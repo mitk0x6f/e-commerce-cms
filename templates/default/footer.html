@@ -1,0 +1,559 @@
+<footer>
+    <section>
+        {{ -- Contact details -- }}
+        <div>
+            <span>{{ VAR translate.contact_me ~ }}</span>
+            <span><a href="mailto: {{ VAR author_email ~ }}" target="_blank">
+                <i class="fa-solid fa-envelope fa-fw fa-xl"></i>{{ VAR author_email ~ }} <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i>
+            </a></span>
+            <span><a href="https://bg.linkedin.com/in/dimitar-dimitrov-712008189" target="_blank">
+                <i class="fa-brands fa-linkedin fa-fw fa-xl"></i>{{ VAR site.author ~ }} <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i>
+            </a></span>
+            <span><a href="tel: +359000000000">
+                <i class="fa-solid fa-mobile-screen-button fa-fw fa-xl"></i>+359 000 000 000
+            </a></span>
+        </div>
+        {{ -- Copyright notice -- }}
+        <div>{{ VAR translate.copyright ~ }}</div>
+    </section>
+</footer>
+{{ IF User::get("signed_in") && !User::get("seller") ? }}
+    <script>
+        let shopping_cart_badge = document.querySelector("header > nav > span.cart > a > span");
+
+        if(shopping_cart_badge.textContent > 0)
+        {
+            shopping_cart_badge.style.display = "block";
+        }
+
+        // Calculate total price of all items in the shopping cart
+
+        document.querySelectorAll("header > nav > span.cart > div > article").forEach(
+            article => {
+                // Find the span element that contains the price and discount
+
+                // Use the article's data-item-id to select the specific article, then find its div.info > span
+
+                const article_id = article.getAttribute("data-item-id");
+
+                const article_price_span = document.querySelector(
+                    `header > nav > span.cart > div > article[data-item-id="${article_id}"] div.info > span`
+                );
+
+                // Get the original price and discount from the data attributes
+
+                const article_price = parseFloat(article_price_span.getAttribute("data-price"));
+                const article_discount = parseFloat(article_price_span.getAttribute("data-discount"));
+
+                // Get the quantity from the article
+
+                const article_quantity = parseInt(article.querySelector(
+                    `header > nav > span.cart > div > article[data-item-id="${article_id}"] div.quantity > span`
+                ).textContent);
+
+                // Calculate the final price
+
+                // Javascript Math does not support floating point numbers, so we manipulate the number using scaling
+
+                article_price_span.textContent = (Math.ceil(article_price * article_quantity * (100 - article_discount)) / 100).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+
+                // article_price_span.textContent = ((article_price - (article_price * (article_discount / 100))) * article_quantity).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+
+                // If the product is discounted, change the price color by adding a class
+
+                if(article_discount > 0)
+                {
+                    article_price_span.classList.add("discounted");
+                }
+            }
+        );
+
+        // If the shopping cart is empty, remove the view cart button and add the empty cart message
+
+        function solve_empty_cart()
+        {
+            if(document.querySelectorAll("header > nav > span.cart > div > article").length === 0)
+            {
+                // Display the empty cart message
+
+                document.querySelector("header > nav > span.cart > div").textContent = "{{ VAR translate.cart_is_empty ~ }}";
+
+                // Hide the shopping cart badge
+
+                shopping_cart_badge.style.display = "none";
+
+                return true;
+            }
+
+            return false;
+        }
+
+        // Make sure the empty shopping cartv is displayed properly.
+
+        solve_empty_cart();
+
+        // Quantity update function
+
+        async function update_quantity(article_id, new_qty)
+        {
+            // Show border feedback, that request is in progress
+
+            // AJAX request
+
+            // Create new imaginary form
+
+            const update_cart_data = new FormData();
+
+            // Append the data to the form
+
+            update_cart_data.append("article_id", article_id);
+            update_cart_data.append("new_qty", new_qty);
+
+            // Send the form data to the server via AJAX request
+
+            try
+            {
+                const response = await fetch(
+                    "/cart/update",
+                    {
+                        method: "POST",
+                        body: update_cart_data
+                    }
+                );
+
+                const result = await response.json();
+
+                if(result.success)
+                {
+                    // Update the shopping cart badge
+
+                    shopping_cart_badge.textContent = parseInt(result.total_qty);
+                }
+                else
+                {
+                    modal_title.textContent = "Error";
+                    modal_content.textContent = result.message;
+                    modal_state.checked = true;
+                }
+            }
+            catch(error)
+            {
+                modal_title.textContent = "Error";
+                modal_content.textContent = "Unexpected error. Please refresh the page and try again.";
+                modal_state.checked = true;
+            }
+            finally
+            {
+                timeout_running = false;
+            }
+        }
+
+        // Remove of item from the shopping cart function
+
+        async function remove_article(article)
+        {
+            let article_id = article.dataset.itemId;
+
+            // AJAX request
+
+            // Create new imaginary form
+
+            const delete_cart_data = new FormData();
+
+            // Append the data to the form
+
+            delete_cart_data.append("article_id", article_id);
+
+            // Send the form data to the server via AJAX request
+
+            try
+            {
+                const response = await fetch(
+                    "/cart/delete",
+                    {
+                        method: "POST",
+                        body: delete_cart_data
+                    }
+                );
+
+                const result = await response.json();
+
+                if(result.success)
+                {
+                    // Remove item from the shopping cart (both shopping carts in case of viewing /cart page)
+
+                    // [Header bar cart, Full page cart]
+
+                    [
+                        'header > nav > span.cart > div > article[data-item-id="' + article_id + '"]',
+                        'main.cart > section > div > div > div > table.order_items > tbody > tr[data-item-id="' + article_id + '"]'
+                    ].forEach(selector => {
+                        // Remove the article from both places
+
+                        document.querySelectorAll(selector).forEach(element => element.remove());
+                    });
+
+                    // Update the shopping cart badge
+
+                    shopping_cart_badge.textContent = parseInt(result.total_qty);
+
+                    // Check if no more articles are remaining and if so, remove the cart button and add text for empty cart
+
+                    solve_empty_cart();
+                }
+                else
+                {
+                    modal_title.textContent = "Error";
+                    modal_content.textContent = result.message;
+                    modal_state.checked = true;
+                }
+            }
+            catch(error)
+            {
+                modal_title.textContent = "Error";
+                modal_content.textContent = "Unexpected error. Please refresh the page and try again. Error: " + error;
+                modal_state.checked = true;
+            }
+        }
+
+        // Shopping cart quantity change
+
+        let timeout = null;
+        let timeout_running = false;
+        let initial_qtys = {};
+        let last_qty = null;
+        let last_updated_item = null;
+
+        // Handle quantity change and article remove behaviors
+
+        function handle_quantity_change(event)
+        {
+            let target = event.target;
+
+            // Selectors for header cart
+
+            const header_cart_plus = "header > nav > span.cart > div > article > div.quantity > div > i:first-of-type";
+            const header_cart_minus = "header > nav > span.cart > div > article > div.quantity > div > i:last-of-type";
+
+            // Selectors for full-page cart
+
+            const page_cart_plus = "main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > div > i:first-of-type";
+            const page_cart_minus = "main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > div > i:last-of-type";
+
+            // If quantity up (plus) or down (minus) button is clicked
+
+            if(target.matches(header_cart_plus)
+            || target.matches(header_cart_minus)
+            || target.matches(page_cart_plus)
+            || target.matches(page_cart_minus))
+            {
+                // Get item info
+
+                // Check if user clicked on the header cart or full-page cart
+
+                let viewing_page = "{{ VAR page_name ~ }}" === "cart";
+
+                let is_page = target.closest("main.cart > section > div > div > div > table.order_items");
+
+                let article_elem = target.closest(is_page ? "table.order_items > tbody > tr" : "article");
+                let qty_elem = article_elem.querySelector(is_page ? "tr > td > div.quantity > span.qty" : "article > div.quantity > span");
+
+                let item = article_elem.dataset.itemId;
+                let current_qty = parseInt(qty_elem.textContent);
+
+                // Store initial quantity for item
+
+                if(!initial_qtys[item])
+                {
+                    initial_qtys[item] = current_qty;
+                }
+
+                // Force quantity update of previous item on new item quantity change
+
+                if(timeout && timeout_running && last_updated_item !== item)
+                {
+                    clearTimeout(timeout);
+
+                    // Force immediate update using previous item's quantity
+
+                    if(initial_qtys[last_updated_item] !== last_qty)
+                    {
+                        update_quantity(last_updated_item, last_qty);
+
+                        document.querySelector(`header > nav > span.cart > div > article[data-item-id="${last_updated_item}"] > div.quantity`)
+                        .classList.remove("in_progress");
+
+                        if(viewing_page)
+                        {
+                            document.querySelector(`main.cart > section > div > div > div > table.order_items > tbody > tr[data-item-id="${last_updated_item}"] > td > div.quantity`)
+                            .classList.remove("in_progress");
+                        }
+                    }
+                }
+
+                if(target.matches(header_cart_plus) || target.matches(page_cart_plus))
+                {
+                    current_qty += 1;
+                }
+                else if(target.matches(header_cart_minus) || target.matches(page_cart_minus))
+                {
+                    // Prevent quantity change to 0 or negative values
+                    // Deleting is managed by the delete button, instead of setting quantity to 0
+
+                    if(current_qty == 1)
+                    {
+                        return;
+                    }
+
+                    current_qty -= 1;
+                }
+
+                // Update the article price in the shopping cart based on the new quantity
+
+                let price_elem_header = document.querySelector(`header > nav > span.cart > div > article[data-item-id="${item}"] > div.info > span`);
+
+                let current_price = parseFloat(price_elem_header.getAttribute("data-price"));
+                let current_discount = parseFloat(price_elem_header.getAttribute("data-discount"));
+
+                // Javascript Math does not support floating point numbers, so we manipulate the number using scaling
+
+                let price_new = (Math.ceil(current_price * current_qty * (100 - current_discount)) / 100).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+
+                // Set header cart price
+
+                price_elem_header.innerHTML = price_new;
+
+                // Set full-page cart price
+
+                if(viewing_page)
+                {
+                    var price_elem_page = document.querySelector(`main.cart > section > div > div > div > table.order_items > tbody > tr[data-item-id="${item}"] > td.price`);
+
+                    price_elem_page.innerHTML = price_new;
+                }
+
+                // Update quantity display
+
+                let qty_elem_header = document.querySelector(`header > nav > span.cart > div > article[data-item-id="${item}"] > div.quantity > span`);
+
+                qty_elem_header.textContent = current_qty;
+                qty_elem_header.parentElement.classList.add("in_progress");
+
+                if(viewing_page)
+                {
+                    var qty_elem_page = document.querySelector(`main.cart > section > div > div > div > table.order_items > tbody > tr[data-item-id="${item}"] > td > div.quantity > span.qty`);
+
+                    qty_elem_page.textContent = current_qty;
+                    qty_elem_page.parentElement.classList.add("in_progress");
+                }
+
+                // Track last updated item
+
+                last_updated_item = item;
+
+                // If timer is already running, reset it and mark the timer tracker as not running
+
+                if(timeout && timeout_running)
+                {
+                    clearTimeout(timeout);
+                    timeout_running = false;
+                }
+
+                // Start new timer
+
+                timeout = setTimeout(
+                    async () => {
+
+                        if(initial_qtys[item] !== current_qty)
+                        {
+                            // Send AJAX request
+
+                            await update_quantity(item, current_qty);
+
+                            // Update initial quantity for item
+
+                            initial_qtys[item] = current_qty;
+
+                            // Remove border feedback animation class
+
+                            qty_elem_header.parentElement.classList.remove("in_progress");
+
+                            if(viewing_page)
+                            {
+                                qty_elem_page.parentElement.classList.remove("in_progress");
+                            }
+                        }
+                    },
+                    1000 // Delay in milliseconds
+                );
+
+                // Update last quantity and mark the timer tracker as running
+
+                last_qty = current_qty;
+                timeout_running = true;
+            }
+            else if(target.matches("header > nav > span.cart > div > article > i:last-of-type"))
+            {
+                let article_elem = target.closest("article");
+
+                // Remove item from the cart in html
+
+                remove_article(article_elem);
+            }
+        }
+
+        // Add event listeners
+
+        const shopping_cart_container = document.querySelector("header > nav > span.cart > div");
+
+        shopping_cart_container.addEventListener("click", handle_quantity_change);
+    </script>
+{{ END IF }}
+<script>
+    // Modal
+
+    const modal_state = document.querySelector("div.modal > input[type='checkbox']#modal_state");
+    const modal_title = document.querySelector("div.modal > div > div.title-bar > span");
+    const modal_content = document.querySelector("div.modal > div > div.content");
+
+    // Handle language and currency changes
+
+    function change_display(data, type)
+    {
+        let form = document.createElement("form");
+
+        form.method = "post";
+
+        form.action = "/change_display.php";
+
+        let field_input = document.createElement("input");
+
+        field_input.type = "hidden";
+
+        if(type === "language")
+        {
+            field_input.name = "language"
+        }
+        else if(type === "currency")
+        {
+            field_input.name = "currency"
+        }
+
+        field_input.value = data;
+
+        form.appendChild(field_input);
+
+        document.body.appendChild(form);
+
+        form.submit();
+    }
+
+    // Handle search field
+
+    function search_key_down(event)
+    {
+        // 13 == "Enter"
+
+        if(event.keyCode == 13)
+        {
+            event.preventDefault();
+            search_prod();
+        }
+
+        // TODO: add handling for quick search list display below the search bar
+    }
+
+    // Handle search submission
+
+    function search_prod()
+    {
+        let search_for = document.querySelector("header > nav > span.search > input[name='search']").value.trim();
+
+        // Replace spaces with dashes
+
+        search_for = search_for.replace(/ /g, "_");
+
+        // Redirect user to search page
+
+        window.location.href = "/search/" + search_for;
+    }
+</script>
+{{ -- Do not include the script if user is signed in -- }}
+{{ IF !User::get("signed_in") ? }}
+    <script>
+        // Handle sign in form. Check if user exists in database, if so, sign in
+
+        document.getElementById("submit_button").addEventListener("click", async function(e)
+        {
+            // Do not submit yet
+
+            const email = document.getElementById("sign_in_email");
+            const password = document.getElementById("sign_in_pass");
+
+            if(email.checkValidity() && password.checkValidity())
+            {
+                // Submit the form, knowing the email and/or password are/is invalid and nothing will happen
+
+                e.preventDefault();
+            }
+
+            // Check if all fields in the form were filled
+
+            const form = document.getElementById("sign_in_form");
+            const required_inputs = form.querySelectorAll("input[required]");
+            let form_completed = true;
+
+            for(let input of required_inputs)
+            {
+                if(!input.value.trim())
+                {
+                    form_completed = false;
+                    break;
+                }
+            }
+
+            if(form_completed)
+            {
+                // AJAX request
+
+                const user_sign_in_data = new FormData(form);
+
+                // Send the form data to the server via AJAX request
+
+                try
+                {
+                    const response = await fetch(
+                        "/auth/signin",
+                        {
+                            method: "POST",
+                            body: user_sign_in_data
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if(result.success)
+                    {
+                        // Reload the page
+
+                        location.reload(true);
+                    }
+                    else
+                    {
+                        modal_title.textContent = "Error";
+                        modal_content.textContent = result.message;
+                        modal_state.checked = true;
+                    }
+                }
+                catch(error)
+                {
+                    modal_title.textContent = "Error";
+                    modal_content.textContent = "Unexpected error. Please refresh the page and try again. Error: " + error;
+                    modal_state.checked = true;
+                }
+            }
+        });
+    </script>
+{{ END IF }}
+</body>
+</html>
