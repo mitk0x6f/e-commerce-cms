@@ -1,0 +1,177 @@
+{{ INCLUDE header # }}
+
+<main class="cart">
+    <div>
+        <div>{{ -- View product image in full screen -- }}</div>
+    </div>
+    <section>
+        <div>
+            <div>
+                <h1>Order items <span>WIP</span></h1>
+                <div>
+                    <table class="order_items">
+                        <tbody>
+                            {{ FOR result in results * }}
+                                <tr data-item-id="{{* article_id *}}">
+                                    <td>
+                                        <span>
+                                            <span>
+                                                <img src="/uploads/articles/{{* article_id *}}/small/img1.jpg" alt="Small product image">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </span>
+                                            <span>
+                                                <span>{{* title *}} <i class="fa-solid fa-external-link"></i></span>
+                                                <span>{{* translate.category *}}</span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="right tiny price_pc">{{* price *}}</td>
+                                    <td class="tiny"><i class="fa-solid fa-times"></i></td>
+                                    <td class="left tiny">
+                                        <div class="quantity">
+                                            <span class="qty">{{* quantity *}}</span>
+                                            <div>
+                                                <i class="fa-solid fa-chevron-up fa-fw"></i>
+                                                <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="right discount">-{{* discount *}}%</td>
+                                    <td class="right price">{{ -- Populated in JS -- }}</td>
+                                    <td class="right tiny"><i class="fa-solid fa-times"></i></td>
+                                </tr>
+                            {{ END FOR }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <h1>Recommended for you <span>WIP</span></h1>
+                <div>
+                    Product cards go here
+                </div>
+            </div>
+        </div>
+        <aside>
+            <div>
+                <h1>Shipping info <span>WIP</span></h1>
+                <div>
+                    <div>
+                        radio buttons for shipping address<br>
+                        add shipping address<br>
+                        <br><hr><br>
+                        same as shipping address<br>
+                        radio buttons for billing address<br>
+                        add billing address
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h1>Order summary <span>WIP</span></h1>
+                <div>
+                    <div>
+                        You are $??.?? away from free shipping card<br>
+                        <br>
+                        subtotal $??.??<br>
+                        discounts -$??.??<br>
+                        shipping $??.??<br>
+                        tax $??.??<hr>
+                        total: <del>$OLD</del> $NEW<br>
+                        <br>
+                        continue to checkout button<br>
+                        or pay with<br>
+                        apple pay | google pay | paypal | venmo buttons
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h1>Do you have a discount voucher?<span>WIP</span></h1>
+                <div>
+                    <div>
+                        <input placeholder="Discount code" type="text">
+                        <span>Apply</span>
+                    </div>
+                </div>
+            </div>
+        </aide>
+    </section>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function (){
+    // Calculate final price of all items in the order
+
+    const order_items = document.querySelectorAll("main.cart > section > div > div > div > table.order_items > tbody > tr");
+    const image_viewer = document.querySelector("main.cart > div");
+
+    // // Grand total of the order
+
+    // let grand_total = 0;
+
+    document.querySelector("main.cart > section > div > div > div > table.order_items > tbody").addEventListener("click", handle_quantity_change);
+
+    // Loop through each item
+
+    order_items.forEach(item => {
+        let item_id = item.getAttribute("data-item-id");
+
+        // Clicking the article name opens the selling page
+
+        item.querySelector("td:first-of-type > span > span:last-of-type > span:first-of-type").addEventListener("click", function() {
+            window.open("/view/" + item_id, "_blank");
+        });
+
+        // Clicking the article image opens the large image viewer
+
+        item.querySelector("td:first-of-type > span > span:first-of-type").addEventListener("click", function() {
+            image_viewer.style.display = "block";
+            image_viewer.querySelector("div").style.backgroundImage = "url(/uploads/articles/" + item_id + "/large/img1.jpg)";
+        });
+
+        // Clicking the x button removes the article from the shopping cart
+
+        item.querySelector("td:last-of-type > i").addEventListener("click", function() {
+                // Remove item from the cart in html
+
+                remove_article(item);
+        });
+
+        const price = parseFloat(item.querySelector("td.right.tiny").textContent.trim());
+        const quantity = parseInt(item.querySelector("td.left.tiny").textContent.trim());
+        const discount = item.querySelector("td.right:not(td.tiny)");
+        const discount_data = parseInt(discount.textContent.trim().replace("-", "").replace("%", ""));
+        const final_price = item.querySelector("td.price");
+
+        // Calculate total for the item
+
+        // Insert final price of the item with the currency
+
+        // Javascript Math does not support floating point numbers, so we manipulate the number using scaling
+
+        final_price.textContent = (Math.ceil(price * quantity * (100 - discount_data)) / 100).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+
+        // // Add total to grand total
+
+        // grand_total += final_price_value;
+
+        // Hide the discount if it is 0
+
+        if(discount_data === 0)
+        {
+            discount.textContent = "";
+        }
+        else
+        {
+            final_price.classList.add("discounted");
+        }
+    });
+
+    // Hide the large image
+
+    image_viewer.addEventListener("click", function() {
+        image_viewer.style.display = "none";
+    });
+});
+</script>
+
+{{ INCLUDE footer # }}

@@ -1,0 +1,337 @@
+{{ INCLUDE header # }}
+
+<main class="listings">
+    <span>
+        <input type="checkbox" id="delete-modal-state">
+        <label for="delete-modal-state" class="modal_background"></label>
+        <div>
+            <div class="title-bar">
+                <span>Confirmation required</span>
+                <label for="delete-modal-state">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </label>
+            </div>
+            <div class="content">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="buttons">
+                <button>Cancel</button>
+                <button>Delete</button>
+            </div>
+        </div>
+    </span>
+    <section>
+        <div>
+            {{ -- Below filter modal is not implemented yet -- }}
+            <label for="filter1-modal-state" class="open_modal">
+                <i class="fa-solid fa-filter"></i>
+            </label>
+            <span>
+                <input type="search" name="search" placeholder="TODO: filter and search box {{ VAR translate.search ~ }}" onkeydown="search_key_down(event)">
+            </span>
+            <a href="listing/add">
+                <i class="fa-solid fa-plus"></i> {{ VAR translate.new_item ~ }}
+            </a>
+        </div>
+        <table class="sortable">
+            <thead>
+                <tr>
+                    <th class="left">{{ VAR translate.title ~ }}</th>
+                    {{ -- <th class="left">{{ VAR translate.description ~ }}</th> -- }}
+                    <th>{{ VAR translate.category ~ }}</th>
+                    <th>{{ VAR translate.price ~ }}</th>
+                    <th>{{ VAR translate.discount ~ }}</th>
+                    <th>{{ VAR translate.stock ~ }}</th>
+                    <th>{{ VAR translate.created ~ }}</th>
+                    <th>{{ VAR translate.status ~ }}</th>
+                    <th><i class="fa-solid fa-ellipsis"></i></td>
+                </tr>
+            </thead>
+            <tbody>
+                {{ -- ARTICLE ROWS -- }}
+                {{ -- NO RESULT FOUND -- }}
+                    {{ IF in_array("No results found", Builder::get_data("results")) ? }}
+                        <tr><td class="no_result">NO RESULTS</td></tr>
+                    {{ END IF }}
+                {{ -- RESULTS FOUND -- }}
+                {{ FOR result in results * }}
+                    <tr>
+                        <td class="left" data-id="{{* id *}}" data-status="{{* status_code *}}">{{* title *}}</td>
+                        {{ -- <td class="left">{{* description *}}</td> -- }}
+                        <td>{{* translate.category *}}</td>
+                        <td>{{* price *}}</td>
+                        <td>{{* discount *}} %</td>
+                        <td>{{* stock *}}</td>
+                        <td>{{* created_on *}}</td>
+                        <td><span class="{{* status *}}">{{* translate.status *}}</span></td>
+                        <td>
+                            <a href="/listing/edit/{{* id *}}"><i class="fa-solid fa-pen"></i></a>
+                            <a href="/listing/delete/{{* id *}}" data-id="{{* id *}}"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                {{ END FOR }}
+            </tbody>
+        </table>
+    </section>
+</main>
+<script>
+    // Validate date
+
+    function is_date(value)
+    {
+        let dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+        // return dateRegex.test(value) && !isNaN(Date.parse(value)); // Date.parse(value) expects ISO 8601 (e.g., YYYY-MM-DD)
+        return dateRegex.test(value);
+    }
+
+    // Convert the date into a valid date object
+
+    function parse_date(value)
+    {
+        const [day, month, year] = value.split(".").map(Number);
+
+        // month - 1, because months are 0-indexed
+
+        return new Date(year, month - 1, day);
+    }
+
+    // Check data type, must be first date or it will confuse it for a number
+
+    function detect_column_type(value1, value2)
+    {
+        if(is_date(value1) && is_date(value2))
+        {
+            return "date";
+        }
+        else if(!isNaN(parseFloat(value1)) && !isNaN(parseFloat(value2)))
+        {
+            return "number";
+        }
+        else
+        {
+            return "text";
+        }
+    }
+
+    // Sorting of the table
+
+    function sort_table_by_column(table, column, asc = true)
+    {
+        const dir_modifier = asc ? 1 : -1;
+        const table_body = table.tBodies[0];
+        const rows = Array.from(table_body.querySelectorAll("tr"));
+
+        // Sort each row
+
+        const sorted_rows = rows.sort(
+            (a, b) => {
+                const a_col_text = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+                const b_col_text = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+
+                // Get data type
+
+                const column_data_type = detect_column_type(a_col_text, b_col_text);
+
+                switch(column_data_type)
+                {
+                    case "date":
+                        // const a_date = new Date(a_col_text);
+                        // const b_date = new Date(b_col_text);
+
+                        // return a_date > b_date ? (1 * dir_modifier) : (-1 * dir_modifier);
+
+                        const a_date = parse_date(a_col_text);
+                        const b_date = parse_date(b_col_text);
+
+                        return (a_date - b_date) * dir_modifier;
+                    case "number":
+                        return (parseFloat(a_col_text) - parseFloat(b_col_text)) * dir_modifier;
+                    default:
+                        return a_col_text.localeCompare(b_col_text) * dir_modifier;
+                }
+
+                return a_col_text > b_col_text ? (1 * dir_modifier) : (-1 * dir_modifier);
+            }
+        );
+
+        // Remove all existing <tr> elements from the table
+
+        while(table_body.firstChild)
+        {
+            table_body.removeChild(table_body.firstChild);
+        }
+
+        // Add the newly sorted rows
+
+        table_body.append(...sorted_rows);
+
+        // Remember how the column is currently sorted
+
+        table.querySelectorAll("th").forEach(th => th.classList.remove("sort-asc", "sort-desc"));
+        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("sort-asc", asc);
+        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("sort-desc", !asc);
+        console.log("Sorting date:", a_date, b_date);
+
+    }
+
+    document.querySelectorAll("main.listings > section > table.sortable > thead > tr > th").forEach(
+        header_cell => {
+            // Skip for last column
+
+            if(header_cell === header_cell.parentElement.lastElementChild)
+            {
+                return;
+            }
+
+            header_cell.addEventListener(
+                "click", () => {
+                    const table_element = header_cell.parentElement.parentElement.parentElement;
+                    const header_index = Array.prototype.indexOf.call(header_cell.parentElement.children, header_cell);
+                    const current_is_ascending = header_cell.classList.contains("sort-asc");
+
+                    sort_table_by_column(table_element, header_index, !current_is_ascending);
+                }
+            );
+        }
+    );
+
+    // When the first <td> (title element) is clicked, if the article is active - lead to the view page
+
+    document.querySelectorAll("main.listings > section > table.sortable > tbody > tr > td:first-of-type").forEach(
+        title_cell => {
+            title_cell.addEventListener(
+                "click", () => {
+                    if(title_cell.getAttribute("data-status") == 1)
+                    {
+                        window.location = "/view/" + title_cell.getAttribute("data-id");
+                    }
+                    else
+                    {
+                        // Change cursor to not-allowed
+
+                        title_cell.style.cursor = "not-allowed";
+
+                        // Reset to the defaut cursor after 0.2s
+
+                        setTimeout(() => {
+                            title_cell.style.cursor = "";
+                        }, 200);
+                    }
+                }
+            );
+        }
+    );
+
+    // Function to submit the deletion form without reloading the page
+
+    async function delete_article(article_id)
+    {
+        // AJAX request
+
+        // Create new imaginary form
+
+        const delete_listing_data = new FormData();
+
+        // Append the data to the form
+
+        delete_listing_data.append("article_id", article_id);
+
+        // Send the form data to the server via AJAX request
+
+        try
+        {
+            const response = await fetch(
+                "/listing/delete",
+                {
+                    method: "POST",
+                    body: delete_listing_data
+                }
+            );
+
+            const result = await response.json();
+
+            if(result.success)
+            {
+                // Delete the row from the table
+
+                const article_row = document.querySelector("main.listings > section > table.sortable > tbody > tr > td > a[data-id='" + article_id + "']").closest("tr");
+
+                if(article_row)
+                {
+                    article_row.remove();
+                }
+
+                // Display success message
+
+                modal_title.textContent = "Success";
+                modal_content.textContent = result.message;
+                modal_state.checked = true;
+            }
+            else
+            {
+                modal_title.textContent = "Error";
+                modal_content.textContent = result.message;
+                modal_state.checked = true;
+            }
+        }
+        catch(error)
+        {
+            modal_title.textContent = "Error";
+            modal_content.textContent = "Unexpected error. Please refresh the page and try again. Error: " + error;
+            modal_state.checked = true;
+        }
+    }
+
+    // Delete confirmation modal
+
+    const delete_modal_state = document.querySelector("main.listings > span > input[type='checkbox']#delete-modal-state");
+    const delete_modal_article = document.querySelector("main.listings > span > button:last-of-type");
+    let delete_article_id = null;
+
+    // Clicking the delete button requires confirmation
+
+    // Clicking delete button will open the confirmation modal
+
+    document.querySelectorAll("main.listings > section > table.sortable > tbody > tr > td:last-of-type > a:last-of-type").forEach(
+        navigation_cell => {
+            navigation_cell.addEventListener(
+                "click", (event) => {
+                    event.preventDefault();
+
+                    // Set the delete_article_id to the data-id of the clicked button
+
+                    delete_article_id = navigation_cell.getAttribute("data-id");
+
+                    delete_modal_state.checked = true;
+
+                    return false;
+                }
+            );
+        }
+    );
+
+    // Clicking the cancel button will close the confirmation modal
+
+    document.querySelector("main.listings > span > div > div.buttons > button:first-of-type").addEventListener(
+        "click", () => {
+            delete_modal_state.checked = false;
+        }
+    );
+
+    // Clicking the delete button will delete the article
+
+    document.querySelector("main.listings > span > div > div.buttons > button:last-of-type").addEventListener(
+        "click", () => {
+            // Hide the confirmation modal
+
+            delete_modal_state.checked = false;
+
+            // Submit the form to delete the article on the server using AJAX request
+
+            delete_article(delete_article_id);
+        }
+    );
+</script>
+
+{{ INCLUDE footer # }}

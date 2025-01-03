@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ VAR site.name ~ }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" type="text/css" href="../templates/default/resources/style.css?v=1.0.0">
+<style>
+/* Personal preference for style resetting.*/
+
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Defining variables */
+
+:root
+{
+    --primary-color: #F5F5F7;
+    --secondary-color: #161617; /* also used as primary text color */
+    --accent-color: #0096FF;
+    --accent-text-color: #0066CC;
+    --secondary-text-color: #777777;
+}
+
+/* Basic page styling */
+html
+{
+    height: 100%;
+}
+
+body
+{
+    height: 100%;
+    background-color: var(--primary-color);
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--secondary-color);
+    overflow-y: scroll;
+}
+
+a
+{
+    color: inherit;
+    text-decoration: none;
+}
+
+/***********************************************/
+/**       Stretch the screen container        **/
+/** Enables centering Horizontal and Vertical **/
+/***********************************************/
+
+main.not_found
+{
+    display: flex;
+    margin-top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Wrapper */
+
+main.not_found > section
+{
+    display: flex;
+    padding: 70px;
+    width: fit-content;
+    border-radius: 34px;
+    box-shadow: 0 11px 34px 0 rgba(0,0,0,.2);
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    overflow: hidden;
+}
+
+/* Logo */
+
+main.not_found > section > a
+{
+    display: block;
+    padding: 0;
+    width: 230px;
+    height: 104px;
+    background-image: url("/templates/default/resources/logo.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+main.not_found > section > label:first-of-type
+{
+    font-size: 18px;
+    font-weight: 700;
+}
+
+main.not_found > section > label > a
+{
+    color: var(--accent-text-color);
+}
+</style>
+</head>
+<body>
+    <main class="not_found">
+        <section>
+            <a href="/home"></a>
+            <label>{{ VAR translate.404_page_not_found ~ }}</label>
+            <label><a href="mailto:critfame@gmail.com?subject=Page not found {{ VAR site.name ~ }}">{{ VAR translate.report_a_problem ~ }}</a></label>
+        </section>
+    </main>
+</body>
+</html>

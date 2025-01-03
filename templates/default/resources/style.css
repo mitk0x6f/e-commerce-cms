@@ -1,0 +1,4180 @@
+/* TODO: make the design responsive (including replacement of the pixel to em/rem) */
+
+/* Personal preference for style resetting.*/
+
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Defining variables */
+
+:root
+{
+    --primary-color: #F5F5F7;
+    --secondary-color: #161617;
+    /* --secondary-color-alternative: #777777; */ /* NOT WCAG COMPLIANT */
+    --secondary-color-alternative: #535353;
+    --primary-text-color: #161617;
+    --primary-text-color-alternative: #464F60;
+    --accent-color: #0096FF;
+    /* --secondary-text-color: #777777; */ /* NOT WCAG COMPLIANT */
+    --secondary-text-color: #535353;
+    --accent-text-color: #0066CC;
+    --accent-text-color-alternative: #E03030;
+    --default-font-family: "Helvetica", "Arial", sans-serif;
+    --default-font-size: 14px;
+    --default-page-width: 1200px;
+}
+
+/* Fix autofills */
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus
+{
+  transition: background-color 0s 600000s, color 0s 600000s !important;
+}
+
+/* Tooltips */
+
+/* [data-tip] {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+} */
+
+/* Tooltip text using pseudo-element */
+
+[data-tip]::after
+{
+    content: attr(data-tip);
+    visibility: hidden;
+    width: 120px;
+    background-color: #333333;
+    color: #FFFFFF;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 100%; /* Position on the right side */
+    transform: translate(10px, -50%); /* Add some space and center vertically */
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* Show the tooltip on hover */
+
+[data-tip]:hover::after
+{
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Basic page styling */
+
+html
+{
+    min-height: 100vh;
+    /* background-color: #FFFFFF; */
+    background-color: var(--secondary-color);
+}
+
+body
+{
+    /* min-height: 100vh; */
+    background-color: var(--primary-color);
+    font-family: var(--default-font-family);
+    font-size: var(--default-font-size);
+    font-weight: 400;
+    color: var(--primary-text-color);
+    overflow-y: scroll;
+}
+
+a
+{
+    color: inherit;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Top navigation */
+
+header
+{
+    position: sticky;
+    display: flex;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.16);
+    background-color: #FFFFFF;
+    justify-content: center;
+    align-items: center;
+    line-height: 60px;
+    z-index: 800;
+}
+
+header > nav
+{
+    display: flex;
+    padding: 0 15px;
+    width: 100%;
+    align-items: stretch;
+    gap: 30px;
+}
+
+header > nav > span
+{
+    position: relative;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    gap: 10px;
+}
+
+header > nav > span > a
+{
+    display: flex;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    gap: 10px;
+}
+
+/* Drop down items */
+
+header > nav > span > div
+{
+    position: absolute;
+    top: 60px;
+    right: 0;
+    border-radius: 0 0 7px 7px;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.08);
+    background-color: #FFFFFF;
+    line-height: 24px;
+    overflow: hidden;
+    /* TODO: replace scaleY with something nicer */
+    /* Clip maybe */
+    transform: scaleY(0);
+    transition: transform 0.1s;
+    transition-delay: 0.20s;
+    transform-origin: top;
+}
+
+header > nav > span:hover > div,
+header > nav > span > div:focus-within
+{
+    transform: scaleY(1);
+    transition-delay: 0s;
+}
+
+/* Logo */
+
+header > nav > span:first-of-type
+{
+    display: block;
+    padding: 0;
+    width: 102px;
+    background-image: url("./logo.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+header > nav > span:first-of-type > a
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Categories */
+
+header > nav > span.categories
+{
+    background-color: #0000000A;
+    border-radius: 7px;
+    margin: 10px 0;
+    padding: 0 10px;
+    transition: background-color 0.2s;
+}
+
+header > nav > span.categories:hover
+{
+    background-color: #0000001F;
+}
+
+header > nav > span.categories > div
+{
+    left: -15px;
+    right: auto;
+    margin-top: -10px;
+    padding: 10px;
+    width: max-content;
+}
+
+header > nav > span.categories > div > nav
+{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+header > nav > span.categories > div > nav > a
+{
+    display: flex;
+    padding: 8px 13px;
+    border-radius: 7px;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, color 0.1s;
+}
+
+header > nav > span.categories > div > nav > a:hover
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+/* Search bar */
+
+header > nav > span.search
+{
+    margin: auto;
+    padding: 0;
+    flex-grow: 1;
+    height: 40px;
+    border: 0;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+    align-items: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+header > nav > span.search:hover
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+header > nav > span.search:focus-within
+{
+    border-color: #00A2FF88;
+    box-shadow: 0 0 2px 0 #00A2FF;
+}
+
+header > nav > span.search > input
+{
+    padding-left: 15px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    flex-grow: 1;
+    line-height: 40px;
+}
+
+header > nav > span.search > input:focus
+{
+    outline: none;
+}
+
+header > nav > span.search > input[type="search"]::-webkit-search-cancel-button
+{
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    /* TODO: use better way instead of background-image */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='var(--primary-color)'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+    cursor: pointer;
+}
+
+header > nav > span.search > span
+{
+    padding: 0 15px 0 5px;
+    height: 40px;
+    line-height: 40px;
+}
+
+/* Language and currency panel */
+
+header > nav > span.language-currency > div
+{
+    display: flex;
+    padding: 20px 30px 30px;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Currency section title */
+
+header > nav > span.language-currency > div > span:nth-of-type(2)
+{
+    margin-top: 10px;
+}
+
+header > nav > span.language-currency > div > div
+{
+    display: flex;
+    width: 220px;
+    border-radius: 7px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.5s;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+header > nav > span.language-currency > div > div:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+header > nav > span.language-currency > div > div:focus
+{
+    box-shadow: 0 2px 10px #00A2FF88;
+}
+
+header > nav > span.language-currency > div > div:focus > label
+{
+    position: relative;
+    pointer-events: all;
+}
+
+header > nav > span.language-currency > div > div > label
+{
+    display: flex;
+    position: absolute;
+    padding: 5px 12px;
+    order: 2;
+    text-transform: capitalize;
+    z-index: 801;
+    pointer-events: none;
+}
+
+header > nav > span.language-currency > div > div > label > span
+{
+    margin-right: 5px;
+}
+
+header > nav > span.language-currency > div > div > input
+{
+    opacity: 0;
+    position: absolute;
+}
+
+header > nav > span.language-currency > div > div > input:checked + label
+{
+    position: relative;
+    background: #FFFFFF;
+    order: 1;
+    z-index: 802;
+}
+
+header > nav > span.language-currency > div > div > input:checked + label:after
+{
+    position: absolute;
+    top: calc(50% - 2.5px);
+    right: 10px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--secondary-color);
+    z-index: 803;
+    content: '';
+    pointer-events: none;
+}
+
+header > nav > span.language-currency > div > div > input:checked ~ label:hover
+{
+    cursor: pointer;
+}
+
+/* Shopping cart */
+
+header > nav > span.cart > div
+{
+    display: flex;
+    padding: 10px;
+    width: max-content;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Articles */
+
+header > nav > span.cart > div > article
+{
+    display: flex;
+    border-radius: 7px;
+    background-color: var(--primary-color);
+    padding: 10px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+header > nav > span.cart > div > article > img
+{
+    border-radius: 7px;
+    width: 50px;
+    height: 50px;
+}
+
+/* Info - title and price */
+
+header > nav > span.cart > div > article > div.info
+{
+    display: flex;
+    min-width: 120px;
+    max-width: 180px;
+    font-size: 12px;
+    line-height: 18px;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Title */
+
+header > nav > span.cart > div > article > div.info > a
+{
+    width: fit-content;
+}
+
+/* Price */
+
+header > nav > span.cart > div > article > div.info > span
+{
+    color: var(--secondary-text-color);
+}
+
+header > nav > span.cart > div > article > div.info > span.discounted
+{
+    color: #FF0000;
+}
+
+/* Quantity */
+
+header > nav > span.cart > div > article > div.quantity,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity
+{
+    display: flex;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: #FFFFFF;
+    font-size: 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+}
+
+header > nav > span.cart > div > article > div.quantity.in_progress,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity.in_progress
+{
+    /* border-image: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25), var(--accent-color)) 1; */
+    /* animation: rotate-border 2s infinite; */
+    /* animation: blink 2s infinite; */
+    animation: moving-border 2s infinite;
+}
+
+@keyframes moving-border {
+    0%, 100% {
+        border-image: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)) 1;
+    }
+    30% {
+        border-image: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25), rgba(0, 150, 255, 0.8)) 1;
+    }
+    40% {
+        border-image: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 150, 255, 0.8), rgba(0, 150, 255, 0.8)) 1;
+    }
+    50% {
+        border-image: linear-gradient(0deg, rgba(0, 150, 255, 0.8), rgba(0, 150, 255, 0.8), rgba(0, 150, 255, 0.8)) 1;
+    }
+    60% {
+        border-image: linear-gradient(0deg, rgba(0, 150, 255, 0.8), rgba(0, 150, 255, 0.8), rgba(0, 0, 0, 0.25)) 1;
+    }
+    70% {
+        border-image: linear-gradient(0deg, rgba(0, 150, 255, 0.8), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)) 1;
+    }
+}
+
+
+@keyframes rotate-border
+{
+    0% {border-image: linear-gradient(0deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    5% {border-image: linear-gradient(18deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    10% {border-image: linear-gradient(36deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    15% {border-image: linear-gradient(54deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    20% {border-image: linear-gradient(72deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    25% {border-image: linear-gradient(90deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    30% {border-image: linear-gradient(108deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    35% {border-image: linear-gradient(126deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    40% {border-image: linear-gradient(144deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    45% {border-image: linear-gradient(162deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    50% {border-image: linear-gradient(180deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    55% {border-image: linear-gradient(198deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    60% {border-image: linear-gradient(216deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    65% {border-image: linear-gradient(234deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    70% {border-image: linear-gradient(252deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    75% {border-image: linear-gradient(270deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    80% {border-image: linear-gradient(288deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    85% {border-image: linear-gradient(306deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    90% {border-image: linear-gradient(324deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+    95% {border-image: linear-gradient(342deg,rgba(0, 0, 0, 0.25),rgba(0, 0, 0, 0.25), var(--accent-color)) 1;}
+}
+
+@keyframes blink
+{
+    0%, 100%
+    {
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        box-shadow: none;
+    }
+
+    50%
+    {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 3px 0 var(--accent-color);
+    }
+}
+
+header > nav > span.cart > div > article > div.quantity > span,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > span
+{
+    width: 35px;
+    max-height: 24px; /* the line-height of the parent. makes sure only one line is shown and the max quantity for it is 99 999.  */
+    text-align: center;
+    overflow: hidden;
+}
+
+header > nav > span.cart > div > article > div.quantity > div,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > div
+{
+    display: flex;
+    border-left: 1px solid rgba(0, 0, 0, 0.25);
+    flex-direction: column;
+}
+
+/* Quantity change buttons */
+
+header > nav > span.cart > div > article > div.quantity > div > i,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > div > i
+{
+    display: flex;
+    width: 18px;
+    height: 18px;
+    background-color: var(--primary-color);
+    color: var(--secondary-text-color);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Up (plus) */
+
+header > nav > span.cart > div > article > div.quantity > div > i:first-of-type,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > div > i:first-of-type
+{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Down (minus) */
+
+header > nav > span.cart > div > article > div.quantity > div > i:hover,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > div > i:hover
+{
+    color: var(--primary-text-color);
+}
+
+/* Trash button */
+
+header > nav > span.cart > div > article > i
+{
+    padding: 5px;
+    color: rgba(0, 0, 0, 0.20);
+    transition: color 0.2s;
+}
+
+header > nav > span.cart > div > article > i:hover
+{
+    color: var(--primary-text-color);
+}
+
+/* View cart button */
+
+header > nav > span.cart > div > a
+{
+    border-radius: 7px;
+    padding: 7px 0;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    text-align: center;
+    transition: box-shadow 0.5s;
+}
+
+header > nav > span.cart > div > a:hover
+{
+    box-shadow: 0 0 10px 0 #00A2FFC0;
+}
+
+/* Shopping cart badge */
+
+header > nav > span.cart > a > span
+{
+    /* Display is changed in JavaScript */
+    display: none;
+}
+
+/* Messages */
+
+header > nav > span.messages
+{
+    margin-right: 5px;
+}
+
+/* Messages panel */
+
+header > nav > span.messages > div
+{
+    display: flex;
+    padding: 30px 30px 20px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Search box */
+
+/* Container */
+
+header > nav > span.messages > div > section
+{
+    display: flex;
+    margin: 0 auto 10px;
+    width: 250px;
+    border: none;
+    border-radius: 7px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.5s;
+    overflow: hidden;
+}
+
+header > nav > span.messages > div > section:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Text area */
+
+header > nav > span.messages > div > section:focus-within
+{
+    box-shadow: 0 2px 10px 0 #00A2FF88;
+}
+
+header > nav > span.messages > div > section > textarea
+{
+    padding-left: 10px;
+    height: 35px;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    flex-grow: 1;
+    line-height: 35px;
+}
+
+header > nav > span.messages > div > section > textarea:focus
+{
+    outline: none;
+}
+
+/* Search button */
+
+header > nav > span.messages > div > section > a
+{
+    padding: 0 10px;
+    height: 35px;
+    line-height: 35px;
+}
+
+/* Click on message opens it in a floating window ? */
+
+header > nav > span.messages > div > a:not(:last-child)
+{
+    display: flex;
+    border-radius: 7px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    transition: box-shadow 0.15s;
+}
+
+header > nav > span.messages > div > a:not(:last-child):hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+header > nav > span.messages > div > a:last-child
+{
+    margin: 0 auto;
+    color: var(--secondary-text-color);
+    transition: color 0.2s;
+}
+
+header > nav > span.messages > div > a:last-child:hover
+{
+    color: var(--primary-text-color);
+}
+
+/* Profile's avatar (rounded) */
+
+header > nav > span.messages > div > a > img
+{
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+/* Related user's name and message appear one over another */
+
+header > nav > span.messages > div > a > div
+{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+header > nav > span.messages > div > a > div > span
+{
+    width: auto;
+}
+
+/* Modifications for unread messages */
+
+header > nav > span.messages > div > a.unread
+{
+    box-shadow: 0 0 8px 1px #00A2FFBB;
+}
+
+header > nav > span.messages > div > a.unread:hover
+{
+    box-shadow: 0 0 8px 1px var(--accent-color);
+}
+
+header > nav > span.messages > div > a.unread > div > span:first-of-type
+{
+    font-weight: 900;
+}
+
+header > nav > span.messages > div > a.unread > div > span:last-of-type
+{
+    font-weight: 700;
+}
+
+/* Red Count Bubble */
+
+header > nav > span:not(.search) > a > span
+{
+    position: absolute;
+    top: 20%;
+    left: 12px;
+    padding: 2px 4px;
+    border-radius: 5px;
+    background-color: var(--accent-text-color-alternative);
+    font-size: 10px;
+    line-height: 10px;
+    color: var(--primary-color);
+}
+
+/* User account panel */
+
+header > nav > span.account-panel > div
+{
+    padding: 30px;
+    text-transform: none;
+}
+
+/* Guest user's menu */
+
+header > nav > span.account-panel > div > form
+{
+    display: flex;
+    width: max-content;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Sign in screen label */
+
+header > nav > span.account-panel > div > form > label
+{
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* Email and password fields */
+
+header > nav > span.account-panel > div > form > span,
+header > nav > span.account-panel > div > form > input
+{
+    border-radius: 7px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.5s;
+    overflow: hidden;
+}
+
+header > nav > span.account-panel > div > form > span:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+header > nav > span.account-panel > div > form > span > input
+{
+    padding: 10px;
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+header > nav > span.account-panel > div > form > span:focus-within
+{
+    box-shadow: 0 2px 10px 0 #00A2FF88;
+}
+
+header > nav > span.account-panel > div > form > span > input::placeholder
+{
+    color: var(--secondary-text-color);
+}
+
+
+/* Remember me and forgot password line */
+
+header > nav > span.account-panel > div > form > div
+{
+    display: flex;
+    padding: 0 5px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+header > nav > span.account-panel > div > form > div > span
+{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+}
+
+header > nav > span.account-panel > div > form > div > span > input[type = checkbox],
+header > nav > span.account-panel > div > form > div > span > label
+{
+    accent-color: var(--accent-color);
+    cursor: pointer;
+}
+
+header > nav > span.account-panel > div > form > div:first-of-type > a
+{
+    color: var(--secondary-text-color);
+}
+
+header > nav > span.account-panel > div > form > div:first-of-type > a:hover
+{
+    color: var(--accent-text-color);
+}
+
+header > nav > span.account-panel > div > form > div:last-of-type > a
+{
+    color: var(--accent-text-color);
+}
+
+header > nav > span.account-panel > div > form > div:last-of-type > a:hover
+{
+    text-decoration: underline;
+}
+
+/* Sign up message */
+
+header > nav > span.account-panel > div > form > div:last-of-type
+{
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Submit button */
+
+header > nav > span.account-panel > div > form > input
+{
+    padding: 10px;
+    border: none;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+header > nav > span.account-panel > div > form > input:hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Signed in user's profile picture */
+
+header > nav > span.account-panel > img
+{
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    object-fit: cover;
+}
+
+/* Signed in user's menu */
+
+header > nav > span.account-panel > div.signed_in
+{
+    padding: 10px;
+}
+
+header > nav > span.account-panel > div.signed_in > nav
+{
+    display: flex;
+    padding: 10px;
+    border-radius: 7px;
+    background-color: var(--primary-color);
+    flex-direction: column;
+    gap: 5px;
+    overflow: hidden;
+}
+
+header > nav > span.account-panel > div.signed_in > nav > a
+{
+    padding: 5px 10px;
+    border-radius: 7px;
+    transition: background-color 0.2s, color 0.1s;
+}
+
+header > nav > span.account-panel > div.signed_in > nav > a:hover
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+/*********************************
+**                              **
+**    GLOBAL MESSAGE [START]    **
+**                              **
+*********************************/
+
+section.global_message
+{
+    display: flex;
+    margin: 40px 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/*
+    Fix below code when the admin panel and global messages are ready.
+
+    :not(:has(*)) instead of :empty, because there is whitespace.
+*/
+
+section.global_message:not(:has(*))
+{
+    display: none;
+}
+
+section.global_message > article
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 20px 20px 45px;
+    width: var(--default-page-width);
+    max-width: 100%;
+    border-radius: 7px;
+    font-weight: 700;
+}
+
+section.global_message > article.warning
+{
+    background-color: #F3DA90;
+}
+
+section.global_message > article.error
+{
+    background-color: #ED8B84;
+}
+
+section.global_message > article.success
+{
+    background-color: #8BE4A8;
+}
+
+section.global_message > article::before
+{
+    display: inline-block;
+    position: relative;
+    left: -20px;
+    font-size: 20px !important;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font: var(--fa-font-solid);
+}
+
+section.global_message > article.warning::before
+{
+    content: "\f071";
+}
+
+section.global_message > article.error::before
+{
+    content: "\f188";
+}
+
+section.global_message > article.success::before
+{
+    content: "\f00c";
+}
+
+/*******************************
+**                            **
+**    GLOBAL MESSAGE [END]    **
+**                            **
+*******************************/
+
+/************************
+**                     **
+**    MODAL [START]    **
+**                     **
+************************/
+
+/* Invisible checkbox that enables the modal control */
+
+div.modal > input[type = checkbox]
+{
+    display: none;
+}
+
+/* Background of the modal */
+
+div.modal > label.modal_background
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(50, 50, 50, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 998;
+}
+
+/* Show the modal by changing the invisible checkbox state */
+
+div.modal > input[type = checkbox]:checked ~ label.modal_background
+{
+    display: block;
+}
+
+div.modal> input[type = checkbox]:checked ~ div
+{
+    display: flex;
+}
+
+/* Error modal itself */
+
+div.modal > div
+{
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 7px;
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    z-index: 999;
+}
+
+div.modal > div > div.title-bar
+{
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    line-height: 24px;
+}
+
+div.modal > div > div.title-bar > span
+{
+    padding-left: 5px;
+    flex-grow: 1;
+    font-weight: 700;
+}
+
+div.modal > div > div.title-bar > label
+{
+    color: var(--secondary-text-color);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+div.modal > div > div.title-bar > label:hover
+{
+    color: var(--accent-text-color-alternative);
+}
+
+/* Error message */
+
+div.modal > div > div.content
+{
+    padding: 15px;
+    min-width: 500px;
+    background-color: var(--primary-color);
+}
+
+/**********************
+**                   **
+**    MODAL [END]    **
+**                   **
+**********************/
+
+/* Body */
+
+/************************************
+**                                 **
+**    PRODUCTS CAROUSEL [START]    **
+**                                 **
+************************************/
+
+/* Cell styling */
+
+section > div.carousel div.carousel-cell
+{
+    margin-right: 10px;
+    width: 1000px;
+    height: 350px;
+    background: var(--secondary-color-alternative);
+    counter-increment: gallery-cell;
+    color: var(--primary-color);
+}
+
+/* Advertisment cell icon */
+
+section > div.carousel div.carousel-cell > i.fa-rectangle-ad
+{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 32px;
+}
+
+/* TODO: make below automatic when admin panel is ready */
+/* Specific styling */
+
+section > div.carousel div.carousel-cell > div
+{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Advertising */
+
+section > div.carousel div.carousel-cell > div.ad
+{
+    display: flex;
+    background: var(--accent-text-color-alternative);
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+/* MACBOOK */
+
+section > div.carousel div.carousel-cell > div.macbook
+{
+    padding: 64px;
+    background-color: #000000;
+    background-image: url(/uploads/macbook.png);
+    background-size: contain;
+    background-position: center right;
+    background-repeat: no-repeat;
+    flex-direction: column;
+    gap: 20px;
+}
+
+section > div.carousel div.carousel-cell > div.macbook > h1
+{
+    font-size: 32px;
+    color: var(--primary-color);
+}
+
+section > div.carousel div.carousel-cell > div.macbook > h2
+{
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+section > div.carousel div.carousel-cell > div.macbook > a
+{
+    padding: 10px 20px;
+    width: fit-content;
+    border-radius: 7px;
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* IPHONE */
+
+section > div.carousel div.carousel-cell > div.iphone
+{
+    padding: 20px;
+    background-image: url(/uploads/iphone.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+section > div.carousel div.carousel-cell > div.iphone > h1
+{
+    font-size: 32px;
+    color: var(--primary-color);
+}
+
+section > div.carousel div.carousel-cell > div.iphone > h2
+{
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+section > div.carousel div.carousel-cell > div.iphone > a
+{
+    padding: 10px 20px;
+    width: fit-content;
+    border-radius: 7px;
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* Specific styling ends */
+
+/* Buttons */
+
+/* No circle */
+
+section > div.carousel .flickity-button
+{
+    background: transparent;
+}
+
+/* big previous & next buttons */
+
+section > div.carousel .flickity-prev-next-button
+{
+    width: 100px;
+    height: 100px;
+}
+
+/* Icon color */
+
+section > div.carousel .flickity-prev-next-button > svg.flickity-button-icon
+{
+    fill: var(--primary-color);
+    transition: filter 0.2s;
+}
+
+section > div.carousel .flickity-prev-next-button > svg.flickity-button-icon:hover
+{
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+}
+
+/* Hide disabled button */
+
+section > div.carousel .flickity-button:disabled
+{
+    display: none;
+}
+
+/**********************************
+**                               **
+**    PRODUCTS CAROUSEL [END]    **
+**                               **
+**********************************/
+
+main
+{
+    display: flex;
+    margin-top: 40px;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+main > section
+{
+    width: var(--default-page-width);
+    max-width: 100%;
+}
+
+/* Main page */
+
+main.home > section:first-of-type
+{
+    display: flex;
+    width: var(--default-page-width);
+    border-radius: 7px;
+    /* old box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+/* Left navigation menu */
+
+main.home > section > aside
+{
+    padding: 10px;
+    width: 220px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+main.home > section > aside > nav
+{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+main.home > section > aside > nav > a
+{
+    display: flex;
+    padding: 10px 15px;
+    border-radius: 7px;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s, color 0.1s;
+}
+
+main.home > section > aside > nav > a:hover
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+/* Right products section */
+
+main.home > section > div
+{
+    display: none;
+    padding: 20px;
+    width: 500px;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 10px;
+}
+
+/* Show first section */
+
+main.home > section > div:first-of-type
+{
+    display: flex;
+}
+
+main.home > section > div > div
+{
+    display: flex;
+    height: 100%;
+}
+
+/* View all products form the category button */
+
+main.home > section > div > span
+{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+main.home > section > div > span > a
+{
+    color: var(--accent-text-color);
+}
+
+main.home ~ main > h1
+{
+    width: var(--default-page-width);
+    padding: 20px 10px;
+    font-size: 1.25rem;
+}
+
+main.home ~ main.search > section.articles > article
+{
+    width: calc((var(--default-page-width) - ((5 - 1) * 40px)) / 5);
+
+}
+
+/* Subscribe to the newsletter */
+
+section.newsletter
+{
+    display: flex;
+    margin-top: 40px;
+    padding: 80px 0;
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+/* If the newsletter is the last section before the footer, remove the margin-top of the footer */
+
+section.newsletter ~ script + footer
+{
+    margin-top: 0;
+}
+
+/* Subscribe invitation message */
+
+section.newsletter > h1
+{
+    font-size: 1.25rem;
+}
+
+section.newsletter > form
+{
+    display: flex;
+    gap: 20px;
+}
+
+/* Form elements */
+
+section.newsletter > form > span,
+section.newsletter > form > input
+{
+    display: flex;
+    background-color: var(--primary-color);
+    border-radius: 7px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.5s;
+    overflow: hidden;
+    align-items: center;
+    color: var(--primary-text-color);
+}
+
+section.newsletter > form > span:hover,
+section.newsletter > form > input:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* Icons */
+
+section.newsletter > form > span > i
+{
+    padding: 0 10px 0 12px;
+}
+
+/* Actual input fields */
+
+section.newsletter > form > span > input
+{
+    padding: 0 10px 0 0;
+    border: none;
+    outline: none;
+    height: 40px;
+    background-color: transparent;
+    color: inherit;
+}
+
+section.newsletter > form > span > input[type="email"]
+{
+    min-width: 200px;
+}
+
+section.newsletter > form > input
+{
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+/************************************
+**                                 **
+**    LISTINGS & ORDERS [START]    **
+**                                 **
+************************************/
+
+/* Delete confirmation modal [START] */
+
+/* Save button */
+
+main.listings > span > div > div.content
+{
+    min-width: fit-content !important;
+}
+
+main.listings > span > div > div.buttons
+{
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    line-height: 24px;
+    gap: 10px;
+}
+
+main.listings > span > div > div.buttons > button
+{
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: none;
+    transition: color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+main.listings > span > div > div.buttons > button:last-of-type
+{
+    width: 100%;
+    background-color: var(--accent-text-color-alternative);
+    color: var(--primary-color);
+}
+
+main.listings > span > div > div.buttons > button:hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Delete confirmation modal [END] */
+
+/* Articles table [START] */
+
+main.listings > section,
+main.orders > section
+{
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+/* Table filters, search and the add new article button */
+
+main.listings > section > div,
+main.orders > section > div
+{
+    position: sticky;
+    top: 0;
+    display: flex;
+    padding: 15px;
+    background-color: #F4F7FC;
+    align-items: stretch;
+    gap: 15px;
+}
+
+main.listings > section > div > label,
+main.listings > section > div > span,
+main.listings > section > div > a,
+main.orders > section > div > label,
+main.orders > section > div > span
+{
+    display: flex;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    background-color: #FFFFFF;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    align-items: center;
+}
+
+/* Filters label and button */
+
+main.listings > section > div > label,
+main.listings > section > div > a,
+main.orders > section > div > label
+{
+    padding: 10px 15px;
+    color: var(--primary-text-color-alternative);
+}
+
+/* Filters label */
+
+main.listings > section > div > label,
+main.orders > section > div > label
+{
+    cursor: pointer;
+}
+
+/* Button */
+
+main.listings > section > div > a
+{
+    display: flex;
+    width: fit-content;
+    background-color: var(--accent-color);
+    gap: 5px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* Search bar */
+
+main.listings > section > div > span,
+main.orders > section > div > span
+{
+    flex-grow: 1;
+    color: var(--primary-text-color-alternative);
+}
+
+main.listings > section > div > label:hover,
+main.listings > section > div > span:hover,
+main.listings > section > div > a:hover,
+main.orders > section > div > label:hover,
+main.orders > section > div > span:hover
+{
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+main.listings > section > div > span:focus-within,
+main.orders > section > div > span:focus-within
+{
+    border-color: #00A2FF88;
+    box-shadow: 0 0 1px 0 #00A2FF;
+}
+
+main.listings > section > div > span > input,
+main.orders > section > div > span > input
+{
+    padding-left: 12px;
+    padding-right: 5px;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    flex-grow: 1;
+    color: inherit;
+}
+
+main.listings > section > div > span > input:focus,
+main.orders > section > div > span > input:focus
+{
+    outline: none;
+}
+
+main.listings > section > div > span > input[type="search"]::-webkit-search-cancel-button,
+main.orders > section > div > span > input[type="search"]::-webkit-search-cancel-button
+{
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    /* TODO: use better way instead of background-image */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='var(--primary-color)'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+    cursor: pointer;
+}
+
+main.listings > section > div > span > span,
+main.orders > section > div > span > span
+{
+    padding: 0 12px 0 5px;
+    height: 30px;
+    line-height: 30px;
+}
+
+/* Table itself */
+
+main.listings > section > table.sortable,
+main.orders > section > table.sortable
+{
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FFFFFF;
+}
+
+/* Table header */
+
+main.listings > section > table.sortable > thead,
+main.orders > section > table.sortable > thead
+{
+    background-color: #F4F7FC;
+    border-bottom: 1px solid #EAEAEA;
+    color: var(--primary-text-color-alternative);
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+main.listings > section > table.sortable > thead > tr > th,
+main.orders > section > table.sortable > thead > tr > th
+{
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+}
+
+main.listings > section > table.sortable > thead > tr > th:not(:last-of-type)::after,
+main.orders > section > table.sortable > thead > tr > th::after
+{
+    position: absolute;
+    font-family: "Font Awesome 6 Free";
+    content: "\f0dc";
+    color: #BCC2CE;
+}
+
+main.listings > section > table.sortable > thead > tr > th.sort-asc::after,
+main.listings > section > table.sortable > thead > tr > th.sort-desc::after,
+main.orders > section > table.sortable > thead > tr > th.sort-asc::after,
+main.orders > section > table.sortable > thead > tr > th.sort-desc::after
+{
+    font-family: "Font Awesome 6 Free";
+    color: var(--primary-text-color);
+}
+
+main.listings > section > table.sortable > thead > tr > th.sort-asc::after,
+main.orders > section > table.sortable > thead > tr > th.sort-asc::after
+{
+    content: "\f0de";
+}
+
+main.listings > section > table.sortable > thead > tr > th.sort-desc::after,
+main.orders > section > table.sortable > thead > tr > th.sort-desc::after
+{
+    content: "\f0dd";
+}
+
+main.listings > section > table.sortable > thead > tr > th::after,
+main.listings > section > table.sortable > thead > tr > th.sort-asc::after,
+main.listings > section > table.sortable > thead > tr > th.sort-desc::after,
+main.orders > section > table.sortable > thead > tr > th::after,
+main.orders > section > table.sortable > thead > tr > th.sort-asc::after,
+main.orders > section > table.sortable > thead > tr > th.sort-desc::after
+{
+	margin-left: 10px;
+}
+
+/* Table body */
+
+/* Body rows */
+
+main.listings > section > table.sortable > tbody > tr:nth-child(even),
+main.orders > section > table.sortable > tbody > tr:nth-child(even)
+{
+    background-color: #F9FAFC;
+}
+
+main.listings > section > table.sortable > tbody > tr:hover,
+main.listings > section > table.sortable > tbody > tr:nth-child(even):hover,
+main.orders > section > table.sortable > tbody > tr:hover,
+main.orders > section > table.sortable > tbody > tr:nth-child(even):hover
+{
+    background-color: #EBF0FA;
+}
+
+/* Body cells */
+
+main.listings > section > table.sortable > tbody > tr > td,
+main.orders > section > table.sortable > tbody > tr > td,
+main.order > section > div > div > div > table.order_items > tbody > tr > td,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td
+{
+    padding: 15px;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Title cell (link to product page) */
+
+main.listings > section > table.sortable > tbody > tr > td:first-of-type,
+main.orders > section > table.sortable > tbody > tr > td:first-of-type
+{
+    color: var(--accent-text-color);
+    cursor: pointer;
+}
+
+main.listings > section > table.sortable > tbody > tr > td > span.active,
+main.listings > section > table.sortable > tbody > tr > td > span.inactive,
+main.orders > section > table.sortable > tbody > tr > td > span.order_pending,
+main.orders > section > table.sortable > tbody > tr > td > span.order_ready_for_shipping,
+main.orders > section > table.sortable > tbody > tr > td > span.order_shipped,
+main.orders > section > table.sortable > tbody > tr > td > span.order_received,
+main.orders > section > table.sortable > tbody > tr > td > span.order_cancelled
+{
+    border-radius: 7px;
+    padding: 5px;
+}
+
+main.orders > section > table.sortable > tbody > tr > td > span.order_pending
+{
+    background-color: #E6E6E6;
+    color: var(--primary-text-color);
+}
+
+main.listings > section > table.sortable > tbody > tr > td > span.active,
+main.orders > section > table.sortable > tbody > tr > td > span.order_received
+{
+    background-color: #D0FBD0;
+    color: #005D00;
+}
+
+main.listings > section > table.sortable > tbody > tr > td > span.inactive,
+main.orders > section > table.sortable > tbody > tr > td > span.order_cancelled
+{
+    background-color: #FFD4D4;
+    color: #870700;
+}
+main.orders > section > table.sortable > tbody > tr > td > span.order_ready_for_shipping
+{
+    background-color: #FFFFB3;
+    color: #575700;
+}
+
+main.orders > section > table.sortable > tbody > tr > td > span.order_shipped
+{
+    background-color: #E5F1FF;
+    color: #004CA3;
+}
+
+/* Edit button */
+
+main.listings > section > table.sortable > tbody > tr > td:last-of-type
+{
+    padding: 0;
+    color: #CACACA;
+    cursor: pointer;
+}
+
+main.listings > section > table.sortable > tbody > tr > td:last-of-type > a
+{
+    padding: 15px;
+    transition: color 0.1s;
+}
+
+main.listings > section > table.sortable > tbody > tr > td:last-of-type > a:first-of-type:hover
+{
+    color: var(--primary-text-color);
+}
+
+main.listings > section > table.sortable > tbody > tr > td:last-of-type > a:last-of-type:hover
+{
+    color: var(--accent-text-color-alternative);
+}
+
+main.listings > section > table.sortable > thead > tr > th.left,
+main.listings > section > table.sortable > tbody > tr > td.left,
+main.orders > section > table.sortable > thead > tr > th.left,
+main.orders > section > table.sortable > tbody > tr > td.left
+{
+    text-align: left;
+}
+
+main.listings > section > table.sortable > thead > tr > th.right,
+main.listings > section > table.sortable > tbody > tr > td.right,
+main.orders > section > table.sortable > thead > tr > th.right,
+main.orders > section > table.sortable > tbody > tr > td.right
+{
+    text-align: right;
+}
+
+main.listings > section > table.sortable > tbody > tr > td.no_result,
+main.orders > section > table.sortable > tbody > tr > td.no_result
+{
+    padding: 20px 10px;
+}
+
+/* Articles table [END] */
+
+/**********************************
+**                               **
+**    LISTINGS & ORDERS [END]    **
+**                               **
+**********************************/
+
+/*****************************
+**                          **
+**    ORDER VIEW [START]    **
+**                          **
+*****************************/
+
+main.order,
+main.cart
+{
+    gap: 20px;
+}
+
+/* View image in full screen */
+
+/* Container */
+
+main.order > div,
+main.cart > div
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(50, 50, 50, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 998;
+    cursor: pointer;
+}
+
+/* Actual image */
+
+main.order > div > div,
+main.cart > div > div
+{
+    /* display: none; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 80px;
+    background-size: contain;
+    background-repeat: no-repeat no-repeat;
+    background-position: center center;
+    overflow: hidden;
+    z-index: 999;
+}
+
+main.order > section,
+main.order > nav,
+main.cart > section
+{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Back button */
+
+main.order > nav
+{
+    padding-left: 20px;
+    width: var(--default-page-width);
+}
+
+main.order > nav > a
+{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Left section container */
+
+main.order > section > div,
+main.cart > section > div
+{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Box design */
+
+main.order > section > div > div,
+main.order > section > aside > div,
+main.cart > section > div > div,
+main.cart > section > aside > div
+{
+    display: flex;
+    border-radius: 7px;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+    background-color: #FFFFFF;
+    flex-direction: column;
+}
+
+/* Order box */
+
+main.order > section > div > div,
+main.cart > section > div > div
+{
+    width: calc(var(--default-page-width) - 225px - 20px);
+}
+
+/* Box title */
+
+main.order > section > div > div > h1,
+main.order > section > aside > div > h1,
+main.cart > section > div > div > h1,
+main.cart > section > aside > div > h1
+{
+    display: flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    font-weight: 700;
+    justify-content: space-between;
+}
+
+main.order > section > div > div > h1:first-of-type > span
+{
+    font-weight: 400;
+}
+
+main.order > section > div > div > h1:first-of-type > span > i,
+main.order > section > div > div > h1:first-of-type > span > span
+{
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 14px;
+    vertical-align: middle;
+}
+
+/* Box content */
+
+main.order > section > div > div > div,
+main.cart > section > div > div > div
+{
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Timeline [START] */
+
+main.order > section > div > div > div > div.timeline
+{
+    position: relative;
+    display: flex;
+    align-items: stretch;
+}
+
+/* Base horizontal line */
+
+main.order > section > div > div > div > div.timeline:before
+{
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: #D3D3D3; /* Inactive line color */
+    content: "";
+    z-index: 0;
+    transform: translateY(-50%);
+}
+
+/* Each timeline item */
+
+main.order > section > div > div > div > div.timeline > span
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1; /* Icons on top of the line */
+    flex: 1; /* Equal spacing */
+}
+
+/* Connecting line for completed / active states */
+
+main.order > section > div > div > div > div.timeline > span:not(span.active ~ span):before
+{
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #4CAF50;
+    content: "";
+    z-index: 0;
+    transform: translateY(-50%);
+}
+
+main.order > section > div > div > div > div.timeline > span:not(span.active ~ span):not(:last-of-type).active:before
+{
+    width: 50%;
+}
+
+main.order > section > div > div > div > div.timeline > span:not(span.active ~ span):after
+{
+    content: attr(data-date);
+    color: #4CAF50;
+}
+
+/* Icon wrapper */
+
+main.order > section > div > div > div > div.timeline > span > i
+{
+    position: relative;
+    display: flex;
+    margin-bottom: 25px;
+    height: 42px;
+    width: 42px;
+    border-radius: 50%;
+    background-color: #D3D3D3;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    font-size: 16px;
+    color: var(--primary-color);
+}
+
+/* Active / Completed icons */
+
+main.order > section > div > div > div > div.timeline > span:not(span.active ~ span) > i
+{
+    background-color: #4CAF50;
+}
+
+main.order > section > div > div > div > div.timeline > span > i:after
+{
+    position: absolute;
+    top: 50px;
+    width: max-content;
+    content: attr(data-text);
+    font-family: var(--default-font-family);
+    font-size: var(--default-font-size);
+    font-weight: 400;
+    color: #4CAF50;
+}
+
+main.order > section > div > div > div > div.timeline > span.active ~ span > i:after
+{
+    color: #D3D3D3;
+}
+
+/* Timeline [END] */
+
+/* Order actionse [START] */
+
+main.order > section > div > div > div > div.order_actions
+{
+    display: flex;
+    border-radius: 7px;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+main.order > section > div > div > div > div.order_actions > a
+{
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.2s;
+}
+
+main.order > section > div > div > div > div.order_actions > a:hover
+{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Order actionse [END] */
+
+/* Items [START] */
+
+main.order > section > div > div > div > table.order_items,
+main.order > section > div > div > div > table.payment,
+main.cart > section > div > div > div > table.order_items
+{
+    margin: -20px 0;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 20px;
+}
+
+/* Table body */
+
+/* Body rows */
+
+main.order > section > div > div > div > table.order_items > tbody > tr,
+main.cart > section > div > div > div > table.order_items > tbody > tr
+{
+    background-color: var(--primary-color);
+    border-radius: 70px;
+    overflow: hidden;
+}
+
+/* Body columns */
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td
+{
+    text-align: left;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span
+{
+    display: flex;
+    gap: 15px;
+}
+
+/* Product image */
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type
+{
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type > img,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type > img
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Image view icon */
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type > i,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type > i
+{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type:hover > i,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:first-of-type:hover > i
+{
+    opacity: 1;
+}
+
+/* Product info */
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type
+{
+    display: flex;
+    height: 64px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type
+{
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-text-color);
+    cursor: pointer;
+}
+
+/* External link icon */
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type > i,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type > i
+{
+    opacity: 0;
+    font-size: 12px;
+    transition: opacity 0.2s;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type:hover > i,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type:hover > i
+{
+    opacity: 1;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:last-of-type,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:last-of-type
+{
+    color: var(--secondary-text-color);
+}
+
+/* Border radius workaround */
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:first-child,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-child
+{
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:last-child,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:last-child
+{
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td.right,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td.right
+{
+    text-align: right;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td.tiny,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td.tiny
+{
+    padding: 0;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td.tiny:not(.left, .right),
+main.cart > section > div > div > div > table.order_items > tbody > tr > td.tiny:not(.left, .right)
+{
+    padding: 10px;
+    text-align: center;
+}
+
+main.order > section > div > div > div > table.order_items > tbody > tr > td:last-of-type,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:last-of-type
+{
+    padding-right: 20px;
+}
+
+/* Items [END] */
+
+/* Payment [Start] */
+
+main.order > section > div > div > div > table.payment > tbody > tr.total
+{
+    font-weight: 700;
+}
+
+main.order > section > div > div > div > table.payment > tbody > tr > td:last-of-type
+{
+    text-align: right;
+}
+
+main.order > section > div > div > div > table.payment > tbody > tr:last-of-type > td
+{
+    padding-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Payment [END] */
+
+/* Customer information [START] */
+
+main.order > section > aside,
+main.cart > section > aside
+{
+    display: flex;
+    width: 225px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Aside box containers */
+
+main.order > section > aside > div:not(:first-of-type) > div,
+main.cart > section > aside > div > div
+{
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+main.order > section > aside > div > div
+{
+    display: flex;
+}
+
+/* Note box */
+
+/* Note box save button */
+
+main.order > section > aside > div > h1:first-of-type > i
+{
+    display: none;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+main.order > section > aside > div > h1:first-of-type > i:hover
+{
+    opacity: 1;
+}
+
+/* Note box writing area */
+
+main.order > section > aside > div > div > textarea
+{
+    width: 100%;
+    padding: 20px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    line-height: 18px;
+    min-height: calc(3 * 18px + 2 * 20px);
+    resize: vertical;
+}
+
+/* Phone number and email address */
+
+main.order > section > aside > div > div > span > a
+{
+    color: var(--accent-text-color);
+}
+
+/* Customer information [END] */
+
+/***************************
+**                        **
+**    ORDER VIEW [END]    **
+**                        **
+***************************/
+
+/****************************
+**                         **
+**    CART VIEW [START]    **
+**                         **
+****************************/
+
+/* Quantity display box */
+
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > span.qty
+{
+    flex-grow: 1;
+    width: auto;
+    min-width: 25px;
+}
+
+/* Quantity change buttons */
+
+main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > div > i
+{
+    cursor: pointer;
+}
+
+/* Discount % and item price */
+
+main.cart > section > div > div > div > table.order_items > tbody > tr > td.discount,
+main.cart > section > div > div > div > table.order_items > tbody > tr > td.price.discounted
+{
+    color: #FF0000;
+}
+
+/* Delete button */
+
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:last-of-type > i
+{
+    color: rgba(0, 0, 0, 0.20);
+    transition: color 0.2s;
+}
+
+main.cart > section > div > div > div > table.order_items > tbody > tr > td:last-of-type > i:hover
+{
+    color: var(--primary-text-color);
+    cursor: pointer;
+}
+
+/**************************
+**                       **
+**    CART VIEW [END]    **
+**                       **
+**************************/
+
+/********************************
+**                             **
+**    LISTINGS EDIT [START]    **
+**                             **
+********************************/
+
+main.listings_edit > form
+{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Left and right sections */
+
+main.listings_edit > form > :is(section, aside)
+{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Left section */
+
+main.listings_edit > form > section
+{
+    width: calc(var(--default-page-width) - 300px - 20px);
+}
+
+/* Right section */
+
+main.listings_edit > form > aside
+{
+    width: 300px;
+}
+
+/* Individual fields */
+
+main.listings_edit > form > :is(section, aside) > div:not(.nav-buttons)
+{
+    display: flex;
+    padding: 0 15px 15px 15px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+    flex-direction: column;
+    gap: 10px;
+    /* overflow: hidden; */
+}
+
+/* Fields labels */
+
+main.listings_edit > form > :is(section, aside) > div > label
+{
+    margin-top: 15px;
+    color: var(--primary-text-color-alternative);
+}
+
+/* Actual input fields */
+
+main.listings_edit > form > aside:is(section, aside) > div > div.editor
+{
+    width: 100%;
+}
+
+main.listings_edit > form > :is(section, aside) > div > span,
+main.listings_edit > form > :is(section, aside) > div > div.editor > textarea,
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > input
+{
+    display: flex;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    background-color: #FFFFFF;
+    align-items: center;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+main.listings_edit > form > :is(section, aside) > div > span > input
+{
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+}
+
+/* Icons */
+
+main.listings_edit > form > :is(section, aside) > div > span > i
+{
+    padding-left: 12px;
+}
+
+/* Inputs, that have icons */
+
+main.listings_edit > form > :is(section, aside) > div > span > i ~ input
+{
+    padding-left: 10px;
+}
+
+/* Article images */
+
+main.listings_edit > form > section > div > div
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Image container */
+
+main.listings_edit > form > section > div > div.images > div
+{
+    position: relative; /* instead of z-index on child img and delete icon */
+    width: 158px;
+    height: 158px;
+}
+
+/* Actual image */
+
+main.listings_edit > form > section > div > div.images > div > img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+/* Delete and move buttons */
+
+main.listings_edit > form > section > div > div.images > div > i
+{
+    display: block;
+    position: absolute;
+    padding: 3px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* Delete button */
+
+main.listings_edit > form > section > div > div.images > div > i.fa-trash
+{
+    top: 5px;
+    right: 5px;
+    opacity: 0.1;
+}
+
+/* Move buttons */
+
+main.listings_edit > form > section > div > div.images > div > i.fa-arrow-left
+{
+    bottom: 5px;
+    left: 5px;
+}
+
+main.listings_edit > form > section > div > div.images > div > i.fa-arrow-right
+{
+    bottom: 5px;
+    right: 5px;
+}
+
+/* Hover effect for delete and move buttons */
+
+main.listings_edit > form > section > div > div.images > div:hover > i
+{
+    opacity: 0.5;
+}
+
+main.listings_edit > form > section > div > div.images > div > i:hover
+{
+    opacity: 1;
+}
+
+/* Add image button */
+
+main.listings_edit > form > section > div > div.images > div.add_new
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px dashed var(--secondary-color-alternative);
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+main.listings_edit > form > section > div > div.images > div.add_new:hover
+{
+    border-color: var(--accent-color);
+}
+
+/* Add image button icon */
+
+main.listings_edit > form > section > div > div.images > div.add_new > i
+{
+    font-size: 25px;
+    opacity: 0.3;
+}
+
+main.listings_edit > form > section > div > div.images > div.add_new:hover > i
+{
+    opacity: 1;
+    color: var(--accent-text-color);
+}
+
+/* Actual input fields hover effect */
+
+main.listings_edit > form > :is(section, aside) > div > span:hover,
+main.listings_edit > form > :is(section, aside) > div > div.editor > textarea:hover
+{
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Actual input fields focus effect */
+
+main.listings_edit > form > :is(section, aside) > div > span:focus-within,
+main.listings_edit > form > :is(section, aside) > div > div.editor > textarea:focus
+{
+    border-color: #00A2FF88;
+    box-shadow: 0 0 1px 0 #00A2FF;
+    outline: none;
+}
+
+/* Status toggle switch */
+
+main.listings_edit > form > :is(section, aside) > div > span.status
+{
+    border: 0;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Actual radial buttons (We mustn't directly see them) */
+
+main.listings_edit > form > :is(section, aside) > div > span.status > input
+{
+    display: none;
+}
+
+/* Actaual radial buttons */
+
+main.listings_edit > form > :is(section, aside) > div > span.status > label
+{
+    width: 50%;
+    line-height: 32px;
+    text-align: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+main.listings_edit > form > :is(section, aside) > div > span.status > input#inactive:checked + label
+{
+    background-color: var(--accent-text-color-alternative);
+    color: var(--primary-color);
+}
+
+main.listings_edit > form > :is(section, aside) > div > span.status > input#active:checked + label
+{
+    /* background-color: var(--accent-color); */
+    background-color: #228B22;
+    color: var(--primary-color);
+}
+
+/* The status toggle indication */
+
+main.listings_edit > form > :is(section, aside) > div > span.status > input:not(:checked) + label
+{
+    background-color: var(--primary-color);
+    color: var(--primary-text-color-alternative);
+    cursor: pointer;
+}
+
+main.listings_edit > form > :is(section, aside) > div > span.status > input:not(:checked) + label:hover
+{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation buttons */
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button
+{
+    border: 0;
+    border-radius: 7px;
+    padding: 10px;
+    flex-grow: 1;
+    /* flex-basis: 0; */
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Buttons styling */
+
+/* Categories [START] */
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content
+{
+    position: relative;
+    width: 100%;
+    height: 500px;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > input
+{
+    padding: 10px;
+    width: 100%;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul
+{
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+    background-color: #FFFFFF;
+    /* display: none; */
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    height: calc(100% - 50px);
+    list-style: none;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar, because MacOS doesn't allow you to keep the scroll bar always visible */
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul::-webkit-scrollbar
+{
+    -webkit-appearance: none;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul::-webkit-scrollbar:vertical
+{
+    width: 11px;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul::-webkit-scrollbar:horizontal
+{
+    height: 11px;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul::-webkit-scrollbar-thumb
+{
+    border-radius: 9px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul::-webkit-scrollbar-thumb:hover
+{
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Custom scrollbar ends */
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul li
+{
+    padding: 11px;
+    cursor: pointer;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content > ul li:hover
+{
+    background-color: var(--primary-color);
+}
+
+/*
+Category Modal [START]
+*/
+
+/* Invisible checkbox that enables the modal control */
+
+main.listings_edit > form > aside > div.category_selector > span > input[type = checkbox],
+main.listings > span > input[type = checkbox]
+{
+    display: none;
+}
+
+/* Filter button that opens the pop-up on click */
+
+main.listings_edit > form > aside > div.category_selector > span > label.open_modal
+{
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Background of the modal */
+
+main.listings_edit > form > aside > div.category_selector > span > label.modal_background,
+main.listings > span > label.modal_background
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(50, 50, 50, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 998;
+}
+
+/* Show the modal by changing the invisible checkbox state */
+
+main.listings_edit > form > aside > div.category_selector > span > input[type = checkbox]:checked ~ label.modal_background,
+main.listings > span > input[type = checkbox]:checked ~ label.modal_background
+{
+    display: block;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > input[type = checkbox]:checked ~ div,
+main.listings > span > input[type = checkbox]:checked ~ div
+{
+    display: flex;
+}
+
+/* Modal itself */
+
+main.listings_edit > form > aside > div.category_selector > span > div,
+main.listings > span > div
+{
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 7px;
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    z-index: 999;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.title-bar,
+main.listings > span > div > div.title-bar
+{
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    line-height: 24px;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.title-bar > span,
+main.listings > span > div > div.title-bar > span
+{
+    padding-left: 5px;
+    flex-grow: 1;
+    font-weight: 700;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.title-bar > label,
+main.listings > span > div > div.title-bar > label
+{
+    color: var(--secondary-text-color);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.title-bar > label:hover,
+main.listings > span > div > div.title-bar > label:hover
+{
+    color: var(--accent-text-color-alternative);
+}
+
+/* Price range slider */
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.content,
+main.listings > span > div > div.content
+{
+    padding: 15px;
+    min-width: 500px;
+    background-color: var(--primary-color);
+}
+
+/* Save button */
+
+/*
+
+Not in use
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.buttons
+{
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    justify-content: flex-end;
+    line-height: 24px;
+    gap: 10px;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.buttons > button
+{
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: none;
+    transition: color 0.5s, box-shadow 0.5s;
+    cursor: pointer;
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.buttons > button#apply
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+main.listings_edit > form > aside > div.category_selector > span > div > div.buttons > button#apply:hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5);
+}
+
+*/
+
+/* Category Modal [END] */
+
+/* Categories [END] */
+
+/*************************************
+
++---------------------------------------+
+| Buttons                               |
++---------------------------------------+
+
++---------------------------------------+
+| Type   | Action                       |
++---------------------------------------+
+| Button | Back to all listings         |
+| Reset  | Reset form to current values |
+| Submit | Save changes                 |
++---------------------------------------+
+
+*************************************/
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="button"],
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="reset"]
+{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="submit"]
+{
+    font-weight: 700;
+}
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="button"]:hover,
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="reset"]:hover
+{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="button"]::before,
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="reset"]::before
+/* main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="submit"]::before */
+{
+    display: inline-block;
+    position: relative;
+    left: -10px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font: var(--fa-font-solid);
+}
+
+/* Back icon */
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="button"]::before
+{
+    content: "\f104";
+}
+
+/* Reset icon */
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="reset"]::before
+{
+    content: "\f2f1";
+}
+
+/* Save icon */
+
+/* main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="submit"]::before
+{
+    content: "\f0c7";
+} */
+
+/* Save button */
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="submit"]
+{
+    width: 100%;
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type="submit"]:hover
+{
+    background-color: var(--accent-text-color);
+}
+
+/******************************
+**                           **
+**    LISTINGS EDIT [END]    **
+**                           **
+******************************/
+
+/***************************
+**                        **
+**    SETTINGS [START]    **
+**                        **
+***************************/
+
+/* Settings page */
+
+main.settings > section
+{
+    display: flex;
+    width: fit-content;
+    border-radius: 7px;
+    /* old box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+/* Left navigation menu */
+
+main.settings > section > aside
+{
+    padding: 10px;
+    width: 220px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+main.settings > section > aside > nav
+{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+main.settings > section > aside > nav > a
+{
+    padding: 10px 15px;
+    border-radius: 7px;
+    transition: background-color 0.2s, color 0.1s;
+}
+
+main.settings > section > aside > nav > a:hover
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+/* Right settings content */
+
+main.settings > section > div
+{
+    display: none;
+    padding: 20px;
+    width: 500px;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 30px;
+}
+
+main.settings > section > div:first-of-type
+{
+    display: flex;
+}
+
+/* Profile settings */
+
+main.settings > section > div.profile > div.profile_picture
+{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Avatar, change and delete buttons */
+
+main.settings > section > div.profile > div.profile_picture > img
+{
+    border-radius: 7px;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+main.settings > section > div.profile > div.profile_picture > div.buttons
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 24px;
+    gap: 20px;
+}
+
+main.settings > section > div.profile > div.profile_picture > div.buttons > button
+{
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
+    cursor: pointer;
+}
+
+main.settings > section > div.profile > div.profile_picture > div.buttons > button:first-of-type
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+main.settings > section > div.profile > div.profile_picture > div.buttons > button:first-of-type:hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5);
+}
+
+main.settings > section > div.profile > div.profile_picture > div.buttons > button:last-of-type
+{
+    color: var(--secondary-text-color);
+}
+
+main.settings > section > div.profile > div.profile_picture > div.buttons > button:last-of-type:hover
+{
+    background-color: var(--accent-text-color-alternative);
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.15);
+    color: var(--primary-color);
+}
+
+/* Other fields */
+
+main.settings > section > div > form
+{
+    display: flex;
+    gap: 20px;
+}
+
+main.settings > section > div > form > span
+{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+main.settings > section > div > form > span:last-of-type
+{
+    flex-grow: 1;
+}
+
+main.settings > section > div > form > span > label
+{
+    line-height: 36px;
+}
+
+main.settings > section > div > form > span > input,
+main.settings > section > div > form > span > select
+{
+    border: none;
+    border-radius: 7px;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+    height: 36px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    transition: box-shadow 0.5s;
+}
+
+main.settings > section > div > form > span > input[type = date],
+main.settings > section > div > form > span > select
+{
+    cursor: pointer;
+}
+
+main.settings > section > div > form > span > input::placeholder
+{
+    color: var(--primary-text-color);
+}
+
+main.settings > section > div > form > span > input:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+main.settings > section > div > form > span > input:focus
+{
+    box-shadow: 0 2px 10px 0 #00A2FF88;
+}
+
+main.settings > section > div > form > span > input:disabled
+{
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+main.settings > section > div > form > span > input:disabled::placeholder
+{
+    color: var(--secondary-text-color);
+}
+
+/* Settings page save button */
+
+main.settings > section > div > input
+{
+    border: none;
+    border-radius: 7px;
+    padding: 10px 20px;
+    color: var(--secondary-text-color);
+    transition: background-color 0.5s, color 0.5s, box-shadow 0.5s;
+    cursor: pointer;
+}
+
+main.settings > section > div > input:disabled
+{
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+main.settings > section > div > input:not(:disabled)
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+main.settings > section > div > input:not(:disabled):hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5);
+}
+
+/********************/
+/*                  */
+/*   Profile page   */
+/*                  */
+/********************/
+
+/* Profile details */
+
+main.profile > section.info
+{
+    display: flex;
+    border-radius: 7px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+/* Avatar on the left */
+
+main.profile > section.info > div
+{
+    display: flex;
+    width: 220px;
+}
+
+main.profile > section.info > div > img
+{
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* Profile info like registered_on, customers and reviews */
+
+main.profile > section.info > article
+{
+    display: flex;
+    padding: 15px;
+    min-width: fit-content;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+main.profile > section.info > article > h1
+{
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* Reviews [START] */
+
+/* The stars */
+
+main.profile > section.info > article > span > i
+{
+    color: orange;
+}
+
+/* The container for the bars */
+
+main.profile > section.info > article > div
+{
+    display: flex;
+    gap: 5px;
+}
+
+/* Divided stars, bars and reviews on 3 columns */
+
+main.profile > section.info > article > div > div
+{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Bars column */
+
+main.profile > section.info > article > div > div.bars
+{
+    flex-grow: 1;
+}
+
+/* Bar */
+
+main.profile > section.info > article > div > div.bars > div
+{
+    border-radius: 7px;
+    background-color: rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+main.profile > section.info > article > div > div.bars > div > div
+{
+    padding: 0 5px;
+    height: 16px;
+    text-align: center;
+    color: var(--primary-color);
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+/* Bar colors */
+
+main.profile > section.info > article > div > div.bars > div.five > div
+{
+    background-color: #5CB85C;
+}
+
+main.profile > section.info > article > div > div.bars > div.four > div
+{
+    background-color: #428BCA;
+}
+
+main.profile > section.info > article > div > div.bars > div.three > div
+{
+    background-color: #5BC0DE;
+}
+
+main.profile > section.info > article > div > div.bars > div.two > div
+{
+    background-color: #F0AD4E;
+}
+
+main.profile > section.info > article > div > div.bars > div.one > div
+{
+    background-color: #D9534F;
+}
+
+/* Reviews column */
+
+main.profile > section.info > article > div > div.reviews
+{
+    text-align: right;
+}
+
+/* Reviews [END] */
+
+main.profile > section.info > aside
+{
+    display: flex;
+    padding: 30px;
+    flex-grow: 1;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.025);
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 20px;
+}
+
+main.profile > section.info > aside > span
+{
+    display: block;
+    padding: 10px 0;
+}
+
+/*******************************
+**                            **
+**    FILTER MODAL [START]    **
+**                            **
+*******************************/
+
+/* Invisible checkbox that enables the modal control */
+
+main.profile > section.info > aside > span > input[type = checkbox]
+{
+    display: none;
+}
+
+/* Filter button that opens the pop-up on click */
+
+main.profile > section.info > aside > span > label.open_modal
+{
+    padding: 10px;
+    width: fit-content;
+    border-radius: 7px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    background: var(--primary-color);
+    cursor: pointer;
+    transition: box-shadow 0.5s;
+}
+
+main.profile > section.info > aside > span > label.open_modal:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Background of the modal */
+
+main.profile > section.info > aside > span > label.modal_background
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(50, 50, 50, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 998;
+}
+
+/* Show the modal by changing the invisible checkbox state */
+
+main.profile > section.info > aside > span > input[type = checkbox]:checked ~ label.modal_background
+{
+    display: block;
+}
+
+main.profile > section.info > aside > span > input[type = checkbox]:checked ~ div
+{
+    display: flex;
+}
+
+/* Modal itself */
+
+main.profile > section.info > aside > span > div
+{
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 7px;
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    z-index: 999;
+}
+
+main.profile > section.info > aside > span > div > div.title-bar
+{
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    line-height: 24px;
+}
+
+main.profile > section.info > aside > span > div > div.title-bar > span
+{
+    padding-left: 5px;
+    flex-grow: 1;
+    font-weight: 700;
+}
+
+main.profile > section.info > aside > span > div > div.title-bar > label
+{
+    color: var(--secondary-text-color);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+main.profile > section.info > aside > span > div > div.title-bar > label:hover
+{
+    color: var(--accent-text-color-alternative);
+}
+
+/* Price range slider */
+
+main.profile > section.info > aside > span > div > div.content
+{
+    padding: 15px;
+    min-width: 500px;
+    background-color: var(--primary-color);
+}
+
+/* Slider itself */
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider
+{
+    margin: 30px 20px 45px;
+    height: 6px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-base
+{
+    height: 6px;
+}
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-handle
+{
+    right: -9px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-handle::before,
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-handle::after
+{
+    display: none;
+}
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-connect
+{
+    border-radius: 10px;
+    background-color: var(--accent-color);
+}
+
+/* Pips */
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-pips
+{
+    height: auto;
+}
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-pips::after
+{
+    content: "";
+    display: table;
+    clear: both;
+}
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-pips > .noUi-marker-large
+{
+    height: 10px;
+}
+
+main.profile > section.info > aside > span > div > div.content > div#range-slider .noUi-pips > .noUi-value
+{
+    top: 15px;
+}
+
+/* From To price input fields */
+
+main.profile > section.info > aside > span > div > div.content > div.range
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Actual fields */
+
+main.profile > section.info > aside > span > div > div.content > div.range > input
+{
+    margin-top: 5px;
+    padding: 5px;
+    width: 100px;
+    border: none;
+    border-radius: 7px;
+    outline: none;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    text-align: center;
+    overflow: hidden;
+    transition: box-shadow 0.5s;
+}
+
+main.profile > section.info > aside > span > div > div.content > div.range > input:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Remove input fields arrow (scroll) buttons */
+
+main.profile > section.info > aside > span > div > div.content > div.range > input::-webkit-outer-spin-button,
+main.profile > section.info > aside > span > div > div.content > div.range > input::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Save and cancel buttons */
+
+main.profile > section.info > aside > span > div > div.buttons
+{
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    justify-content: flex-end;
+    line-height: 24px;
+    gap: 10px;
+}
+
+main.profile > section.info > aside > span > div > div.buttons > button
+{
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: none;
+    transition: color 0.5s, box-shadow 0.5s;
+    cursor: pointer;
+}
+
+main.profile > section.info > aside > span > div > div.buttons > button#range-reset
+{
+    background-color: rgba(0, 0, 0, 0.15);
+    color: var(--secondary-text-color);
+}
+
+main.profile > section.info > aside > span > div > div.buttons > button#range-reset:hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.15);
+    color: var(--primary-text-color);
+}
+
+main.profile > section.info > aside > span > div > div.buttons > button#range-apply
+{
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+main.profile > section.info > aside > span > div > div.buttons > button#range-apply:hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5);
+}
+
+/*****************************
+**                          **
+**    FILTER MODAL [END]    **
+**                          **
+*****************************/
+
+/**************************
+**                       **
+**    ARTICLE [START]    **
+**                       **
+**************************/
+
+/* Articles container */
+
+main.search > section.articles,
+main.profile > section.articles
+{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+main.profile
+{
+    gap: 40px;
+}
+
+/* Article card */
+
+main.search > section.articles > article,
+main.profile > section.articles > article,
+main.category > section > article
+{
+    display: flex;
+    width: calc((var(--default-page-width) - ((4 - 1) * 40px)) / 4);
+    border-radius: 7px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    background-color: #FFFFFF;
+    flex-direction: column;
+    overflow: hidden;
+    transition: box-shadow 0.5s;
+}
+
+main.search > section.articles > article:hover,
+main.profile > section.articles > article:hover,
+main.category > section > article:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+    width: calc((var(--default-page-width) - ((4 - 1) * 40px)) / 4);
+}
+
+/* Article image and title */
+
+main.search > section.articles > article > a,
+main.profile > section.articles > article > a,
+main.category > section > article > a
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+main.search > section.articles > article > a > img,
+main.profile > section.articles > article > a > img,
+main.category > section > article > a > img
+{
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+main.search > section.articles > article > a > h1,
+main.profile > section.articles > article > a > h1,
+main.category > section > article > a > h1
+{
+    display: flex;
+    padding: 15px;
+    height: 100%;
+    flex-grow: 1;
+    align-items: center;
+}
+
+main.search > section.articles > article > a > span#discount,
+main.profile > section.articles > article > a > span#discount,
+main.category > section > article > a > span#discount
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 3px 5px;
+    border-radius: 7px;
+    background-color: #E03030;
+    font-weight: 700;
+    color: #F5F5F7;
+    font-size: 14px;
+}
+
+/* Article rating, price and buttons */
+
+/* Rating */
+
+main.search > section.articles > article > div.rating,
+main.profile > section.articles > article > div.rating,
+main.category > section > article > div.rating
+{
+    display: flex;
+    padding: 10px 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+main.search > section.articles > article > div.rating > i,
+main.profile > section.articles > article > div.rating > i,
+main.category > section > article > div.rating > i
+{
+    color: orange;
+}
+
+main.search > section.articles > article > div.rating > span:first-of-type,
+main.profile > section.articles > article > div.rating > span:first-of-type,
+main.category > section > article > div.rating > span:first-of-type
+{
+    margin-left: 5px;
+    flex-grow: 1;
+}
+
+/* Price and buttons */
+
+main.search > section.articles > article > div:last-of-type,
+main.profile > section.articles > article > div:last-of-type,
+main.category > section > article > div:last-of-type
+{
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+main.search > section.articles > article > div > div.price,
+main.profile > section.articles > article > div > div.price,
+main.category > section > article > div > div.price
+{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Price */
+
+main.search > section.articles > article > div > div.price > span:first-of-type,
+main.profile > section.articles > article > div > div.price > span:first-of-type,
+main.category > section > article > div > div.price > span:first-of-type
+{
+    font-weight: 700;
+}
+
+main.search > section.articles > article > div > div.price > span:first-of-type > span:first-of-type,
+main.profile > section.articles > article > div > div.price > span:first-of-type > span:first-of-type,
+main.category > section > article > div > div.price > span:first-of-type > span:first-of-type
+{
+    color: #FF0000;
+}
+
+main.search > section.articles > article > div > div.price > span:first-of-type > span:last-of-type,
+main.profile > section.articles > article > div > div.price > span:first-of-type > span:last-of-type,
+main.category > section > article > div > div.price > span:first-of-type > span:last-of-type
+{
+    font-weight: 400;
+    color: var(--secondary-text-color);
+    text-decoration: line-through;
+}
+
+/* Shipping */
+
+main.search > section.articles > article > div > div.price > span:last-of-type,
+main.profile > section.articles > article > div > div.price > span:last-of-type,
+main.category > section > article > div > div.price > span:last-of-type
+{
+    color: var(--secondary-text-color);
+}
+
+main.search > section.articles > article > div > div.buttons,
+main.profile > section.articles > article > div > div.buttons,
+main.category > section > article > div > div.buttons
+{
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    gap: 15px;
+}
+
+main.search > section.articles > article > div > div.buttons > span,
+main.profile > section.articles > article > div > div.buttons > span,
+main.category > section > article > div > div.buttons > span
+{
+    cursor: pointer;
+}
+
+main.search > section.articles > article > div > div.buttons > span:hover > i.fa-heart,
+main.profile > section.articles > article > div > div.buttons > span:hover > i.fa-heart,
+main.category > section > article > div > div.buttons > span:hover > i.fa-heart,
+main.search > section.articles > article > div > div.buttons > span:has(i.fa-solid.fa-heart) > i,
+main.profile > section.articles > article > div > div.buttons > span:has(i.fa-solid.fa-heart) > i,
+main.category > section > article > div > div.buttons > span:has(i.fa-solid.fa-heart) > i
+{
+    color: var(--accent-text-color-alternative);
+}
+
+main.search > section.articles > article > div > div.buttons > span:has(i.fa-solid.fa-heart):hover > i,
+main.profile > section.articles > article > div > div.buttons > span:has(i.fa-solid.fa-heart):hover > i,
+main.category > section > article > div > div.buttons > span:has(i.fa-solid.fa-heart):hover > i
+{
+    color: inherit;
+}
+
+main.search > section.articles > article > div > div.buttons > span:hover > i.fa-cart-shopping,
+main.profile > section.articles > article > div > div.buttons > span:hover > i.fa-cart-shopping,
+main.category > section > article > div > div.buttons > span:hover > i.fa-cart-shopping
+{
+    color: var(--accent-color);
+}
+
+/************************
+**                     **
+**    ARTICLE [END]    **
+**                     **
+************************/
+
+/*************************
+**                      **
+**    CATEGORY [END]    **
+**                      **
+*************************/
+
+main.category
+{
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Left and right sections */
+
+/* Left section - Sub-categories and Filters */
+
+main.category > aside
+{
+    display: flex;
+    padding: 20px;
+    width: 250px;
+    border-radius: 7px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.025);
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Sub-categories */
+
+main.category > aside > div.sub-categories
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+main.category > aside > div.sub-categories > a
+{
+    width: fit-content;
+    color: var(--accent-text-color);
+}
+
+main.category > aside > div.sub-categories > a:before
+{
+    display: inline-block;
+    margin-right: 5px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font: var(--fa-font-solid);
+    content: "\f105";
+}
+
+/* Filters */
+
+main.category > aside > div.filters
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Right section - List of articles */
+
+main.category > section
+{
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(var(--default-page-width) - 250px - 15px);
+    gap: 15px;
+}
+
+/* Breadcrumb */
+
+main.category > section > nav
+{
+    padding: 10px 0 0 5px;
+    flex-basis: 100%;
+}
+
+main.category > section > article
+{
+    width: calc((var(--default-page-width) - 250px - 15px - ((4 - 1) * 15px)) / 4);
+}
+
+main.category > section > article:hover
+{
+    width: calc((var(--default-page-width) - 250px - 15px - ((4 - 1) * 15px)) / 4);
+}
+
+main.category > section > article > a > h1,
+main.category > section > article > div.rating,
+main.category > section > article > div:last-of-type
+{
+    padding: 10px;
+}
+
+main.category > section > article > div > div.buttons
+{
+    gap: 10px;
+}
+
+/* This could be used in case the old price currency identifier is displayed */
+/* main.category > section > article > div > div.buttons > span
+{
+    font-size: 18px;
+} */
+
+/***************************
+**                        **
+**    CATEGORY [START]    **
+**                        **
+***************************/
+
+/* Sign up page */
+/* Move code here */
+
+/*************************
+**                      **
+**    FOOTER [START]    **
+**                      **
+*************************/
+
+footer
+{
+    display: flex;
+    margin-top: 40px;
+    padding: 50px 0;
+    width: 100%;
+    background-color: var(--secondary-color);
+    flex-direction: column;
+    align-items: center;
+}
+
+footer > section
+{
+    display: flex;
+    width: var(--default-page-width);
+    min-height: 250px;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+footer > section > div
+{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+footer > section > div > span > a > i
+{
+    margin-right: 10px;
+}
+
+/***********************
+**                    **
+**    FOOTER [END]    **
+**                    **
+***********************/

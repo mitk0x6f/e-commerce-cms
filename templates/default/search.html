@@ -1,0 +1,84 @@
+{{ INCLUDE header # }}
+
+<main class="search">
+    <section class="articles">
+        {{ FOR result in results * }}
+            <article>
+                <a href="/view/{{* id *}}">
+                    {{ -- TODO: fix below link -- }}
+                    <img src="/uploads/articles/{{* id *}}/large/img1.jpg">
+                    <h1>{{* title *}}</h1>
+                    <span id="discount">-{{* discount *}}%</span>
+                </a>
+                <div class="rating">
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <span>0 (0)</span>
+                    <span>Sold: 0</span>
+                </div>
+                <div>
+                    <div class="price">
+                        <span id="price">{{* price *}} {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                        <span id="shipping">Free shipping</span>
+                    </div>
+                    <div class="buttons">
+                        <span><i class="fa-regular fa-heart"></i></span>
+                        <span><i class="fa-solid fa-cart-shopping"></i></span>
+                    </div>
+                </div>
+            </article>
+        {{ END FOR }}
+    </section>
+</main>
+
+<script>
+    // TODO: DO NOT repeat the scripts on search.html, profile_shop.html and category_view.html.
+    // Get all price and discount elements
+
+    let price_elements = document.querySelectorAll("section.articles > article > div > div.price > span#price");
+    let discount_elements = document.querySelectorAll("section.articles > article > a > span#discount");
+
+    // Iterate over each product
+
+    for(let i = 0; i < price_elements.length; i++)
+    {
+        let discount = parseFloat(discount_elements[i].textContent.replace(/[^0-9.]/g, ""));
+
+        // Skip if there is no discount
+
+        if(discount == 0)
+        {
+            discount_elements[i].style.display = "none";
+            continue;
+        }
+
+        let price = parseFloat(price_elements[i].textContent.replace(" {{ VAR translate.bulgarian_lev_short ~ }}", ""));
+        let new_price = price - (price * discount / 100);
+
+        price_elements[i].innerHTML = "<span>" + new_price.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}</span> <span>" + price.toFixed(2) + "</span>";
+    }
+
+    // Update the search field placeholder text with current search query
+
+    let current_url = window.location.href;
+
+    // Check if the URL contains the search query
+
+    if(current_url.includes("/search/"))
+    {
+        // Get the search query
+
+        let search_query = decodeURIComponent(current_url.split('/search/')[1]);
+
+        // Replace _ with spaces
+
+        search_query = search_query.replace(/_/g, " ");
+
+        document.querySelector("header > nav > span.search > input[name='search']").setAttribute("value", search_query);
+    }
+</script>
+
+{{ INCLUDE footer # }}

@@ -1,0 +1,403 @@
+{{ INCLUDE header # }}
+
+<main class="product">
+    <section>
+        <div>
+            <div class="wrapper">
+                <div class="carousel">
+                    {{ -- ||
+                        USING EXAMPLE
+                        <div class="carousel-cell">
+                            <img src="placeholder.jpg" data-flickity-lazyload="full.jpg" alt="">
+                        </div>
+                    || -- }}
+                    {{ -- |
+                        Scaling the image for different screen sizes
+                        <img class="carousel-cell-image"
+                            data-flickity-lazyload-srcset="
+                                walrus-large.jpg 720w,
+                                walrus-med.jpg 360w"
+                            sizes="(min-width: 1024px) 720px, 360px"
+                            data-flickity-lazyload-src="walrus-large.jpg"
+                            alt="Product image"
+                        >
+                    | -- }}
+                    <div class="carousel-cell">
+                        <img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img1.jpg" data-flickity-lazyload="/uploads/articles/{{ VAR article_info.id ~ }}/large/img1.jpg" class="carousel-cell-image" alt="Product image">
+                    </div>
+                    <div class="carousel-cell">
+                        <img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img2.jpg" data-flickity-lazyload="/uploads/articles/{{ VAR article_info.id ~ }}/large/img2.jpg" class="carousel-cell-image" alt="Product image">
+                    </div>
+                    <div class="carousel-cell">
+                        <img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img3.jpg" data-flickity-lazyload="/uploads/articles/{{ VAR article_info.id ~ }}/large/img3.jpg" class="carousel-cell-image" alt="Product image">
+                    </div>
+                    <div class="carousel-cell">
+                        <img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img4.jpg" data-flickity-lazyload="/uploads/articles/{{ VAR article_info.id ~ }}/large/img4.jpg" class="carousel-cell-image" alt="Product image">
+                    </div>
+                    <div class="carousel-cell">
+                        <img src="/uploads/product.jpg" data-flickity-lazyload="https://www.eso.org/public/archives/images/screen/eso2008a.jpg" class="carousel-cell-image" alt="Product image">
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-nav">
+                <div class="carousel-cell"><img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img1.jpg" alt="Small product image"></div>
+                <div class="carousel-cell"><img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img2.jpg" alt="Small product image"></div>
+                <div class="carousel-cell"><img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img3.jpg" alt="Small product image"></div>
+                <div class="carousel-cell"><img src="/uploads/articles/{{ VAR article_info.id ~ }}/small/img4.jpg" alt="Small product image"></div>
+                <div class="carousel-cell"><img src="/uploads/product.jpg" alt="Small product image"></div>
+            </div>
+        </div>
+        <aside>
+            <div class="category">
+                <a href="/home">{{ VAR translate.home ~ }}</a>
+                {{ FOR link in article_info.breadcrumb * }}
+                    <i class="fa-solid fa-angle-right"></i> <a href="/category/{{* name *}}">{{* translate.name *}}</a>
+                {{ END FOR }}
+            </div>
+            <div class="shop_name"><a href="/profile/{{ VAR article_info.shop_slug ~ }}">{{ VAR article_info.shop_name ~ }}</a></div>
+            <div class="title">{{ VAR article_info.title ~ }}</div>
+            <div class="description">{{ VAR article_info.description ~ }}</div>
+            <div class="new_price"><span>{{ VAR article_info.price ~ }} {{ VAR translate.bulgarian_lev_short ~ }}</span><span>-{{ VAR article_info.discount ~ }}%</span></div>
+            <div class="price">{{ VAR article_info.price ~ }}</div>
+            <form id="add_to_cart_form" action="/cart/add" method="post">
+                <input type="hidden" name="article_id" value="{{ VAR article_info.id ~ }}">
+                <div class="quantity">
+                    <span><i class="fa-solid fa-minus fa-fw"></i></span>
+                    <span class="qty"><input type="number" value="1" name="quantity" pattern="\d*" {{ IF User::get("seller") ? }}disabled{{ END IF }}></span>
+                    <span><i class="fa-solid fa-plus fa-fw"></i></span>
+                </div>
+                <span>
+                    <i class="fa-solid fa-cart-shopping fa-fw"></i>
+                    <input type="submit" value="{{ VAR translate.add_to_cart ~ }}" id="submit_add_to_cart" {{ IF User::get("seller") ? }}disabled{{ END IF }}>
+                </span>
+                <span>
+                    <i class="fa-regular fa-heart"></i>
+                </span>
+            </form>
+        </aside>
+    </section>
+</main>
+<script>
+    // Initiate flickity using non-query
+
+    // Options
+
+    var flktyA = new Flickity(document.querySelector("main.product > section > div > div.wrapper > div.carousel"), {
+        lazyLoad: 1,
+        pageDots: false,
+        fullscreen: true
+    });
+
+    // Navigation
+
+    var flktyB = new Flickity(document.querySelector("main.product > section > div > div.carousel-nav"), {
+        asNavFor: ".carousel",
+        contain: true,
+        pageDots: false,
+        prevNextButtons: false
+    });
+
+    // Calculate discounted price
+
+    // Get price and discount elements
+
+    let old_price_element = document.querySelector("main.product > section > aside > div.price");
+    let new_price_element = document.querySelector("main.product > section > aside > div.new_price > span:first-of-type");
+    let discount_element = document.querySelector("main.product > section > aside > div.new_price > span:last-of-type");
+
+    if(new_price_element && discount_element)
+    {
+        var old_price = parseFloat(new_price_element.textContent.replace(" {{ VAR translate.bulgarian_lev_short ~ }}", ""));
+        var new_price, new_price_pc;
+        let discount = parseFloat(discount_element.textContent.replace(/[^0-9.]/g, ""));
+
+        // Recalculate new price if there is a discount and add discounted class
+
+        if(discount == 0)
+        {
+            old_price_element.style.display = "none";
+            discount_element.style.display = "none";
+
+            // Format the price
+
+            new_price = old_price;
+
+            // Price per unit
+
+            new_price_pc = new_price + " {{ VAR translate.bulgarian_lev_short ~ }}";
+        }
+        else
+        {
+            new_price = old_price - (old_price * (discount / 100));
+
+            // Format the price
+
+            new_price_element.innerHTML = new_price.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+            new_price_element.classList.add("discounted");
+
+            // Price per unit
+
+            new_price_pc = new_price_element.innerHTML;
+        }
+    }
+</script>
+{{ -- Below script is not required unless user is a buyer -- }}
+{{ IF !User::get("seller") ? }}
+<script>
+    // Make sure the add to cart button is clickable on the entire area, due to the way it's styled
+
+    document.querySelector("main.product > section > aside > form > span").addEventListener(
+        "click", () =>
+        {
+            document.querySelector("main.product > section > aside > form > span > input").click();
+        }
+    );
+
+    // Quantity to buy change behavior
+
+    const article_qty = document.querySelector("main.product > section > aside > form > div.quantity > span.qty > input");
+
+    // Handle input only digits
+
+    // TODO: make below used old_price_element.innerHTML and new_price_element.innerHTML reusable !!!
+
+    article_qty.addEventListener(
+        "input", () =>
+        {
+            let current_value = article_qty.value;
+
+            if(!/^'d+$/.test(current_value) || parseInt(current_value) < 1)
+            {
+                article_qty.value = current_value.replace(/\D/g, "");
+
+                // Do not allow for 0 or negative numbers
+
+                if(article_qty.value === "" || parseInt(article_qty.value) < 1)
+                {
+                    article_qty.value = 1;
+                }
+            }
+
+            old_price_element.innerHTML = (old_price * article_qty.value).toFixed(2);
+            new_price_element.innerHTML = (new_price * article_qty.value).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+        }
+    );
+
+    // Handle quantity decrement
+
+    document.querySelector("main.product > section > aside > form > div.quantity > span:first-of-type").addEventListener(
+        "click", () =>
+        {
+            if(article_qty.value > 1)
+            {
+                // Decrement quantity if there is more than 1
+
+                article_qty.value = parseInt(article_qty.value) - 1;
+
+                old_price_element.innerHTML = (old_price * article_qty.value).toFixed(2);
+                new_price_element.innerHTML = (new_price * article_qty.value).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+            }
+        }
+    );
+
+    // Handle quantity increment
+
+    document.querySelector("main.product > section > aside > form > div.quantity > span:last-of-type").addEventListener(
+        "click", () =>
+        {
+            // Increment quantity
+
+            article_qty.value = parseInt(article_qty.value) + 1;
+
+            old_price_element.innerHTML = (old_price * article_qty.value).toFixed(2);
+            new_price_element.innerHTML = (new_price * article_qty.value).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+        }
+    );
+
+    // Add to cart button click behavior
+    const buy_form = document.getElementById("add_to_cart_form");
+
+    let is_submitting = false;
+
+    // Add article to shopping cart
+    // TODO: move this function in the footer, so it can be reused
+
+    let shopping_cart_article_template = document.querySelector("header > nav > span.cart > div > template");
+
+    function add_article()
+    {
+        let cart_clone = shopping_cart_article_template.content.cloneNode(true);
+
+        let article_info = {
+            element: cart_clone.querySelector("article"),
+            image: cart_clone.querySelector("img"),
+            link: cart_clone.querySelector("div.info > a"),
+            price: cart_clone.querySelector("div.info > span"),
+            quantity: cart_clone.querySelector("div.quantity > span")
+        };
+
+        // Set article data-item-id
+
+        article_info.element.dataset.itemId = "{{ VAR article_info.id ~ }}";
+
+        // Set article image
+
+        article_info.image.src = `/uploads/articles/{{ VAR article_info.id ~ }}/large/img1.jpg`;
+
+        // Set article link and name
+
+        article_info.link.href = `/view/${article_info.element.dataset.itemId}`;
+        article_info.link.textContent = "{{ VAR article_info.title ~ }}";
+
+        // Set article price and discount
+
+        article_info.price.textContent = (new_price * article_qty.value).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+        article_info.price.setAttribute("data-price", old_price);
+        article_info.price.setAttribute("data-discount", "{{ VAR article_info.discount ~ }}");
+
+        if(new_price_element.classList.contains("discounted"))
+        {
+            article_info.price.classList.add("discounted");
+        }
+
+        // Set article quantity
+
+        article_info.quantity.textContent = article_qty.value;
+
+        // Check if the shopping cart is empty
+
+        if(solve_empty_cart())
+        {
+            // Remove the empty shopping cart message
+
+            shopping_cart_container.innerHTML = "";
+
+            // Append the article
+
+            shopping_cart_container.appendChild(cart_clone);
+
+            // Add the button
+
+            shopping_cart_container.innerHTML += '<a href="/cart">{{ VAR translate.view_cart ~ }}</a>';
+        }
+        else
+        {
+            let existing_article = shopping_cart_container.querySelector(`article[data-item-id="{{ VAR article_info.id ~ }}"]`);
+
+            // Cart is not empty and the article already exists
+
+            if(existing_article)
+            {
+                let existing_price = existing_article.querySelector("div.info > span");
+                let existing_quantity = existing_article.querySelector("div.quantity > span");
+
+                // Update the quantity and price of the existing article using the current data
+
+                existing_quantity.textContent = parseInt(existing_quantity.textContent) + parseInt(article_qty.value);
+                existing_price.textContent = (new_price * parseInt(existing_quantity.textContent)).toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+            }
+            else
+            {
+                // shopping_cart_container.querySelector("a:last-of-type").parentNode.parentNode.after(cart_clone);
+
+                // shopping_cart_container.appendChild(cart_clone);
+
+                shopping_cart_container.insertBefore(cart_clone, shopping_cart_container.lastElementChild);
+
+                // shopping_cart_container.querySelector("a:last-of-type").insertAdjacent('afterend', cart_clone);
+                // const lastLink = shopping_cart_container.querySelector("a:last-of-type");
+                // lastLink.parentNode.insertAdjacentElement('afterend', cart_clone);
+            }
+        }
+    }
+
+    buy_form.addEventListener(
+        "submit", async (event) =>
+        {
+            // Prevent the default form submission
+
+            event.preventDefault();
+
+            if(is_submitting)
+            {
+                return;
+            }
+
+            is_submitting = true;
+
+            const buy_form_data = new FormData(buy_form);
+
+            // Send the form data to the server via AJAX request
+
+            try
+            {
+                const response = await fetch(
+                    "/cart/add",
+                    {
+                        method: "POST",
+                        body: buy_form_data
+                    }
+                );
+
+                const result = await response.json();
+
+                if(result.success)
+                {
+                    // Update the shopping cart badge
+
+                    // Defined in the footer
+                    // let shopping_cart_badge = document.querySelector("header > nav > span.cart > a > span");
+
+                    shopping_cart_badge.textContent = parseInt(shopping_cart_badge.textContent) + parseInt(article_qty.value);
+
+                    // Add the article in the cart
+
+                    add_article();
+
+                    // Display the shopping cart badge (Required when adding artile to empty shopping cart)
+
+                    shopping_cart_badge.style.display = "block";
+
+                    // Reset buying quantity and price
+
+                    article_qty.value = 1;
+
+                    old_price_element.innerHTML = old_price.toFixed(2);
+                    new_price_element.innerHTML = new_price.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+
+                    // // Function to hide the modal after 1500ms (1.5s) delay
+
+                    // (async () => {
+                    //     await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    //     modal_state.checked = false;
+                    // })();
+                }
+                else
+                {
+                    if(result.message === "User not signed in.")
+                    {
+                        result.message = "[WIP] Currently you must be signed in to buy an article.";
+                    }
+                    modal_content.textContent = result.message;
+                    modal_state.checked = true;
+                }
+            }
+            catch(error)
+            {
+                modal_content.textContent = "Unexpected error.";
+                modal_state.checked = true;
+                console.error("Unexpected error: ", error);
+            }
+            finally
+            {
+                is_submitting = false;
+            }
+        }
+    );
+
+    // TODO: make the add to favourite button work
+</script>
+{{ END IF }}
+
+{{ INCLUDE footer # }}

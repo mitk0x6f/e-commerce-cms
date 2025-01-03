@@ -1,0 +1,460 @@
+{{ -- |
+    TODO: write documentation
+
+    TODO: As of now conditions in the if block are used as in PHP.
+            Change from IF True && True to IF True AND True,
+            also for OR and other operators.
+
+    TODO: Fix a bug in comments with empty first line.
+            Currently handled by writting anything like multiline or even space:
+            \{\{ -- |
+                this is a working
+                multiline comment
+            | -- \}\}
+| -- }}
+
+{{ INCLUDE header # }}
+
+{{ -- New products carousel -- }}
+<section>
+    <div class="carousel">
+        <div class="carousel-cell">
+            <div class="macbook">
+                <h1>Apple Macbook Product Showcase</h1>
+                <h2>Lean. Mean. M3 machine.</h2>
+                <a href="view/14">Buy now</a>
+            </div>
+        </div>
+        <div class="carousel-cell">
+            <div class="iphone">
+                <h1>Apple iPhone 16 Pro</h1>
+                <h2>Hello, Apple Intelligence.</h2>
+                <a href="view/61">Buy now</a>
+            </div>
+        </div>
+        <div class="carousel-cell">
+            <i class="fa-solid fa-rectangle-ad"></i>
+            <div class="ad">Non-intrusive advertising here.</div>
+        </div>
+    </div>
+</section>
+
+{{ -- Main product categories -- }}
+<main class="home">
+    <section>
+        {{ -- List of categories -- }}
+        {{ -- |
+            id + id2 (+ hidden id3). category1 + category2 [combined_name]
+
+            1 + 5. laptops + computers [laptops_and_computers]
+            27 + 31. smartphones + tablets [smartphones_and_tablets]
+            59 + 82. monitors + TVs [monitors_and_TVs]
+            37. pc_components
+            58. peripherals
+            72. office
+            89. cameras
+            100 + 179 (+ 103). watches
+            125. software
+            134. home_appliances
+        | -- }}
+        <aside>
+            <nav>
+                <a href="#recommended"><i class="fa-regular fa-star fa-fw"></i> {{ VAR translate.recommended ~ }}</a>
+                <a href="#laptops_and_computers"><i class="fa-solid fa-laptop fa-fw"></i> {{ VAR translate.laptops_and_computers ~ }}</a>
+                <a href="#smartphones_and_tablets"><i class="fa-solid fa-mobile-screen-button fa-fw"></i> {{ VAR translate.smartphones_and_tablets ~ }}</a>
+                <a href="#monitors_and_TVs"><i class="fa-solid fa-tv fa-fw"></i> {{ VAR translate.monitors_and_TVs ~ }}</a>
+                <a href="#pc_components"><i class="fa-solid fa-microchip fa-fw"></i> {{ VAR translate.pc_components ~ }}</a>
+                <a href="#peripherals"><i class="fa-solid fa-computer-mouse fa-fw"></i> {{ VAR translate.peripherals ~ }}</a>
+                <a href="#office"><i class="fa-solid fa-print fa-fw"></i> {{ VAR translate.office ~ }}</a>
+                <a href="#cameras"><i class="fa-solid fa-camera fa-fw"></i> {{ VAR translate.cameras ~ }}</a>
+                <a href="#watches"><i class="fa-solid fa-clock fa-fw"></i> {{ VAR translate.watches ~ }}</a>
+                <a href="#software"><i class="fa-solid fa-laptop-code fa-fw"></i> {{ VAR translate.software ~ }}</a>
+                <a href="#home_appliances"><i class="fa-solid fa-house-circle-check fa-fw"></i> {{ VAR translate.home_appliances ~ }}</a>
+            </nav>
+        </aside>
+        {{ -- Products by category -- }}
+        <div class="recommended">
+            <div>
+                WIP - Recommended products will be displayed here.
+            </div>
+        </div>
+        <div class="laptops_and_computers">
+            <div>
+                WIP - Laptop and computer products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.laptops ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="">{{ VAR translate.computers ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="smartphones_and_tablets">
+            <div>
+                WIP - Smartphone and tablet products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.smartphones ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="">{{ VAR translate.tablets ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="monitors_and_TVs">
+            <div>
+                WIP - Monitor and TV products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.monitors ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="">{{ VAR translate.TVs ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="pc_components">
+            <div>
+                WIP - PC components will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="peripherals">
+            <div>
+                WIP - Peripheral products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="office">
+            <div>
+                WIP - Office products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="cameras">
+            <div>
+                WIP - Camera products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="watches">
+            <div>
+                WIP - Watch products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="software">
+            <div>
+                WIP - Software products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+        <div class="home_appliances">
+            <div>
+                WIP - Home appliance products will be displayed here.
+            </div>
+            <span>
+                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+            </span>
+        </div>
+    </section>
+</main>
+
+{{ -- Example sections are following -- }}
+
+<main class="search">
+    <h1>WIP {{ VAR translate.for_you ~ }}</h1>
+    <section class="articles">
+        <article>
+            <a href="/view/2">
+                {{ -- TODO: fix below link -- }}
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-regular fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-regular fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-regular fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-regular fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-regular fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+    </section>
+</main>
+
+<main class="search">
+    <h1>WIP {{ VAR translate.from_your_favorites ~ }}</h1>
+    <section class="articles">
+        <article>
+            <a href="/view/2">
+                {{ -- TODO: fix below link -- }}
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-solid fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-solid fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-solid fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-solid fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        <article>
+            <a href="/view/2">
+                <img src="/uploads/product.jpg" alt="Product_name image">
+                <h1>Placeholder</h1>
+                <span id="discount">-Discount%</span>
+            </a>
+            <div>
+                <div class="price">
+                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span id="shipping">Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-solid fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+    </section>
+</main>
+
+<section class="newsletter">
+    <h1>{{ VAR translate.subscribe_to_our_newsletter ~ }}</h1>
+    <form action="/newsletter/subscribe" method="POST">
+        <span>
+            <i class="fa-regular fa-user"></i>
+            <input type="text" name="name" placeholder="{{ VAR translate.name ~ }} (optional)" autocomplete="name">
+        </span>
+        <span>
+            <i class="fa-regular fa-envelope"></i>
+            <input type="email" name="email" placeholder="Email" autocomplete="email">
+        </span>
+        <input type="submit" value="{{ VAR translate.subscribe ~ }}">
+    </form>
+</section>
+
+<script>
+// Initiate flickity using non-query
+
+// Options
+
+var flkty = new Flickity(
+    document.querySelector("section > div.carousel"),
+    {
+        wrapAround: true
+    }
+);
+
+// Enable the different product pages
+
+const navLinks = document.querySelectorAll("main.home > section > aside > nav > a");
+
+navLinks.forEach(
+    (link) => {
+        link.addEventListener(
+            "click",
+            (event) => {
+                // Do not follow the link of the <a> element
+
+                event.preventDefault();
+
+                // Get the information of the settings-page attribute
+
+                const section = link.getAttribute("href").substring(1);
+
+                // Hide currently open page (all pages actually)
+
+                document.querySelectorAll("main.home > section > div").forEach((div) => {
+                    div.style.display = "none";
+                });
+
+                // Open the desired page
+
+                document.querySelector("div." + section).style.display = "flex";
+            }
+        );
+    }
+);
+
+// Submitting the newsletter form is handled without page refresh
+
+document.querySelector("section.newsletter > form").addEventListener("submit", async function (event){
+    // Do not submit the form the default way
+
+    event.preventDefault();
+
+    // AJAX request
+
+    // Create new imaginary form
+
+    const newsletter_data = new FormData(this);
+
+    // Send the form data to the server via AJAX request
+
+    try
+    {
+        const response = await fetch(
+            "/newsletter/subscribe",
+            {
+                method: "POST",
+                body: newsletter_data
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.success)
+        {
+            modal_title.textContent = "Success";
+            modal_content.textContent = result.message;
+            modal_state.checked = true;
+        }
+        else
+        {
+            modal_title.textContent = "Error";
+            modal_content.textContent = result.message;
+            modal_state.checked = true;
+        }
+    }
+    catch(error)
+    {
+        modal_title.textContent = "Error";
+        modal_content.textContent = "Unexpected error. Please refresh the page and try again.";
+        modal_state.checked = true;
+    }
+});
+</script>
+
+{{ INCLUDE footer # }}

@@ -1,0 +1,11 @@
+# Research material
+
+_Research/
+
+# Database structure and example data
+
+_database.sql
+
+# Mac DS_Store file
+
+.DS_Store

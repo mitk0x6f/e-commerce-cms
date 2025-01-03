@@ -1,0 +1,168 @@
+{{ INCLUDE header # }}
+
+<main class="orders">
+    <section>
+        <div>
+            {{ -- Below filter modal is not implemented yet -- }}
+            <label for="filter1-modal-state" class="open_modal">
+                <i class="fa-solid fa-filter"></i>
+            </label>
+            <span>
+                <input type="search" name="search" placeholder="TODO: filter and search box {{ VAR translate.search ~ }}" onkeydown="search_key_down(event)">
+            </span>
+        </div>
+        <table class="sortable">
+            <thead>
+                <tr>
+                    <th>{{ VAR translate.reference_code ~ }}</th>
+                    <th>{{ VAR translate.lump_sum ~ }} [{{ VAR translate.bulgarian_lev_short ~ }}]</th>
+                    <th>{{ VAR translate.order_created ~ }}</th>
+                    <th>{{ VAR translate.status ~ }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ -- ARTICLE ROWS -- }}
+                {{ -- NO RESULT FOUND -- }}
+                    {{ IF in_array("No results found", Builder::get_data("results")) ? }}
+                        <tr><td class="no_result">NO RESULTS</td></tr>
+                    {{ END IF }}
+                {{ -- RESULTS FOUND -- }}
+                {{ FOR result in results * }}
+                    <tr>
+                        <td data-id="{{* order_id *}}">{{* order_id *}}</td>
+                        <td>{{* total_price *}}</td>
+                        <td>{{* order_date *}}</td>
+                        <td><span class="{{* order_status *}}">{{* translate.order_status *}}</span></td>
+                    </tr>
+                {{ END FOR }}
+            </tbody>
+        </table>
+    </section>
+</main>
+<script>
+    // Validate date
+
+    function is_date(value)
+    {
+        let dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+        // return dateRegex.test(value) && !isNaN(Date.parse(value)); // Date.parse(value) expects ISO 8601 (e.g., YYYY-MM-DD)
+        return dateRegex.test(value);
+    }
+
+    // Convert the date into a valid date object
+
+    function parse_date(value)
+    {
+        const [day, month, year] = value.split(".").map(Number);
+
+        // month - 1, because months are 0-indexed
+
+        return new Date(year, month - 1, day);
+    }
+
+    // Check data type, must be first date or it will confuse it for a number
+
+    function detect_column_type(value1, value2)
+    {
+        if(is_date(value1) && is_date(value2))
+        {
+            return "date";
+        }
+        else if(!isNaN(parseFloat(value1)) && !isNaN(parseFloat(value2)))
+        {
+            return "number";
+        }
+        else
+        {
+            return "text";
+        }
+    }
+
+    // Sorting of the table
+
+    function sort_table_by_column(table, column, asc = true)
+    {
+        const dir_modifier = asc ? 1 : -1;
+        const table_body = table.tBodies[0];
+        const rows = Array.from(table_body.querySelectorAll("tr"));
+
+        // Sort each row
+
+        const sorted_rows = rows.sort(
+            (a, b) => {
+                const a_col_text = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+                const b_col_text = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+
+                // Get data type
+
+                const column_data_type = detect_column_type(a_col_text, b_col_text);
+
+                switch(column_data_type)
+                {
+                    case "date":
+                        // const a_date = new Date(a_col_text);
+                        // const b_date = new Date(b_col_text);
+
+                        // return a_date > b_date ? (1 * dir_modifier) : (-1 * dir_modifier);
+
+                        const a_date = parse_date(a_col_text);
+                        const b_date = parse_date(b_col_text);
+
+                        return (a_date - b_date) * dir_modifier;
+                    case "number":
+                        return (parseFloat(a_col_text) - parseFloat(b_col_text)) * dir_modifier;
+                    default:
+                        return a_col_text.localeCompare(b_col_text) * dir_modifier;
+                }
+
+                return a_col_text > b_col_text ? (1 * dir_modifier) : (-1 * dir_modifier);
+            }
+        );
+
+        // Remove all existing <tr> elements from the table
+
+        while(table_body.firstChild)
+        {
+            table_body.removeChild(table_body.firstChild);
+        }
+
+        // Add the newly sorted rows
+
+        table_body.append(...sorted_rows);
+
+        // Remember how the column is currently sorted
+
+        table.querySelectorAll("th").forEach(th => th.classList.remove("sort-asc", "sort-desc"));
+        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("sort-asc", asc);
+        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("sort-desc", !asc);
+    }
+
+    document.querySelectorAll("main.orders > section > table.sortable > thead > tr > th").forEach(
+        header_cell => {
+            header_cell.addEventListener(
+                "click", () => {
+                    const table_element = header_cell.parentElement.parentElement.parentElement;
+                    const header_index = Array.prototype.indexOf.call(header_cell.parentElement.children, header_cell);
+                    const current_is_ascending = header_cell.classList.contains("sort-asc");
+
+                    sort_table_by_column(table_element, header_index, !current_is_ascending);
+                }
+            );
+        }
+    );
+
+    // When the first <td> (title element) is clicked, if the article is active - lead to the view page
+
+    document.querySelectorAll("main.orders > section > table.sortable > tbody > tr > td:first-of-type").forEach(
+        title_cell => {
+            title_cell.addEventListener(
+                "click", () => {
+                    window.location = "/order/" + title_cell.getAttribute("data-id");
+                }
+            );
+        }
+    );
+</script>
+
+{{ INCLUDE footer # }}

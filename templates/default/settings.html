@@ -1,0 +1,326 @@
+{{ -- |
+    TODO:
+            1. Add verification or confirmation for important settings changes.
+| -- }}
+
+{{ INCLUDE header # }}
+
+<main class="settings">
+    <section>
+        {{ -- SETTINGS NAVIGATION -- }}
+
+        <aside>
+            <nav>
+                <a href="#profile"><i class="fa-solid fa-address-card fa-fw"></i> {{ VAR translate.profile ~ }}</a>
+                <a href="#account"><i class="fa-solid fa-gear fa-fw"></i> {{ VAR translate.account ~ }}</a>
+                <a href="#notifications"><i class="fa-solid fa-bell fa-fw"></i> {{ VAR translate.notifications ~ }}</a>
+                <a href="#privacy"><i class="fa-solid fa-shield fa-fw"></i> {{ VAR translate.privacy ~ }}</a>
+                <a href="#delete"><i class="fa-solid fa-user-xmark fa-fw"></i> {{ VAR translate.delete_account ~ }}</a>
+            </nav>
+        </aside>
+
+        {{ -- SETTINGS PAGES -- }}
+
+        <div class="profile">
+            <div class="profile_picture">
+                <img src="../uploads/avatars/{{ VAR USER.profile_picture ~ }}">
+                <div class="buttons">
+                    <button>{{ VAR translate.change_picture ~ }}</button>
+                    <button>{{ VAR translate.delete_picture ~ }}</button>
+                </div>
+            </div>
+            <form action="" method="post" id="profile-form">
+                <span>
+                    <label for="first_name">{{ VAR translate.given_name ~ }}</label>
+                    <label for="last_name">{{ VAR translate.family_name ~ }}</label>
+                    {{ IF User::get("seller") ? }}
+                        <label for="slug">{{ VAR translate.shop_link ~ }}</label>
+                        <label for="shop_name">{{ VAR translate.shop_name ~ }}</label>
+                    {{ END IF }}
+                    <label for="account_type">{{ VAR translate.account_type ~ }}</label>
+                </span>
+                <span>
+                    <input type="text" name="first_name" placeholder="{{ VAR USER.first_name ~ }}" id="first_name" data-tip="WIP custom">
+                    <input type="text" name="last_name" placeholder="{{ VAR USER.last_name ~ }}" id="last_name" data-tip="WIP custom">
+                    {{ IF User::get("seller") ? }}
+                        <input type="text" name="slug" placeholder="{{ VAR site.absolute_link ~ }}/profile/{{ VAR USER.slug ~ }}" pattern="^http:\/\/.+\..{2,}\/profile\/[0-9a-zA-Z_]+$" id="slug" data-tip="WIP custom">
+                        <input type="text" name="shop_name" placeholder="{{ VAR USER.shop_name ~ }}" id="shop_name" data-tip="WIP custom">
+                    {{ END IF }}
+                    <input type="text" name="account_type" placeholder="{{ VAR translate.upon_request_1 ~ }}" id="account_type" disabled>
+                    {{ -- |
+                        Account type can only be changed upon request by the user.
+                        Change of account type is subject to approval by the admin.
+
+                        <select name="account_type" id="account_type" data-tip="WIP custom">
+                            <option value="0" {{ IF !User::get("seller") ? }}selected{{ END IF }}>{{ VAR translate.personal ~ }}</option>
+                            <option value="1" {{ IF User::get("seller") ? }}selected{{ END IF }}>{{ VAR translate.business ~ }}</option>
+                        </select>
+                    | -- }}
+                </span>
+            </form>
+            <input type="submit" value="{{ VAR translate.save ~ }}" form="profile-form" name="save-profile" disabled>
+        </div>
+        <div class="account">
+            <form action="" method="post" id="account-form">
+                <span>
+                    <label for="email">{{ VAR translate.email ~ }}</label>
+                    <label for="tel">{{ VAR translate.telephone_number ~ }}</label>
+                    <label for="bday">{{ VAR translate.birth_date ~ }}</label>
+                    <label for="country">{{ VAR translate.country ~ }}</label>
+                    <label for="gender">{{ VAR translate.gender ~ }}</label>
+                    <label for="language">{{ VAR translate.language ~ }}</label>
+                </span>
+                {{ -- |
+                    TODO:
+                        Remove IF User::get($field) == $value to reduce the load time of the page
+                        as it is not necessary to be performed during template parsing.
+
+                        Set variables in javascript and do it there as it is marginally faster
+                        (2 to 4 times more efficient for the current state of the page. Having 50 countries will be about 50x faster).
+                        to check for the option with the matching value and set it as selected.
+                | -- }}
+                <span>
+                    <input type="email" name="email" placeholder="{{ VAR USER.email ~ }}" id="email">
+                    {{ -- TODO: Use https://github.com/google/libphonenumber for phone number validation -- }}
+                    <input type="tel" name="phone_number" placeholder="+{{ VAR USER.phone_number ~ }}" pattern="^\+[1-9]\d{6,14}$" id="tel">
+                    <input type="date" name="birth_date" value="{{ VAR USER.birth_date ~ }}" title="Please select your birth date." id="bday">
+                    <select name="country" id="country">
+                        <option value="USA" {{ IF User::get("country") === "USA" ? }}selected{{ END IF }}>{{ VAR translate.united_states ~ }}</option>
+                        <option value="BGR" {{ IF User::get("country") === "BGR" ? }}selected{{ END IF }}>{{ VAR translate.bulgaria ~ }}</option>
+                        <option value="RUS" {{ IF User::get("country") === "RUS" ? }}selected{{ END IF }}>{{ VAR translate.russia ~ }}</option>
+                    </select>
+                    <select name="gender" id="gender">
+                        <option value="1" {{ IF User::get("gender") == 1 ? }}selected{{ END IF }}>{{ VAR translate.male ~ }}</option>
+                        <option value="2" {{ IF User::get("gender") == 2 ? }}se lected{{ END IF }}>{{ VAR translate.female ~ }}</option>
+                        <option value="3" {{ IF User::get("gender") == 3 ? }}selected{{ END IF }}>{{ VAR translate.other ~ }}</option>
+                        <option value="4" {{ IF User::get("gender") == 4 ? }}selected{{ END IF }}>{{ VAR translate.prefer_not_to_say ~ }}</option>
+                    </select>
+                    <select name="language" id="language">
+                        <option value="en" {{ IF User::get("language") === "en" ? }}selected{{ END IF }}>English ({{ VAR translate.english ~ }})</option>
+                        <option value="bg" {{ IF User::get("language") === "bg" ? }}selected{{ END IF }}>Български ({{ VAR translate.bulgarian ~ }})</option>
+                    </select>
+                </span>
+            </form>
+            <input type="submit" value="{{ VAR translate.save ~ }}" form="account-form" name="save-account" disabled>
+        </div>
+        <div class="notifications">
+            TODO SETTINGS PAGE: notifications
+        </div>
+        <div class="privacy">
+            TODO SETTINGS PAGE: privacy
+        </div>
+        <div class="delete">
+            TODO SETTINGS PAGE: delete account
+        </div>
+    </section>
+</main>
+<script>
+    // Enable the settings page menu
+
+    const nav_links = document.querySelectorAll("main.settings > section > aside > nav > a");
+
+    nav_links.forEach((link) => {
+        link.addEventListener("click", (event) => {
+            // Do not follow the link of the <a> element
+
+            event.preventDefault();
+
+            // Get the information of the settings-page attribute
+
+            const section = link.getAttribute("href").substring(1);
+
+            // Hide currently open page (all pages actually)
+
+            document.querySelectorAll("main.settings > section > div").forEach((div) => {
+                div.style.display = "none";
+            });
+
+            // Open the desired page
+
+            document.querySelector("div." + section).style.display = "flex";
+            window.history.pushState("", "", "http://localhost/settings/" + section);
+        });
+    });
+
+    // If user changed settings, return him to the page they submitted
+
+    const url = window.location.href;
+    const parts = url.split("/");
+    const page_index = parts.indexOf("settings");
+
+    // Check if the url has a page attribute
+
+    if(page_index !== -1 && parts.length > page_index + 1 && parts[page_index + 1])
+    {
+        // Get the value of the attribute
+
+        const page_value = parts[page_index + 1];
+
+        // Hide all pages except the one that has the page attribute
+
+        document.querySelectorAll("main.settings > section > div").forEach((div) => {
+            div.style.display = "none";
+        });
+
+        document.querySelector("div." + page_value).style.display = "flex";
+    }
+
+    // Enable and disable form submit button
+
+    // Save all forms and buttons in variables
+
+    const forms = document.querySelectorAll("main.settings > section > div > form");
+    const submit_buttons = document.querySelectorAll("main.settings > section > div > input[value='{{ VAR translate.save ~ }}']");
+
+    // Temporary translation. Replace below code when translation class is implemented
+
+    const fields_translated = {
+        slug: "{{ VAR translate.shop_link ~ }}",
+        shop_name: "{{ VAR translate.shop_name ~ }}",
+        email: "{{ VAR translate.email ~ }}",
+        phone_number: "{{ VAR translate.telephone_number ~ }}"
+    };
+
+    // Iterate through the forms and keep track of current index
+
+    forms.forEach((form, i) => {
+        // Get current form related submit button
+        // As long as each form has submit button after it !!
+
+        const submit_button = submit_buttons[i];
+
+        // Enable the submit button if any field is being changed
+
+        form.addEventListener("change", function () {
+            submit_button.disabled = false;
+        });
+
+        // Attach submit button click event listener to handle form submission
+
+        submit_button.addEventListener("click", async function (event) {
+            // Do not submit the form the default way
+
+            event.preventDefault();
+
+            // AJAX request
+
+            // Create new imaginary form
+
+            const settings_form_data = new FormData(form);
+
+            // Append the submit button name to the form
+
+            settings_form_data.append(submit_button.name, true);
+
+            // Send the form data to the server via AJAX request
+
+            try
+            {
+                const response = await fetch(
+                    "/settings/update",
+                    {
+                        method: "POST",
+                        body: settings_form_data
+                    }
+                );
+
+                const result = await response.json();
+
+                if(result.success)
+                {
+                    // SWITCH UPDATED FIELDS. IF FIELD IS LANGUAGE, RELOAD
+
+                    if(result.requires_reload == true)
+                    {
+                        location.reload();
+                    }
+
+                    this.disabled = true;
+                }
+                else
+                {
+                    modal_title.textContent = "Error";
+
+                    // If changed field data already exists in the database
+
+                    if(result.field)
+                    {
+                        // TODO: replace below fields_translated when the translate template is implemented
+
+                        // Make only the first letter in the sentence capital, due to the translation
+
+                        let sentence = "{{ VAR translate.this ~ }} " + fields_translated[result.field] + " {{ VAR translate.is_taken ~ }}";
+
+                        if(result.by_you)
+                        {
+                            sentence = sentence + " {{ VAR translate.by_you ~ }}";
+                        }
+
+                        modal_content.textContent = sentence.charAt(0).toUpperCase() + sentence.slice(1).toLowerCase();
+                    }
+                    else
+                    {
+                        modal_content.textContent = result.message;
+                    }
+
+                    modal_state.checked = true;
+                }
+            }
+            catch(error)
+            {
+                modal_title.textContent = "Error";
+                modal_content.textContent = "Unexpected error. Please refresh the page and try again. Error: " + error;
+                modal_state.checked = true;
+            }
+        });
+    });
+
+    // Keep the + as a prefix for the phone number field on user input
+
+    const phone_number_input = document.querySelector("main.settings > section > div.account > form#account-form > span > input[name='phone_number']");
+
+    phone_number_input.addEventListener("input", function() {
+        // Check if the input starts with the prefix for the profile page
+
+        if(phone_number_input.value == "+")
+        {
+            // Remove the prefix if it is the only text in the input field
+
+            phone_number_input.value = "";
+        }
+        else if(!phone_number_input.value.startsWith("+"))
+        {
+            // Add the prefix if the input does not start with it
+
+            phone_number_input.value = "+" + phone_number_input.value;
+        }
+    });
+</script>
+
+{{ IF User::get("seller") ? }}
+    <script>
+        // Keep the website link as a prefix for the slug field on user input
+
+        const slug_input = document.querySelector("main.settings > section > div.profile > form#profile-form > span > input[name='slug']");
+
+        slug_input.addEventListener("input", function() {
+            // Check if the input starts with the prefix for the profile page
+            // TODO: replace each VARIABLE site.absolute_link with one global JS variable
+
+            if(slug_input.value == "{{ VAR site.absolute_link ~ }}/profile/")
+            {
+                // Remove the prefix if it is the only text in the input field
+
+                slug_input.value = "";
+            }
+            else if(!slug_input.value.startsWith("{{ VAR site.absolute_link ~ }}/profile/"))
+            {
+                // Add the prefix if the input does not start with it
+
+                slug_input.value = "{{ VAR site.absolute_link ~ }}/profile/" + slug_input.value;
+            }
+        });
+    </script>
+{{ END IF }}
+
+{{ INCLUDE footer # }}

@@ -1,0 +1,305 @@
+/***********************************************/
+/**       Stretch the screen container        **/
+/** Enables centering Horizontal and Vertical **/
+/***********************************************/
+
+main.signup
+{
+    display: flex;
+    margin-top: 0;
+    width: 100%;
+    /* height: 100%; */
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    z-index: 9990;
+}
+
+/* Wrapper */
+
+main.signup > section
+{
+    display: flex;
+    padding: 70px 0 50px 0;
+    width: fit-content;
+    border-radius: 34px;
+    box-shadow: 0 11px 34px 0 rgba(0,0,0,.2);
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    overflow: hidden;
+}
+
+/*****************/
+/** Sign up box **/
+/*****************/
+
+/* Logo */
+
+main.signup > section > a
+{
+    display: block;
+    padding: 0;
+    width: 230px;
+    height: 104px;
+    background-image: url("/templates/default/resources/logo.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* Container */
+
+main.signup > section > form
+{
+    display: flex;
+    width: 500px;
+    /* overflow-x: hidden; Set to auto for scrollbar */
+    overflow: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    /* -webkit-overflow-scrolling: touch; */
+}
+
+/* Pages (steps) */
+
+main.signup > section > form > div
+{
+    display: flex;
+    margin: 20px 0;
+    padding: 0 40px;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 30px;
+    scroll-snap-align: start;
+}
+
+/* Fields and buttons */
+
+main.signup > section > form > div > span,
+main.signup > section > form > div > nav > i,
+main.signup > section > form > div > nav > input
+{
+    width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 7px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.5s;
+    overflow: hidden;
+}
+
+main.signup > section > form > div > span
+{
+    display: flex;
+    align-items: center
+}
+
+main.signup > section > form > div > span:hover
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+}
+
+main.signup > section > form > div > nav > i:hover,
+main.signup > section > form > div > nav > input:hover
+{
+    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+main.signup > section > form > div > span:focus-within
+{
+    box-shadow: 0 2px 10px 0 #00A2FF88;
+}
+
+main.signup > section > form > div > span > input::placeholder
+{
+    color: var(--secondary-text-color);
+}
+
+/* Fields */
+
+main.signup > section > form > div > span > input,
+main.signup > section > form > div > span > select,
+main.signup > section > form > div > span > i
+{
+    padding: 10px;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+main.signup > section > form > div > span > input[type=tel]
+{
+    padding-left: 5px;
+}
+
+main.signup > section > form > div > span > i
+{
+    text-align: center;
+}
+
+main.signup > section > form > div > span > i.fa-plus
+{
+    margin-left: 10px;
+    padding: 10px 0;
+    width: fit-content;
+}
+
+main.signup > section > form > div > span > i.fa-eye,
+main.signup > section > form > div > span > i.fa-eye-slash
+{
+    width: 40px;
+    cursor: pointer;
+}
+
+/* Fields placeholder text */
+
+main.signup > section > form > div > span > input[type=date]:invalid,
+main.signup > section > form > div > span > select:invalid
+{
+    color: var(--secondary-text-color);
+}
+
+/* Back, continue and submit buttons */
+
+/* Back and continue buttons container */
+
+main.signup > section > form > div > nav
+{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+/* Back and continue buttons */
+
+main.signup > section > form > div > nav > i,
+main.signup > section > form > div > nav > input
+{
+    padding: 10px;
+    border: none;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Back button */
+
+main.signup > section > form > div > nav > i
+{
+    width: 40px;
+}
+
+/* Submit and continue buttons */
+
+main.signup > section > form > div > nav > input[type = submit]
+{
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+}
+
+main.signup > section > form > div > nav > input:disabled
+{
+    background-color: var(--secondary-text-color);
+    cursor: not-allowed;
+}
+
+/* ERROR MODAL */
+
+/* Invisible checkbox that enables the modal control */
+
+div.err_modal > input[type = checkbox]
+{
+    display: none;
+}
+
+/* Background of the modal */
+
+div.err_modal > label.err_modal_background
+{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(50, 50, 50, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 9998;
+}
+
+/* Show the modal by changing the invisible checkbox state */
+
+div.err_modal > input[type = checkbox]:checked ~ label.err_modal_background
+{
+    display: block;
+}
+
+div.err_modal> input[type = checkbox]:checked ~ div
+{
+    display: flex;
+}
+
+/* Error modal itself */
+
+div.err_modal > div
+{
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 7px;
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    z-index: 9999;
+}
+
+div.err_modal > div > div.title-bar
+{
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    line-height: 24px;
+}
+
+div.err_modal > div > div.title-bar > span
+{
+    padding-left: 5px;
+    flex-grow: 1;
+    font-weight: 700;
+}
+
+div.err_modal > div > div.title-bar > label
+{
+    color: var(--secondary-text-color);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+div.err_modal > div > div.title-bar > label:hover
+{
+    color: var(--accent-text-color-alternative);
+}
+
+/* Error message */
+
+div.err_modal > div > div#err_modal_content
+{
+    padding: 15px;
+    min-width: 500px;
+    background-color: var(--primary-color);
+}

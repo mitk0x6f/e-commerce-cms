@@ -1,0 +1,532 @@
+{{ INCLUDE header # }}
+
+<main class="listings_edit">
+    <form method="POST">
+        <section>
+            <div>
+                <label for="title">{{ VAR translate.title ~ }}</label>
+                <span>
+                    <input type="text" id="title" name="title" value="" placeholder="Please enter {{ VAR translate.title ~ }}">
+                </span>
+                <label for="description">{{ VAR translate.description ~ }}</label>
+                {{ -- TODO: Change SCEDITOR to Summernote -- }}
+                <div class="editor">
+                    <textarea id="description" name="description" placeholder="Please enter {{ VAR translate.description ~ }}"></textarea>
+                </div>
+            </div>
+            <div>
+                <label>{{ VAR translate.images ~ }}</label>
+                <div class="images">
+                    {{ -- TODO: On image click, view in lightbox -- }}
+                    {{ -- TODO: Initial image upload is in user's browser cache. Saving uploads the images to the server -- }}
+                    <div>
+                        <img src="img1.jpg">
+                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div>
+                        <img src="img1.jpg">
+                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div>
+                        <img src="img2.jpg">
+                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div>
+                        <img src="img3.jpg">
+                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div class="add_new">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <aside>
+            <div class="category_selector">
+                <label for="category">Category</label>
+                <span>
+                    <i class="fa-solid fa-list"></i>
+                    <input type="checkbox" id="category_modal_state">
+                    <label for="category_modal_state" class="open_modal">Select Category</label>
+                    <label for="category_modal_state" class="modal_background"></label>
+                    <div>
+                        <div class="title-bar">
+                            <span>Category</span>
+                            <label for="category_modal_state">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </label>
+                        </div>
+                        <div class="content">
+                            <input type="search" id="category-search" placeholder="Search categories..." autocomplete="off">
+                            <ul id="category-list" class="category-list"></ul>
+                        </div>
+                    </div>
+                </span>
+            </div>
+
+            <div>
+                <label for="stock">{{ VAR translate.stock ~ }}</label>
+                <span>
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <input type="text" id="stock" name="stock" value="" placeholder="Please enter {{ VAR translate.stock ~ }}">
+                </span>
+            </div>
+            <div>
+                <label for="price">{{ VAR translate.price ~ }}</label>
+                <span>
+                    <i class="fa-solid fa-money-bill"></i>
+                    <input type="text" id="price" name="price" value="" placeholder="Please enter {{ VAR translate.price ~ }}">
+                </span>
+                <label for="discount">{{ VAR translate.discount ~ }}</label>
+                <span>
+                    <i class="fa-solid fa-percent"></i>
+                    <input type="text" id="discount" name="discount" value="" placeholder="Please enter {{ VAR translate.discount ~ }}">
+                </span>
+            </div>
+            <div>
+                <label>{{ VAR translate.status ~ }}</label>
+                <span class="status">
+                    <input type="radio" name="status" id="inactive" value="0" checked>
+                    <label for="inactive">{{ VAR translate.inactive ~ }}</label>
+                    <input type="radio" name="status" id="active" value="1">
+                    <label for="active">{{ VAR translate.active ~ }}</label>
+                </span>
+            </div>
+            <div class="nav-buttons">
+                <button type="button" onclick="location.href='/listings';">{{ VAR translate.all_listings ~ }}</button>
+                <button type="reset">{{ VAR translate.reset ~ }}</button>
+                <button type="submit">{{ VAR translate.save ~ }}</button>
+            </div>
+        </aside>
+    </form>
+</main>
+
+{{ -- BBCode editor -- }}
+
+<script src="/templates/default/resources/sceditor3_bbcode.js"></script>
+<script>
+var textarea = document.getElementById("description");
+sceditor.create(textarea, {
+	format: "bbcode",
+    width: "100%",
+    height: "300px",
+    resizeWidth: false,
+    dateFormat: "day/month/year",
+    toolbarExclude: "email,link,unlink",
+    emoticonsRoot: "/templates/default/resources/",
+	style: "/templates/default/resources/sceditor3_modified.css"
+});
+</script>
+
+{{ -- Categories -- }}
+
+{{ -- TODO: Read below from file -- }}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Initiate translation map and categories map variables in the global scope
+
+    let translation_map = {};
+    let categories_map = {};
+
+    // Get the translation map from the JSON
+
+    fetch("/templates/dict.json")
+    .then(response => {
+        if(!response.ok)
+        {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        // Get the current display language
+
+        let language = "{{ VAR USER.language ~ }}";
+
+        // Append the translation map to the global scope
+
+        translation_map = data[language];
+
+        // Get the categories map from the JSON
+
+        fetch("/templates/categories.json")
+        .then(response => {
+            if(!response.ok)
+            {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            return response.json();
+        })
+        .then(data => {
+            // Append the categories map to the global scope
+
+            categories_map = data;
+
+            // Initialize the category list
+
+            build_category_list();
+
+            // Change the current category (when the function doesn't have an argument, the category is reset to the current one)
+
+            set_current_category();
+        })
+        .catch(error => {
+            console.error("Error loading categories: ", error);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading JSON:', error);
+    });
+
+    const search_input = document.getElementById("category-search");
+    const category_list = document.getElementById("category-list");
+    const selected_category = document.querySelector("main.listings_edit > form > aside > div.category_selector > span > label.open_modal");
+    const category_modal_state = document.querySelector("main.listings_edit > form > aside > div.category_selector > span > input[type = checkbox]#category_modal_state");
+    let selected_category_id = 0;
+
+    // When the modal is shown, the page scrolling is disabled
+
+    let scroll_position = 0;
+
+    // Function to reset the scroll position, so we don't repeat the code on two different places
+
+    function reset_scrolling()
+    {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+
+        // Restore the scroll position
+
+        window.scrollTo(0, scroll_position);
+    }
+
+    category_modal_state.addEventListener("change", function () {
+        if(category_modal_state.checked)
+        {
+            // Disable scrolling
+
+            // Save the current scroll position
+
+            scroll_position = window.scrollY;
+
+            // Disable scrolling by setting fixed position and offsetting the body
+
+            document.body.style.position = "fixed";
+            document.body.style.top = `-${scroll_position}px`;
+            document.body.style.width = "100%";
+        }
+        else
+        {
+            // Re-enable scrolling by removing the fixed positioning and offset of the body
+
+            reset_scrolling();
+        }
+    });
+
+    // Build category tree
+
+    function build_category_tree(map)
+    {
+        const tree = {};
+        const nodes = {};
+
+        // Create nodes for each category
+
+        for(let id in map)
+        {
+            // Fetch the translation, fallback to the original name if the translation is not found
+
+            map[id].name = translation_map[map[id].name] || map[id].name;
+
+            nodes[id] = {...map[id], id: parseInt(id), children: []};
+        }
+
+        // Assign children to their parents
+
+        for(let id in nodes)
+        {
+            const category = nodes[id];
+
+            if(category.parent)
+            {
+                if(nodes[category.parent])
+                {
+                    nodes[category.parent].children.push(category);
+                }
+            }
+            else
+            {
+                // Top-level categories
+
+                tree[id] = category;
+            }
+        }
+
+        // Return the top-level categories
+
+        return Object.values(tree);
+    }
+
+    function set_current_category(category_id = 0)
+    {
+        selected_category.textContent = categories_map[category_id].name;
+        selected_category_id = category_id;
+    }
+
+    // Recursive function to append categories and subcategories to the list
+    // TODO: Below function is used in listing_edit and listing_add. Make it reusable instead of copy-pasted
+
+    function append_categories(categories, parentElement, level = 0)
+    {
+        // Create a temporary element to sample the base padding
+
+        const temp_li = document.createElement("li");
+
+        // Append it temporarily to apply styles
+
+        parentElement.appendChild(temp_li);
+
+        // Fetch the base padding
+
+        const base_padding = parseInt(window.getComputedStyle(temp_li).paddingLeft, 10);
+
+        // Clear the temporary element
+
+        parentElement.removeChild(temp_li);
+
+        // Loop through the actual categories
+
+        categories.forEach(category => {
+            const li = document.createElement("li");
+
+            li.textContent = category.name;
+            li.dataset.id = category.id;
+
+            if(level > 0)
+            {
+                li.style.paddingLeft = `${base_padding + 30 * level}px`;
+            }
+
+            // Mousedown instead of click, because it loses focus, before the click second condition can be applied
+
+            li.addEventListener("mousedown", function () {
+                // On category select, change the selected category
+
+                // selected_category.textContent = category.name;
+
+                set_current_category(category.id);
+
+                // Changes search field
+                // search_input.value = category.name;
+
+                // Hide dropdown
+
+                // category_list.style.display = "none";
+
+                // Re-enable scrolling by removing the fixed positioning and offset of the body
+
+                reset_scrolling();
+
+                // Hide the modal
+
+                document.querySelector("main.listings_edit > form > aside > div.category_selector > span > input[type = checkbox]").checked = false;
+
+                // Reset the search input and results
+
+                search_input.value = "";
+
+                filter_categories("");
+            });
+
+            parentElement.appendChild(li);
+
+            if(category.children && category.children.length > 0)
+            {
+                append_categories(category.children, parentElement, level + 1);
+            }
+        });
+    }
+
+    // Build and display the category list
+
+    function build_category_list()
+    {
+        category_list.innerHTML = "";
+
+        append_categories(build_category_tree(categories_map), category_list);
+    }
+
+    // Filter categories based on search input
+
+    function filter_categories(searchTerm)
+    {
+        const items = category_list.getElementsByTagName("li");
+
+        for(let item of items)
+        {
+            if(item.textContent.toLowerCase().includes(searchTerm.toLowerCase()))
+            {
+                // Show item if it matches
+
+                item.style.display = "";
+            }
+            else
+            {
+                // Hide item if it doesn't match
+
+                item.style.display = "none";
+            }
+        }
+    }
+
+    // Event listeners
+
+    // search_input.addEventListener("click", function (){
+    //     category_list.style.display = "block"; // Show dropdown
+    // });
+
+    // search_input.addEventListener("focus", function (){
+    //     category_list.style.display = "block"; // Show dropdown
+    // });
+
+    // search_input.addEventListener("focusout", function (){
+    //     category_list.style.display = "none"; // hide dropdown
+    // });
+
+    search_input.addEventListener("input", function () {
+        filter_categories(search_input.value);
+    });
+
+    // document.addEventListener("click", function (event) {
+    //     if (!category_list.contains(event.target) && !search_input.contains(event.target)) {
+    //         category_list.style.display = "none"; // Hide dropdown when clicking outside
+    //     }
+    // });
+
+    const article_form = document.querySelector("form");
+
+    // Set the default label for the category selector
+
+    selected_category.setAttribute("data-default", selected_category.textContent);
+
+    // Block form submission on Enter and return false to block further actions
+
+    article_form.addEventListener("keydown", function (event) {
+        if(event.key === "Enter" || event.keyCode === 13)
+        {
+            event.preventDefault();
+
+            return false;
+        }
+    });
+
+    // Make the reset button, also reset the current category
+
+    article_form.addEventListener("reset", function () {
+        if(selected_category.hasAttribute("data-default") && selected_category.hasAttribute("data-default-id"))
+        {
+            selected_category.textContent = selected_category.getAttribute("data-default");
+            selected_category_id = selected_category.getAttribute("data-default-id");
+        }
+        else
+        {
+            selected_category.textContent = selected_category.getAttribute("data-default");
+        }
+
+        // TODO: see how it goes, below line might really not be needed anymore and should be removed
+        // set_current_category();
+    });
+
+    // Make sure the save button overrides the data used for the form reset
+
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    ////// HANDLE FORM SUBMISSION, UPDATE DATABASE WITHOUT RELOADING THE PAGE //////
+    ////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // Function to submit the form without reloading
+
+    async function submit_form()
+    {
+        // AJAX request
+
+        // Create new imaginary form
+
+        const submit_form_data = new FormData(article_form);
+
+        // Append the data to the form
+
+        submit_form_data.append("category_id", selected_category_id);
+
+        // Send the form data to the server via AJAX request
+
+        try
+        {
+            const response = await fetch(
+                "/listing/add/submit",
+                {
+                    method: "POST",
+                    body: submit_form_data
+                }
+            );
+
+            const result = await response.json();
+
+            if(result.success)
+            {
+                modal_title.textContent = "Success";
+                modal_content.textContent = result.message;
+                modal_state.checked = true;
+
+                // Upon successful submission, redirect to the edit page of the article
+
+                // Delay the redirection by 2 seconds
+
+                setTimeout(() => {
+                    window.location.href = "/listing/edit/" + result.article_id;
+                }, 2000);
+            }
+            else
+            {
+                modal_title.textContent = "Error";
+                modal_content.textContent = result.message;
+                modal_state.checked = true;
+            }
+        }
+        catch(error)
+        {
+            modal_title.textContent = "Error";
+            modal_content.textContent = "Unexpected error. Please refresh the page and try again. Error: " + error;
+            modal_state.checked = true;
+        }
+    }
+
+    // Block form submission on Save button and return false to block further actions
+
+    article_form.addEventListener("submit", function (event) {
+        // Do not submit the form the default way
+
+        event.preventDefault();
+
+        // Submit the form without reloading the page
+
+        submit_form();
+
+        return false;
+    });
+});
+</script>
+
+{{ INCLUDE footer # }}

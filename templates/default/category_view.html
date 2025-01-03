@@ -1,0 +1,99 @@
+{{ INCLUDE header # }}
+
+<main class="category">
+    <aside>
+        {{ IF Builder::get_data("sub_categories") !== [] ? }}
+            <div class="sub-categories">
+                <h1>{{ VAR translate.subcategory ~ }}</h1>
+                {{ FOR category in sub_categories * }}
+                    <a href="/category/{{* name *}}">{{* translate.name *}}</a>
+                {{ END FOR }}
+            </div>
+        {{ END IF }}
+        <div class="filters">
+            <h1>{{ VAR translate.filters ~ }} - WIP</h1>
+            <div>
+                <div>{{ VAR translate.price ~ }} double slider</div>
+            </div>
+            <div>
+                <div><input type="checkbox" id="free_shipping"> <label for="free_shipping">Free shipping</label></div>
+            </div>
+        </div>
+    </aside>
+    <section>
+        <nav>
+            <a href="/home">{{ VAR translate.home ~ }}</a>
+            {{ FOR category in breadcrumb * }}
+                <i class="fa-solid fa-angle-right"></i> <a href="/category/{{* name *}}">{{* translate.name *}}</a>
+            {{ END FOR }}
+        </nav>
+        {{ FOR result in results * }}
+            <article>
+                <a href="/view/{{* id *}}">
+                    <img src="/uploads/articles/{{* id *}}/large/img1.jpg">
+                    <h1>{{* title *}}</h1>
+                    <span id="discount">-{{* discount *}}%</span>
+                </a>
+                <div class="rating">
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <span>0 (0)</span>
+                    <span>Sold: 0</span>
+                </div>
+                <div>
+                    <div class="price">
+                        <span id="price">{{* price *}} {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                        <span id="shipping">Free shipping</span>
+                    </div>
+                    <div class="buttons">
+                        <span><i class="fa-regular fa-heart"></i></span>
+                        <span><i class="fa-solid fa-cart-shopping"></i></span>
+                    </div>
+                </div>
+            </article>
+        {{ END FOR }}
+    </section>
+</main>
+
+<script>
+    // #########################################################################################################
+    // #########################################################################################################
+    // ### NOTE :                                                                                        [!] ###
+    // #########################################################################################################
+    // ###                                                                                                   ###
+    // ###  BELOW DIFFERENCE : 2ND PRICE VALUE (OLD PRICE) HAS OMITED THE CURRENCY IDENTIFIER TO SAVE SPACE  ###
+    // ###                                                                                                   ###
+    // #########################################################################################################
+    // #########################################################################################################
+
+    // TODO: DO NOT repeat the scripts on search.html, profile_shop.html and category_view.html.
+    // Get all price and discount elements
+
+    let price_elements = document.querySelectorAll("section > article > div > div.price > span#price");
+    let discount_elements = document.querySelectorAll("section > article > a > span#discount");
+
+    // Iterate over each product
+
+    for(let i = 0; i < price_elements.length; i++)
+    {
+        let discount = parseFloat(discount_elements[i].textContent.replace(/[^0-9.]/g, ""));
+
+        // Skip if there is no discount
+
+        if(discount == 0)
+        {
+            discount_elements[i].style.display = "none";
+            continue;
+        }
+
+        let price = parseFloat(price_elements[i].textContent.replace(" {{ VAR translate.bulgarian_lev_short ~ }}", ""));
+        let new_price = price - (price * discount / 100);
+
+        price_elements[i].innerHTML = "<span>" + new_price.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}</span> <span>" + price.toFixed(2) + "</span>";
+    }
+</script>
+
+{{ INCLUDE footer # }}

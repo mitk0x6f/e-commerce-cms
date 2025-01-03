@@ -1,0 +1,309 @@
+{{ INCLUDE header # }}
+
+<main class="profile">
+    <section class="info">
+        <div>
+            {{ -- USER AVATAR -- }}
+            <img src="/uploads/avatars/{{ VAR shop_info.profile_picture ~ }}" alt="Seller logo / profile picture">
+        </div>
+        <article>
+            <h1>{{ VAR shop_info.shop_name ~ }}</h1>
+            <span>Registered on: {{ VAR shop_info.registered_on ~ }}</span>
+            <span>Customers: 300 (42 last 3 months)</span>
+            <span>
+                {{ -- Full star -- }}
+                {{ -- <i class="fa-solid fa-star"></i> -- }}
+                {{ -- Half star -- }}
+                {{ -- <i class="fa-solid fa-star-half-stroke"></i> -- }}
+                {{ -- Empty star -- }}
+                {{ -- <i class="fa-regular fa-star"></i> -- }}
+                User Rating: 4.4 average
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+                (152 reviews)
+            </span>
+            <div>
+                <div>
+                    <span>5 <i class="fa-solid fa-star"></i></span>
+                    <span>4 <i class="fa-solid fa-star"></i></span>
+                    <span>3 <i class="fa-solid fa-star"></i></span>
+                    <span>2 <i class="fa-solid fa-star"></i></span>
+                    <span>1 <i class="fa-solid fa-star"></i></span>
+                </div>
+                <div class="bars">
+                    <div class="five">
+                        <div style="width: calc(96 / 152 * 100%);">63%</div>
+                    </div>
+                    <div class="four">
+                        <div style="width: calc(42 / 152 * 100%);">28%</div>
+                    </div>
+                    <div class="three">
+                        <div style="width: calc(9 / 152 * 100%);">6%</div>
+                    </div>
+                    <div class="two">
+                        <div style="width: calc(5 / 152 * 100%);">3%</div>
+                    </div>
+                    <div class="one">
+                        <div style="width: calc(3 / 152 * 100%);">2%</div>
+                    </div>
+                </div>
+                <div class="reviews">
+                    <span>96</span>
+                    <span>42</span>
+                    <span>9</span>
+                    <span>5</span>
+                    <span>3</span>
+                </div>
+            </div>
+        </article>
+        <aside>
+            {{ -- Button template -- }}
+            <span>
+                <input type="checkbox" id="filter1-modal-state">
+                <label for="filter1-modal-state" class="open_modal">Price</label>
+                <label for="filter1-modal-state" class="modal_background"></label>
+                <div>
+                    <div class="title-bar">
+                        <span>Price</span>
+                        <label for="filter1-modal-state">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </label>
+                    </div>
+                    <div class="content">
+                        <div id="range-slider"></div>
+                        <div class="range">
+                            <input type="number" name="range_start" id="range-start" placeholder="0" min="0" max="3500">
+                            <span>-</span>
+                            <input type="number" name="range_end" id="range-end" placeholder="0" min="0" max="3500">
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button id="range-reset">Reset</button>
+                        <button id="range-apply">Apply</button>
+                    </div>
+                </div>
+            </span>
+            {{ -- More buttons below -- }}
+            <span>
+                <input type="checkbox" id="filter2-modal-state">
+                <label for="filter2-modal-state" class="open_modal">Filter 2</label>
+                <label for="filter2-modal-state" class="modal_background"></label>
+                <div>
+                    <div class="title-bar">
+                        <span>Filter 2</span>
+                        <label for="filter2-modal-state">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </label>
+                    </div>
+                    <div class="content">
+                        Content
+                    </div>
+                    <div class="buttons">
+                        <button>Reset</button>
+                        <button>Apply</button>
+                    </div>
+                </div>
+            </span>
+            {{ -- --------- -- }}
+            <span>
+                <input type="checkbox" id="filter3-modal-state">
+                <label for="filter3-modal-state" class="open_modal">Filter 3</label>
+                <label for="filter3-modal-state" class="modal_background"></label>
+                <div>
+                    <div class="title-bar">
+                        <span>Filter 3</span>
+                        <label for="filter3-modal-state">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </label>
+                    </div>
+                    <div class="content">
+                        Content
+                    </div>
+                    <div class="buttons">
+                        <button>Reset</button>
+                        <button>Apply</button>
+                    </div>
+                </div>
+            </span>
+        </aside>
+    </section>
+    <section class="articles">
+        {{ -- || EXAMPLE
+        <article>
+            <a href="/view/1">
+                <img src="/uploads/product.jpg" alt="Product image">
+                <h1>Product name</h1>
+                <span id="discount">-5%</span>
+            </a>
+            <div class="rating">
+                <i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+                <i class="fa-regular fa-star"></i>
+                <span>0 (0)</span>
+                <span>Sold: 0</span>
+            </div>
+            <div>
+                <div class="price">
+                    <span>96 {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                    <span>Free shipping</span>
+                </div>
+                <div class="buttons">
+                    <span><i class="fa-regular fa-heart"></i></span>
+                    <span><i class="fa-solid fa-cart-shopping"></i></span>
+                </div>
+            </div>
+        </article>
+        || -- }}
+        {{ FOR result in results * }}
+            <article>
+                <a href="/view/{{* id *}}">
+                    <img src="/uploads/articles/{{* id *}}/large/img1.jpg" alt="Product image">
+                    <h1>{{* title *}}</h1>
+                    <span id="discount">-{{* discount *}}%</span>
+                </a>
+                <div class="rating">
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                    <span>0 (0)</span>
+                    <span>Sold: 0</span>
+                </div>
+                <div>
+                    <div class="price">
+                        <span id="price">{{* price *}} {{ VAR translate.bulgarian_lev_short ~ }}</span>
+                        <span id="shipping">Free shipping</span>
+                    </div>
+                    <div class="buttons">
+                        <span><i class="fa-regular fa-heart"></i></span>
+                        <span><i class="fa-solid fa-cart-shopping"></i></span>
+                    </div>
+                </div>
+            </article>
+        {{ END FOR }}
+    </section>
+</main>
+
+<script>
+    // Initiate range slider
+
+    var rangeSlider = document.getElementById("range-slider");
+
+    // TODO: Below min and max values to be automatically set
+    // TODO: Below range min, 50%, 70% and max to be dynamically set
+
+    var rangeMin = 0;
+    var rangeMax = 3500;
+
+    noUiSlider.create(rangeSlider, {
+        start: [rangeMin, rangeMax],
+        connect: true,
+        range: {
+            "min": rangeMin,
+            "50%": [500, 1],
+            "70%": [1000, 1],
+            "max": rangeMax
+        },
+        tooltips: [true, true],
+        pips: {
+            mode: "range",
+            density: 3
+        },
+        format: {
+            to: function (value)
+            {
+                return Math.round(value);
+            },
+            from: function (value)
+            {
+                return value;
+            }
+        }
+    });
+
+    // Update range start and end input elements
+    // On range slider bar drag
+
+    var rangeStart = document.getElementById("range-start");
+    var rangeEnd = document.getElementById("range-end");
+
+    rangeSlider.noUiSlider.on('update', function (values, handle){
+        if(handle === 0)
+        {
+            rangeStart.value = Math.round(values[0]);
+        }
+        else
+        {
+            rangeEnd.value = Math.round(values[1]);
+        }
+    });
+
+    // Update range slider bar
+    // On range start and end inputs change
+
+    rangeStart.addEventListener('change', function () {
+        rangeSlider.noUiSlider.set([this.value, null]);
+    });
+
+    rangeEnd.addEventListener('change', function () {
+        rangeSlider.noUiSlider.set([null, this.value]);
+    });
+
+    // Reset range on reset button clicked
+    // TODO: make other filter's reset and apply button do something
+
+    var rangeReset = document.getElementById("range-reset");
+
+    rangeReset.addEventListener("click", function () {
+        // Reset range bar
+
+        rangeSlider.noUiSlider.set([rangeMin, rangeMax]);
+
+        // Make sure input fields are also reset
+
+        rangeStart.value = rangeMin;
+        rangeEnd.value = rangeMax;
+
+        // Close the modal
+
+        document.getElementById("filter1-modal-state").checked = false;
+    });
+
+    // TODO: add the apply button logic
+
+    // Calculate discounted price
+
+    // TODO: DO NOT repeat the scripts on search.html, profile_shop.html and category_view.html.
+    // Get all price and discount elements
+
+    let price_elements = document.querySelectorAll("section.articles > article > div > div.price > span#price");
+    let discount_elements = document.querySelectorAll("section.articles > article > a > span#discount");
+
+    // Iterate over each product
+
+    for(let i = 0; i < price_elements.length; i++)
+    {
+        let discount = parseFloat(discount_elements[i].textContent.replace(/[^0-9.]/g, ""));
+
+        // Skip if there is no discount
+
+        if(discount == 0)
+        {
+            discount_elements[i].style.display = "none";
+            continue;
+        }
+
+        let price = parseFloat(price_elements[i].textContent.replace(" {{ VAR translate.bulgarian_lev_short ~ }}", ""));
+        let new_price = price - (price * discount / 100);
+
+        price_elements[i].innerHTML = "<span>" + new_price.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}</span> <span>" + price.toFixed(2) + "</span>";
+    }
+</script>
+
+{{ INCLUDE footer # }}

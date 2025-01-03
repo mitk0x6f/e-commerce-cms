@@ -1,0 +1,306 @@
+{{ INCLUDE header # }}
+
+<main class="order">
+    <div>
+        <div>{{ -- View product image in full screen -- }}</div>
+    </div>
+    <nav>
+        <a href="/orders"><i class="fa-solid fa-angle-left"></i> {{ VAR translate.all_orders ~ }}</a>
+    </nav>
+    <section>
+        <div>
+            <div>
+                <h1>Order details<span>{{ VAR translate.reference_code ~ }}: <i class="fa-solid fa-hashtag"></i> <span>{{ VAR order_id ~ }}</span></span></h1>
+                <div>
+                    <div class="timeline">
+                        <span data-date="08.12.2024">
+                            <i class="fa-solid fa-basket-shopping" data-text="{{ VAR translate.order_pending ~ }}"></i>
+                        </span>
+                        <span data-date="09.12.2024">
+                            <i class="fa-solid fa-boxes-packing" data-text="{{ VAR translate.order_waiting_to_be_shipped ~ }}"></i>
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-truck-fast" data-text="{{ VAR translate.order_shipped ~ }}"></i>
+                        </span>
+                        <span>
+                            <i class="fa-solid fa-check" data-text="{{ VAR translate.order_received ~ }}"></i>
+                        </span>
+                    </div>
+                    <div class="order_actions">
+                        <a href="/orders"><i class="fa-solid fa-print"></i>Print order</a>
+                        <a href="/orders"><i class="fa-solid fa-barcode"></i></i>Create shipping label</a>
+                        <a href="/orders"><i class="fa-solid fa-check"></i>Mark as shipped</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h1>Order items</h1>
+                <div>
+                    <table class="order_items">
+                        <tbody>
+                            {{ FOR result in results * }}
+                                <tr>
+                                    <td data-id="{{* article_id *}}">
+                                        <span>
+                                            <span>
+                                                <img src="/uploads/articles/{{* article_id *}}/small/img1.jpg" alt="Small product image">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </span>
+                                            <span>
+                                                <span>{{* title *}} <i class="fa-solid fa-external-link"></i></span>
+                                                <span>{{* translate.category *}}</span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="right tiny">{{* price *}}</td>
+                                    <td class="tiny"><i class="fa-solid fa-times"></i></td>
+                                    <td class="left tiny">{{* quantity *}}</td>
+                                    <td class="right">-{{* discount *}}%</td>
+                                    <td class="right">{{ -- Populated in JS -- }}</td>
+                                </tr>
+                            {{ END FOR }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <h1>{{ VAR translate.payment ~ }}<span>not implemented yet <span>WIP</span></span></h1>
+                <div>
+                    <table class="payment">
+                        <tbody>
+                            <tr>
+                                <td colspan="2">Subtotal</td>
+                                <td>$120.00</td>
+                            </tr>
+                            <tr>
+                                <td>Shipping</td>
+                                <td>First Class Package International (0.0 kg)</td>
+                                <td>$9.50</td>
+                            </tr>
+                            <tr>
+                                <td>Tax</td>
+                                <td>HST 13%</td>
+                                <td>$15.60</td>
+                            </tr>
+                            <tr class="total">
+                                <td colspan="2">Total</td>
+                                <td>$145.10</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Paid by customer</td>
+                                <td>$145.10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <aside>
+            <div>
+                <h1>Note<i class="fa-solid fa-save"></i></h1>
+                <div>
+                    <textarea placeholder="Optional" data-tip="255 chars max">{{ VAR shop_note ~ }}</textarea>
+                </div>
+            </div>
+            <div>
+                <h1>{{ VAR translate.customer_information ~ }}</h1>
+                <div>
+                    <span><i class="fa-solid fa-user fa-fw"></i> {{ VAR first_name ~ }} {{ VAR last_name ~ }}</span>
+                    <span><i class="fa-solid fa-phone fa-fw"></i> <a href="tel:+{{ VAR phone_number ~ }}">+{{ VAR phone_number ~ }}</a></span>
+                    {{ -- TODO: WIP IF USER IS SHARING THE EMAIL. Currently is shared for all. -- }}
+                    <span><i class="fa-solid fa-at fa-fw"></i> <a href="mailto:{{ VAR email ~ }}">{{ VAR email ~ }}</a></span>
+                    <span>[TODO] OR</span>
+                    <span><i class="fa-solid fa-at fa-fw"></i> Hidden by user</span>
+                    <span>
+                        <i class="fa-solid fa-language fa-fw"></i>
+                        {{ -- TODO: replace below with dynamic. E.g., {{ VAR TRANSLATE.preferred_language ~ }} -- }}
+                        {{ IF Builder::get_data("preferred_language") === "en" ? }}
+                            {{ VAR translate.english ~ }}
+                        {{ END IF }}
+
+                        {{ IF Builder::get_data("preferred_language") === "bg" ? }}
+                            {{ VAR translate.bulgarian ~ }}
+                        {{ END IF }}
+                    </span>
+                </div>
+            </div>
+            <div>
+                <h1>{{ VAR translate.shipping_address ~ }}<span>WIP</span></h1>
+                <div>
+                    <span><i class="fa-solid fa-user fa-fw"></i> Fname Lname</span>
+                    <span><i class="fa-solid fa-location-dot fa-fw"></i> Address</span>
+                    <span><i class="fa-solid fa-city fa-fw"></i> City</span>
+                    <span><i class="fa-solid fa-earth-europe fa-fw"></i> Country</span>
+                    <span><i class="fa-solid fa-phone fa-fw"></i> +Phone_Number</span>
+                </div>
+            </div>
+            <div>
+                <h1>{{ VAR translate.billing_address ~ }}<span>WIP</span></h1>
+                <div>
+                    <span>{{ VAR translate.same_as_shipping_address ~ }}</span>
+                </div>
+            </div>
+        </aside>
+    </section>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function (){
+    // Order timeline
+    // Current order status code: [0=cancelled;1=pending;2=ready_for_shipping;3=shipped;4=received;]
+
+    const order_current_status = "{{ VAR status_code ~ }}";
+    const timeline_items = document.querySelectorAll("main.order > section > div > div > div > div.timeline > span");
+
+    // Add "active" class to the correct item based on index
+
+    if(order_current_status >= 0 && order_current_status < timeline_items.length)
+    {
+        timeline_items[order_current_status].classList.add("active");
+    }
+
+    // Calculate final price of all items in the order
+
+    const order_items = document.querySelectorAll("main.order > section > div > div > div > table.order_items > tbody > tr");
+    const image_viewer = document.querySelector("main.order > div");
+
+    // Grand total of the order (Not currently in use)
+
+    // let grand_total = 0;
+
+    // Loop through each item
+
+    order_items.forEach(item => {
+        let item_id = item.querySelector("td[data-id]").getAttribute("data-id");
+
+        // Clicking the article name opens the selling page
+
+        item.querySelector("td:first-of-type > span > span:last-of-type > span:first-of-type").addEventListener("click", function() {
+            window.open("/view/" + item_id, "_blank");
+        });
+
+        item.querySelector("td:first-of-type > span > span:first-of-type").addEventListener("click", function() {
+            image_viewer.style.display = "block";
+            image_viewer.querySelector("div").style.backgroundImage = "url(/uploads/articles/" + item_id + "/large/img1.jpg)";
+        });
+
+        const price = parseFloat(item.querySelector("td.right.tiny").textContent.trim());
+        const quantity = parseInt(item.querySelector("td.left.tiny").textContent.trim());
+        const discount = item.querySelector("td.right:not(td.tiny)");
+        const discount_data = parseInt(discount.textContent.trim().replace("-", "").replace("%", ""));
+        const final_price = item.querySelector("td:last-of-type");
+
+        // Calculate total for the item
+
+        // Javascript Math does not support floating point numbers, so we manipulate the number using scaling
+
+        const final_price_value = Math.ceil(price * quantity * (100 - discount_data)) / 100;
+
+        // Insert final price of the item with the currency
+
+        final_price.textContent = final_price_value.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
+
+        // // Add total to grand total
+
+        // grand_total += final_price_value;
+
+        // Hide the discount if it is 0
+
+        if(discount_data === 0)
+        {
+            discount.textContent = "";
+        }
+    });
+
+    // Hide the large image
+
+    image_viewer.addEventListener("click", function() {
+        image_viewer.style.display = "none";
+    });
+
+    // Handle note box (save button display)
+
+    const note_box = document.querySelector("main.order > section > aside > div > div > textarea");
+    const note_save_button = document.querySelector("main.order > section > aside > div > h1:first-of-type > i");
+    let note_value = note_box.value;
+
+    // Only show the save button when the note has been changed
+
+    note_box.addEventListener("input", () => {
+        if(note_box.value !== note_value)
+        {
+            note_save_button.style.display = "block";
+        }
+        else
+        {
+            note_save_button.style.display = "none";
+        }
+    });
+
+    // Handle save button click
+
+    note_save_button.addEventListener("click", async () => {
+        // Up to 255 character notes are accepted
+
+        if(note_box.value.length > 255)
+        {
+            note_box.value = note_box.value.slice(0, 255);
+
+            modal_title.textContent = "Warning";
+            modal_content.textContent = "Note is too long. The maximum length is 255 characters. Note has been automatically truncated.";
+            modal_state.checked = true;
+        }
+
+        // AJAX request
+
+        // Create new imaginary form
+
+        const save_note_data = new FormData();
+
+        // Append the data to the form
+
+        save_note_data.append("order_id", "{{ VAR order_id ~ }}");
+        save_note_data.append("shop_note", note_box.value);
+
+        // Send the form data to the server via AJAX request
+
+        try
+        {
+            const response = await fetch(
+                "/order/save_note",
+                {
+                    method: "POST",
+                    body: save_note_data
+                }
+            );
+
+            const result = await response.json();
+
+            if(result.success)
+            {
+                // Update remembered note value
+
+                note_value = note_box.value;
+
+                // Hide the save button
+
+                note_save_button.style.display = "none";
+            }
+            else
+            {
+                modal_title.textContent = "Error";
+                modal_content.textContent = result.message;
+                modal_state.checked = true;
+            }
+        }
+        catch(error)
+        {
+            modal_title.textContent = "Error";
+            modal_content.textContent = "Unexpected error. Please refresh the page and try again. Error: " + error;
+            modal_state.checked = true;
+        }
+    });
+});
+</script>
+
+{{ INCLUDE footer # }}

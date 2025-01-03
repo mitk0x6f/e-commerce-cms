@@ -1,0 +1,30 @@
+{{ INCLUDE header # }}
+
+<main class="profile">
+    <section class="info">
+        <div>
+            {{ -- USER AVATAR -- }}
+            <img src="/uploads/avatars/alien.jpg" alt="Profile picture">
+        </div>
+        <article>
+            <span>{{ VAR USER.first_name ~ }} {{ VAR USER.last_name ~ }}</span>
+            <span>Registered on: {{ VAR registered_on ~ }}</span>
+            <span>Reviews:
+                {{ IF User::get("reviews_count") > 0 ? }}
+                    {{ VAR USER.reviews_count ~ }}
+                {{ ELSE }}
+                    None yet
+                {{ END IF }}</span>
+            <span>
+            </span>
+        </article>
+    </section>
+    <section class="reviews">
+        {{ IF User::get("reviews_count") > 0 ? }}
+            {{ -- TODO: ADD FOR BLOCK -- }}
+            FOR LOOP: REVIEWS
+        {{ END IF }}
+    </section>
+</main>
+
+{{ INCLUDE footer # }}

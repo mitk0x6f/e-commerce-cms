@@ -1,0 +1,21 @@
+<pre>
+[START]
+
+{{ IF true == false ? }}
+    [
+        {{ IF true == true ? }}
+            #IF CONTENT START#
+                {{ FOR article in cart * }}
+                    {{* title *}}
+                {{ END FOR }}
+            #IF CONTENT END#
+        {{ ELSE }}
+            #ELSE CONTENT#
+        {{ END IF }}
+    ]
+{{ ELSE }}
+    -
+{{ END IF }}
+
+[END]
+</pre>

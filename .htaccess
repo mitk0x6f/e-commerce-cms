@@ -1,0 +1,42 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Static
+
+RewriteRule ^home\/?$ index.php [L]
+RewriteRule ^listings\/?$ listings.php [L]
+RewriteRule ^orders\/?$ orders.php [L]
+RewriteRule ^order\/save_note\/?$ order_save_note.php [L]
+RewriteRule ^listing/add\/?$ listing_add.php [L]
+RewriteRule ^listing/add/submit\/?$ listing_add_submit.php [L]
+RewriteRule ^listing/edit/submit\/?$ listing_edit_submit.php [L]
+RewriteRule ^listing/delete\/?$ listing_delete.php [L]
+RewriteRule ^auth/signup\/?$ signup.php [L]
+RewriteRule ^auth/signin\/?$ signin.php [L]
+RewriteRule ^auth/signout\/?$ signout.php [L]
+RewriteRule ^profile\/?$ profile.php [L]
+RewriteRule ^settings\/?$ settings.php [L]
+RewriteRule ^settings\/update\/?$ settings_update.php [L]
+RewriteRule ^search\/?$ search.php [L]
+RewriteRule ^category\/?$ category_view.php [L]
+RewriteRule ^cart\/?$ cart.php [L]
+RewriteRule ^cart\/add\/?$ cart_add.php [L]
+RewriteRule ^cart\/update\/?$ cart_update.php [L]
+RewriteRule ^cart\/delete\/?$ cart_delete.php [L]
+RewriteRule ^newsletter\/subscribe\/?$ newsletter_subscribe.php [L]
+
+# Dynamic
+
+RewriteRule ^home\/([^\/]+)\/([^\/]+)\/?([^\/]+)?\/?([^\/]+)?\/?$ index.php?$1=$2&$3=$4 [QSA,L]
+RewriteRule ^view\/(\d{1,11})\/?$ listing_view.php?id=$1 [QSA,L]
+RewriteRule ^order\/(\d{1,11})\/?$ order_view.php?id=$1 [QSA,L]
+RewriteRule ^listing\/edit\/(\d{1,11})\/?$ listing_edit.php?id=$1 [QSA,L]
+RewriteRule ^profile\/([^\/]+)\/?$ profile.php?shop_id=$1 [QSA,L]
+RewriteRule ^settings\/([^\/]+)\/?$ settings.php?page=$1 [QSA,L]
+RewriteRule ^search\/([^\/]+)\/?$ search.php?search=$1 [QSA,L]
+RewriteRule ^category\/([^\/]+)\/?$ category_view.php?category=$1 [QSA,L]
+
+ErrorDocument 404 /404.php

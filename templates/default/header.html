@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="{{ VAR USER.language ~ }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ VAR site.title ~ }}</title>
+    <meta name="description" content="{{ VAR site.description ~ }}">
+    <meta name="keywords" content="{{ VAR site.keywords ~ }}">
+    <meta name="author" content="{{ VAR site.author ~ }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/templates/default/resources/favicon.jpg">
+    {{ -- |
+        Include styles in the following order:
+            1. Font awesome (icons)
+            2. Flags (icons)
+            3. noUiSlider
+            4. Main style
+    | -- }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
+    {{ -- TODO: IF page requires it -- }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.css">
+    {{ -- TODO: update style version from server to force the users to update -- }}
+    <link rel="stylesheet" type="text/css" href="/templates/default/resources/style.css?v=1.0.0">
+    {{ -- TODO: IF page requires it -- }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    {{ -- jquery
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    -- }}
+    {{ -- TODO: IF page requires it -- }}
+    <link rel="stylesheet" type="text/css" href="/templates/default/resources/flickity.css">
+    {{ -- KEEP PAGE SPECIFIC STYLE LAST -- }}
+    <link rel="stylesheet" type="text/css" href="/templates/default/resources/listing_view.css">
+    <script src="/templates/default/resources/flickity2.pkgd.min.js"></script>
+    <script src="/templates/default/resources/flickity1.fullscreen.js"></script>
+    {{ -- |
+        External links instead
+        <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+        <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+        <script src="https://unpkg.com/flickity-fullscreen@1.1.1/fullscreen.js"></script>
+
+        Not required currently
+        <script src="/templates/default/resources/flickity-as-nav-for2.js"></script>
+        <script src="/templates/default/resources/flickity-as-nav-for3.js"></script>
+        <script src="https://unpkg.com/flickity-as-nav-for@3/as-nav-for.js"></script>
+        <script src="https://unpkg.com/flickity-fullscreen@2/fullscreen.js"></script>
+    | -- }}
+    {{ -- TODO: IF page requires it -- }}
+    {{ -- TODO: make it load from local server maybe ? -- }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
+    <script src="/templates/default/resources/sceditor3_min.js"></script>
+    {{ -- |
+        External links instead
+        OLD -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/default.min.css">
+        OLD -> <script src="https://cdn.jsdelivr.net/npm/sceditor@3/minified/sceditor.min.js"></script>
+        LATEST -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
+        LATEST -> <script src="https://cdn.jsdelivr.net/combine/npm/sceditor@latest/minified/sceditor.min.js,npm/sceditor@latest/minified/formats/bbcode.min.js,npm/sceditor@latest/minified/icons/monocons.min.js"></script>
+    | -- }}
+</head>
+<body>
+    {{ -- Top navigation bar -- }}
+    <header>
+        <nav>
+            {{ -- LOGO -- }}
+            <span><a href="/home" aria-label="Home page"></a></span>
+            <span class="categories">
+                <i class="fa-solid fa-bars fa-xl"></i></i>
+                <div>
+                    <nav>
+                        {{ -- |
+                            1. laptops
+                            5. computers
+                            10. consoles
+                            14. accessories
+                            27. smartphones
+                            31. tablets
+                            37. pc_components
+                            58. peripherals
+                            72. office
+                            81. TVs_and_public_displays
+                            89. cameras
+                            99. watches_and_smartbands
+                            107. servers_and_power_supplies
+                            119. network_equipment
+                            125. software
+                            129. hobby
+                            134. home_appliances
+                        | -- }}
+                        <a href="/category/laptops"><i class="fa-solid fa-laptop fa-fw"></i> {{ VAR translate.laptops ~ }}</a>
+                        <a href="/category/computers"><i class="fa-solid fa-computer fa-fw"></i> {{ VAR translate.computers ~ }}</a>
+                        <a href="/category/consoles"><i class="fa-solid fa-gamepad fa-fw"></i> {{ VAR translate.consoles ~ }}</a>
+                        <a href="/category/accessories"><i class="fa-solid fa-bolt fa-fw"></i> {{ VAR translate.accessories ~ }}</a>
+                        <a href="/category/smartphones"><i class="fa-solid fa-mobile-screen-button fa-fw"></i> {{ VAR translate.smartphones ~ }}</a>
+                        <a href="/category/tablets"><i class="fa-solid fa-tablet-screen-button fa-fw"></i> {{ VAR translate.tablets ~ }}</a>
+                        <a href="/category/pc_components"><i class="fa-solid fa-microchip fa-fw"></i> {{ VAR translate.pc_components ~ }}</a>
+                        <a href="/category/peripherals"><i class="fa-solid fa-computer-mouse fa-fw"></i> {{ VAR translate.peripherals ~ }}</a>
+                        <a href="/category/office"><i class="fa-solid fa-print fa-fw"></i> {{ VAR translate.office ~ }}</a>
+                        <a href="/category/TVs_and_public_displays"><i class="fa-solid fa-tv fa-fw"></i> {{ VAR translate.TVs_and_public_displays ~ }}</a>
+                        <a href="/category/cameras"><i class="fa-solid fa-camera fa-fw"></i> {{ VAR translate.cameras ~ }}</a>
+                        <a href="/category/watches_and_smartbands"><i class="fa-solid fa-clock fa-fw"></i> {{ VAR translate.watches_and_smartbands ~ }}</a>
+                        <a href="/category/servers_and_power_supplies"><i class="fa-solid fa-server fa-fw"></i> {{ VAR translate.servers_and_power_supplies ~ }}</a>
+                        <a href="/category/network_equipment"><i class="fa-solid fa-wifi fa-fw"></i> {{ VAR translate.network_equipment ~ }}</a>
+                        <a href="/category/software"><i class="fa-solid fa-laptop-code fa-fw"></i> {{ VAR translate.software ~ }}</a>
+                        <a href="/category/hobby"><i class="fa-solid fa-bicycle fa-fw"></i> {{ VAR translate.hobby ~ }}</a>
+                        <a href="/category/home_appliances"><i class="fa-solid fa-house-circle-check fa-fw"></i> {{ VAR translate.home_appliances ~ }}</a>
+                    </nav>
+                </div>
+            </span>
+
+            {{ -- Search bar -- }}
+            <span class="search">
+                {{ -- Instead of textarea, input type="search" can be used -- }}
+                <input type="search" name="search" placeholder="{{ VAR translate.search ~ }}" onkeydown="search_key_down(event)">
+                <span onclick="search_prod()"><i class="fa-solid fa-magnifying-glass"></i></span>
+            </span>
+
+            {{ -- Language and currency menu -- }}
+            <span class="language-currency">
+                <i class="fa-solid fa-globe fa-xl"></i>
+                {{ VAR site.language ~ }} | {{ VAR site.currency ~ }}
+                <div>
+                    <span>{{ VAR translate.language ~ }}</span>
+                    <div tabindex="1">
+                        <input type="radio" name="language" id="en" {{ IF User::get("language") === "en" ? }}checked{{ END IF }}>
+                        <label for="en" onclick="change_display('en', 'language');">
+                            <span class="fi fi-us"></span>English ({{ VAR translate.english ~ }})
+                        </label>
+                        <input type="radio" name="language" id="bg" {{ IF User::get("language") === "bg" ? }}checked{{ END IF }}>
+                        <label for="bg" onclick="change_display('bg', 'language');">
+                            <span class="fi fi-bg"></span>Български ({{ VAR translate.bulgarian ~ }})
+                        </label>
+                    </div>
+
+                    {{ -- TODO: make currency change work -- }}
+                    <span>{{ VAR translate.currency ~ }}</span>
+                    <div tabindex="2">
+                        <input type="radio" name="currency" id="usd" {{ IF User::get("currency") === "USD" ? }}checked{{ END IF }}>
+                        <label for="usd" onclick="change_display('USD', 'currency');">USD - {{ VAR translate.us_dollar ~ }}</label>
+                        <input type="radio" name="currency" id="eur" {{ IF User::get("currency") === "EUR" ? }}checked{{ END IF }}>
+                        <label for="eur" onclick="change_display('EUR', 'currency');">EUR - {{ VAR translate.euro ~ }}</label>
+                        <input type="radio" name="currency" id="bgn" {{ IF User::get("currency") === "BGN" ? }}checked{{ END IF }}>
+                        <label for="bgn" onclick="change_display('BGN', 'currency');">BGN - {{ VAR translate.bulgarian_lev ~ }}</label>
+                    </div>
+                </div>
+            </span>
+
+            {{ IF User::get("signed_in") ? }}
+                {{ IF !User::get("seller") ? }}
+                    {{ -- CUSTOMER MENU -- }}
+
+                    {{ -- Wishlist page link -- }}
+                    <span>
+                        <a href="#wishlist">
+                            <i class="fa-solid fa-heart fa-xl"></i>
+                            <span>WIP</span>
+                            {{ VAR translate.wishlist ~ }}
+                        </a>
+                        <div>Wishlist items</div>
+                    </span>
+                    {{ -- Shopping cart menu -- }}
+                    <span class="cart">
+                        <a href="/cart">
+                            <i class="fa-solid fa-cart-shopping fa-xl"></i>
+                            <span>{{ VAR USER.cart_total_qty ~ }}</span>
+                            {{ VAR translate.cart ~ }}
+                        </a>
+                        <div>
+                            {{ -- Only show below code when viewing product listing page to handle adding new cart items -- }}
+                            {{ IF Builder::get_data("page_name") === "listing_view" ? }}
+                            <template>
+                                <article data-item-id="">
+                                    <img src="" alt="">
+                                    <div class="info">
+                                        <a href=""></a>
+                                        <span data-price="" data-discount=""></span>
+                                    </div>
+                                    <div class="quantity">
+                                        <span></span>
+                                        <div>
+                                            <i class="fa-solid fa-chevron-up"></i>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-xmark"></i>
+                                </article>
+                            </template>
+                            {{ END IF }}
+                            {{ FOR article in cart * }}
+                                <article data-item-id="{{* article_id *}}">
+                                    {{ -- TODO: fix images -- }}
+                                    <img src="/uploads/articles/{{* article_id *}}/large/img1.jpg" alt="Product_name image">
+                                    <div class="info">
+                                        <a href="/view/{{* article_id *}}">{{* title *}}</a>
+                                        <span data-price="{{* price *}}" data-discount="{{* discount *}}"></span>
+                                    </div>
+                                    <div class="quantity">
+                                        <span>{{* quantity *}}</span>
+                                        <div>
+                                            <i class="fa-solid fa-chevron-up"></i>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-xmark"></i>
+                                </article>
+                            {{ END FOR }}
+                            {{ IF !empty(Builder::get_data("cart")) ? }}
+                                <a href="/cart">{{ VAR translate.view_cart ~ }}</a>
+                            {{ END IF }}
+                        </div>
+                    </span>
+                {{ ELSE }}
+                    {{ -- SHOP MENU -- }}
+
+                    {{ -- Orders menu -- }}
+                    <span>
+                        <a href="/orders">
+                            <i class="fa-solid fa-boxes-packing fa-xl"></i>
+                            {{ VAR translate.orders ~ }}
+                            <span>??</span>
+                        </a>
+                    </span>
+                    {{ -- Listings menu -- }}
+                    <span>
+                        <a href="/listings">
+                            <i class="fa-solid fa-tags fa-xl"></i>
+                            {{ VAR translate.listings ~ }}
+                        </a>
+                    </span>
+                {{ END IF }}
+
+                {{ -- Messages menu -- }}
+                <span class="messages">
+                    <a href="#messages">
+                        <i class="fa-solid fa-message fa-xl"></i>
+                        <span>WIP</span>
+                    </a>
+                    <div>
+                        <section>
+                            <textarea placeholder="{{ VAR translate.search ~ }}"></textarea>
+                            <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                        </section>
+                        <a href="#" class="unread">
+                            {{ -- TODO: when user info is available, change the alt attribute accordingly -- }}
+                            <img src="/uploads/avatars/female.png" alt="Seller/User logo / profile picture">
+                            <div>
+                                <span>User name</span>
+                                <span>Lorem Ipsum</span>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <img src="/uploads/avatars/male.png" alt="Seller/User logo / profile picture">
+                            <div>
+                                <span>User name</span>
+                                <span>Lorem Ipsum</span>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <img src="/uploads/avatars/alien.jpg" alt="Seller/User logo / profile picture">
+                            <div>
+                                <span>User name <i class="fa-solid fa-square-check" style="color: #0096FF;" title="Verified"></i></span>
+                                <span>Lorem Ipsum</span>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <img src="/uploads/avatars/alien.jpg" alt="Seller/User logo / profile picture">
+                            <div>
+                                <span>User name <i class="fa-solid fa-square-check" style="color: #0096FF;" title="Verified"></i> <i class="fa-regular fa-star" style="color: #0096FF;" title="Excellent Quality"></i></span>
+                                <span>Lorem Ipsum</span>
+                            </div>
+                        </a>
+                        <a href="#">
+                            <img src="/uploads/avatars/alien.jpg" alt="Seller/User logo / profile picture">
+                            <div>
+                                <span>User name <i class="fa-solid fa-square-check" style="color: #0096FF;" title="Verified"></i> <i class="fa-regular fa-star" style="color: #0096FF;" title="Excellent Quality"></i></span>
+                                <span>Lorem Ipsum</span>
+                            </div>
+                        </a>
+                        <a href="#">{{ VAR translate.view_more ~ }}</a>
+                    </div>
+                </span>
+            {{ END IF }}
+
+            {{ -- User account menu -- }}
+            <span class="account-panel">
+                {{ IF User::get("signed_in") ? }}
+                    {{ -- USER AVATAR -- }}
+                    <img src="/uploads/avatars/{{ VAR USER.profile_picture ~ }}" alt="Profile picture">
+
+                    {{ -- USER NAMES -- }}
+                    {{ VAR USER.first_name ~ }} {{ VAR USER.last_name ~ }}
+                {{ ELSE }}
+                    <i class="fa-solid fa-user fa-xl"></i>
+                    {{ VAR translate.guest ~ }}
+                {{ END IF }}
+                {{ IF !User::get("signed_in") ? }}
+                    <div>
+                        <form action="/auth/signin" method="post" id="sign_in_form">
+                            <label>{{ VAR translate.you_are_not_signed_in ~ }}</label>
+                            <span><input type="email" name="email" placeholder="Email"id="sign_in_email" required></span>
+                            <span>
+                                <input type="password" name="password" placeholder="{{ VAR translate.password ~ }}" minlength="8" maxlength="256"
+                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,256}$"
+                                title="Password must contain at least one lowercase letter, one uppercase letter, one number, one symbol, and be at least 8 characters long."
+                                autocomplete="current-password" id="sign_in_pass" required>
+                            </span>
+                            <div>
+                                <span>
+                                    <input type="checkbox" id="rememberme" name="rememberme">
+                                    <label for="rememberme"> {{ VAR translate.remember_me ~ }}</label>
+                                </span>
+                                <a href="#">{{ VAR translate.forgot_password ~ }}</a>
+                            </div>
+                            <input type="submit" value="{{ VAR translate.sign_in ~ }}" id="submit_button">
+                            <div>
+                                {{ VAR translate.dont_have_an_account ~ }} <a href="/auth/signup">{{ VAR translate.create_a_new_one ~ }}</a>
+                            </div>
+                        </form>
+                    </div>
+                {{ ELSE }}
+                    <div class="signed_in">
+                        <nav>
+                            <a href="/profile">{{ VAR translate.profile ~ }}</a>
+                            <a href="/settings">{{ VAR translate.settings ~ }}</a>
+                            <a href="/auth/signout">{{ VAR translate.sign_out ~ }}</a>
+                        </nav>
+                    </div>
+                {{ END IF }}
+            </span>
+        </nav>
+    </header>
+
+    {{ -- Placeholder for modal -- }}
+    <div class="modal">
+        <input type="checkbox" id="modal_state">
+        <label for="modal_state" class="modal_background"></label>
+        <div>
+            <div class="title-bar">
+                <span>Error</span>
+                <label for="modal_state">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </label>
+            </div>
+            <div class="content">
+                Content
+            </div>
+        </div>
+    </div>
+
+    {{ -- TODO: Make below automatic when admin panel is ready -- }}
+    <section class="global_message">
+        {{ -- |
+            USAGE EXAMPLES:
+                <article class="error">Global error message.</article>
+                <article class="warning">Global warning message.</article>
+                <article class="success">Global green message.</article>
+        | -- }}
+
+        {{ IF !User::get("signed_in") ? }}
+            <article class="success">
+                <div>
+                    <span style="font-size: 1.25em;font-weight: 700;">You can try out the platform now!</span><br>
+                    Shop account: <i class="fa-solid fa-envelope"></i> shop@example.email <i class="fa-solid fa-key"></i> Shop_Password_123<br>
+                    Customer account: <i class="fa-solid fa-envelope"></i> customer@example.email <i class="fa-solid fa-key"></i> Customer_Password_123
+                </div>
+            </article>
+        {{ END IF }}
+
+        {{ IF Builder::get_data("page_name") === "cart" ? }}
+            <article class="warning">The current page is work in progress.</article>
+        {{ END IF }}
+
+        {{ IF Builder::get_data("page_name") === "order_view" ? }}
+            <article class="warning">The current page is work in progress.</article>
+        {{ END IF }}
+    </section>

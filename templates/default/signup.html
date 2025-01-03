@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ VAR site.name ~ }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/templates/default/resources/style.css?v=1.0.0">
+    <link rel="stylesheet" type="text/css" href="/templates/default/resources/signup.css?v=1.0.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+{{ -- |
+    TODO:
+        - Correct the modal to match the script in other pages (from footer template file)
+        - Use the newer AJAX request
+        - Translate the entire plage
+        - Add language change button
+| -- }}
+</head>
+<body>
+    <div class="err_modal">
+        <input type="checkbox" id="err_modal_state">
+        <label for="err_modal_state" class="err_modal_background"></label>
+        <div>
+            <div class="title-bar">
+                <span>Error</span>
+                <label for="err_modal_state">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </label>
+            </div>
+            <div id="err_modal_content">
+                Content
+            </div>
+        </div>
+    </div>
+    <main class="signup">
+        <section>
+            <a href="/home"></a>
+            <label>{{ VAR translate.create_your_new_account ~ }}</label>
+            <form action="" method="post" id="form">
+                <div id="step-1">
+                    <span><input type="email" name="email" placeholder="{{ VAR translate.email_address ~ }}" autocomplete="email" id="email" required autofocus></span>
+                    <span><input type="text" name="first_name" placeholder="{{ VAR translate.given_name ~ }}" autocomplete="given-name" required></span>
+                    <span><input type="text" name="last_name" placeholder="{{ VAR translate.family_name ~ }}" autocomplete="family-name" required></span>
+                    <nav><input type="button" value="{{ VAR translate.continue ~ }}" onclick="scrollToStep(2)"></nav>
+                </div>
+                <div id="step-2">
+                    <span><input type="date" name="birth_date" autocomplete="bday" title="Please select your birth date." required></span>
+                    <span>
+                        <select name="country" required>
+                            <option value="" selected disabled>{{ VAR translate.country ~ }}</option>
+                            <option value="USA">{{ VAR translate.united_states ~ }}</option>
+                            <option value="BGR">{{ VAR translate.bulgaria ~ }}</option>
+                            <option value="RUS">{{ VAR translate.russia ~ }}</option>
+                        </select>
+                    </span>
+                    <span>
+                        <select name="gender" required>
+                            <option value="" selected disabled>{{ VAR translate.gender ~ }}</option>
+                            <option value="1">{{ VAR translate.male ~ }}</option>
+                            <option value="2">{{ VAR translate.female ~ }}</option>
+                            <option value="3">{{ VAR translate.other ~ }}</option>
+                            <option value="4">{{ VAR translate.prefer_not_to_say ~ }}</option>
+                        </select>
+                    </span>
+                    <nav>
+                        <i class="fa-solid fa-angle-left" onclick="scrollToStep(1)"></i>
+                        <input type="button" value="{{ VAR translate.continue ~ }}" onclick="scrollToStep(3)">
+                    </nav>
+                </div>
+                <div id="step-3">
+                    <span>
+                        <i class="fa-solid fa-plus fa-sm"></i>
+                        {{ -- TODO: Use https://github.com/google/libphonenumber for phone number validation -- }}
+                        <input type="tel" name="phone_number" placeholder="{{ VAR translate.telephone_number ~ }}" pattern="^[1-9]\d{6,14}$" autocomplete="tel" id="phone_number" required>
+                    </span>
+                    <span>
+                        <input type="password" name="password" placeholder="{{ VAR translate.password ~ }}" minlength="8" maxlength="256"
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,256}$"
+                        title="Password must contain at least one lowercase letter, one uppercase letter, one number, one symbol, and be at least 8 characters long."
+                        autocomplete="new-password" id="password_field" required>
+                        <i class="fa-solid fa-eye" id="password_button"></i>
+                    </span>
+                    <nav>
+                        <i class="fa-solid fa-angle-left" onclick="scrollToStep(2)"></i>
+                        <input type="submit" value="{{ VAR translate.sign_up ~ }}" id="submit_button">
+                    </nav>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script>
+    // Back and Continue buttons behavior
+
+    function scrollToStep(step_id)
+    {
+        const step = document.getElementById("step-" + step_id);
+
+        step.scrollIntoView({
+            block: "start",
+            behavior: "smooth",
+            inline: "start"
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Password eye button (i) behavior
+        // Toggle password visibility
+
+        // Set field and icon pointer
+
+        const password_field = document.querySelector("#password_field");
+        const password_button = document.querySelector("#password_button");
+
+        // Executed when the eye button (icon) is clicked
+
+        password_button.addEventListener("click", function(e)
+        {
+            // Toggle the field show/hide state
+
+            const password_field_state = password_field.getAttribute("type") === "password" ? "text" : "password";
+
+            // Apply field state
+
+            password_field.setAttribute("type", password_field_state);
+
+            // Change eye button image
+
+            this.classList.toggle("fa-eye");
+            this.classList.toggle("fa-eye-slash");
+        });
+
+        // Error modal
+
+        const error_state = document.getElementById("err_modal_state");
+        const error_message = document.getElementById("err_modal_content");
+
+        // Sign in the user (used after signing him up successfully)
+
+        async function sign_in_user(user_sign_up_data)
+        {
+            // AJAX request
+
+            try
+            {
+                const response = await fetch(
+                    "/auth/signin",
+                    {
+                        method: "POST",
+                        body: user_sign_up_data
+                    }
+                );
+
+                const result = await response.json();
+
+                if(result.success)
+                {
+                    window.location.href = "/home";
+                }
+                else
+                {
+                    error_message.textContent = result.message;
+                    error_state.checked = true;
+                }
+            }
+            catch(error)
+            {
+                    error_message.textContent = "Unexpected error. Please sign in with email and password using the home page.";
+                    error_state.checked = true;
+            }
+        }
+
+        // Checking if user exists before form submission
+
+        document.getElementById("submit_button").addEventListener("click", async function(e)
+        {
+            // Do not submit yet
+
+            // TODO: first validate form, then right before submission prevent default
+
+            e.preventDefault();
+
+            // Check if all fields in the form were filled
+
+            const form = document.getElementById("form");
+            const required_inputs = form.querySelectorAll("input[required]");
+            let form_completed = true;
+
+            for(let input of required_inputs)
+            {
+                if(!input.value.trim())
+                {
+                    form_completed = false;
+                    break;
+                }
+            }
+
+            if(form_completed)
+            {
+                // AJAX request
+
+                const user_sign_up_data = new FormData(form);
+
+                // Send the form data to the server via AJAX request
+
+                try
+                {
+                    const response = await fetch(
+                        "/auth/signup",
+                        {
+                            method: "POST",
+                            body: user_sign_up_data
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if(result.success)
+                    {
+                        sign_in_user(user_sign_up_data);
+
+                        // Show success message in case the server responds slowly during the signing in process
+
+                        error_message.textContent = result.message;
+                        error_state.checked = true;
+
+                    }
+                    else
+                    {
+                        error_message.textContent = result.message;
+                        error_state.checked = true;
+                    }
+                }
+                catch(error)
+                {
+                    error_message.textContent = "Unexpected error. Please refresh the page and try again. Error: " + error;
+                    error_state.checked = true;
+                }
+            }
+        });
+    });
+    </script>
+</body>
+</html>
