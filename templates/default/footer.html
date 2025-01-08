@@ -19,7 +19,7 @@
 </footer>
 {{ IF User::get("signed_in") && !User::get("seller") ? }}
     <script>
-        let shopping_cart_badge = document.querySelector("header > nav > span.cart > a > span");
+        let shopping_cart_badge = document.querySelector("header > nav > span.cart > a > span.counter");
 
         if(shopping_cart_badge.textContent > 0)
         {
@@ -410,73 +410,115 @@
     </script>
 {{ END IF }}
 <script>
-    // Modal
-
-    const modal_state = document.querySelector("div.modal > input[type='checkbox']#modal_state");
-    const modal_title = document.querySelector("div.modal > div > div.title-bar > span");
-    const modal_content = document.querySelector("div.modal > div > div.content");
-
-    // Handle language and currency changes
-
-    function change_display(data, type)
+    document.addEventListener("DOMContentLoaded", function()
     {
-        let form = document.createElement("form");
+        // Modal
 
-        form.method = "post";
+        const modal_state = document.querySelector("div.modal > input[type='checkbox']#modal_state");
+        const modal_title = document.querySelector("div.modal > div > div.title-bar > span");
+        const modal_content = document.querySelector("div.modal > div > div.content");
 
-        form.action = "/change_display.php";
+        // Handle language and currency changes
 
-        let field_input = document.createElement("input");
-
-        field_input.type = "hidden";
-
-        if(type === "language")
+        function change_display(data, type)
         {
-            field_input.name = "language"
-        }
-        else if(type === "currency")
-        {
-            field_input.name = "currency"
-        }
+            let form = document.createElement("form");
 
-        field_input.value = data;
+            form.method = "post";
 
-        form.appendChild(field_input);
+            form.action = "/change_display.php";
 
-        document.body.appendChild(form);
+            let field_input = document.createElement("input");
 
-        form.submit();
-    }
+            field_input.type = "hidden";
 
-    // Handle search field
+            if(type === "language")
+            {
+                field_input.name = "language"
+            }
+            else if(type === "currency")
+            {
+                field_input.name = "currency"
+            }
 
-    function search_key_down(event)
-    {
-        // 13 == "Enter"
+            field_input.value = data;
 
-        if(event.keyCode == 13)
-        {
-            event.preventDefault();
-            search_prod();
+            form.appendChild(field_input);
+
+            document.body.appendChild(form);
+
+            form.submit();
         }
 
-        // TODO: add handling for quick search list display below the search bar
-    }
+        // Handle language change
 
-    // Handle search submission
+        document.querySelectorAll("label[for='en'], label[for='bg']").forEach(label => {
+            label.addEventListener("click", () => {
+                // Currently [en, bg] are the only supported languages
 
-    function search_prod()
-    {
-        let search_for = document.querySelector("header > nav > span.search > input[name='search']").value.trim();
+                change_display(label.getAttribute("for"), "language");
+            });
+        });
 
-        // Replace spaces with dashes
+        // Handle currency change
 
-        search_for = search_for.replace(/ /g, "_");
+        document.querySelectorAll("label[for='usd'], label[for='eur'], label[for='bgn']").forEach(label => {
+            label.addEventListener("click", () => {
+                // Currently [USD, EUR, BGN] are the only selectable currencies
+                // None is actually supported.
+                // TODO: Implement currency conversion
 
-        // Redirect user to search page
+                change_display(label.getAttribute("for").toUpperCase(), "currency");
+            });
+        });
 
-        window.location.href = "/search/" + search_for;
-    }
+        // Handle search field
+
+        const search_l = document.querySelector("header > nav > span.search > input[name='search']");
+        const search_s = document.querySelector("header > nav > span.search-sm > div > input[name='search']");
+
+        // Synchronize both fields (large and small screen)
+
+        const synchronize_search = (source, target) => {target.value = source.value;};
+
+        search_l.addEventListener("input", () => synchronize_search(search_l, search_s));
+        search_s.addEventListener("input", () => synchronize_search(search_s, search_l));
+
+        // Handle search submission
+
+        function search_prod()
+        {
+            let search_for = search_l.value.trim();
+
+            // Replace spaces with dashes
+
+            search_for = search_for.replace(/ /g, "_");
+
+            // Redirect user to search page
+
+            window.location.href = "/search/" + search_for;
+        }
+
+        function search_key_down(event)
+        {
+            // 13 == "Enter"
+
+            if(event.keyCode == 13)
+            {
+                event.preventDefault();
+
+                search_prod();
+            }
+        }
+
+        search_l.addEventListener("keydown", search_key_down);
+        search_s.addEventListener("keydown", search_key_down);
+
+        // Handle search icon click
+
+        search_l.closest("span.search").querySelector("span").addEventListener("click", search_prod);
+        search_s.closest("span.search-sm").querySelector("div > span").addEventListener("click", search_prod);
+    });
 </script>
 {{ -- Do not include the script if user is signed in -- }}
 {{ IF !User::get("signed_in") ? }}

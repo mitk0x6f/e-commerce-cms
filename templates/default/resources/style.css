@@ -2,7 +2,9 @@
 
 /* Personal preference for style resetting.*/
 
-*
+*,
+*::before,
+*::after
 {
     margin: 0;
     padding: 0;
@@ -15,18 +17,34 @@
 {
     --primary-color: #F5F5F7;
     --secondary-color: #161617;
-    /* --secondary-color-alternative: #777777; */ /* NOT WCAG COMPLIANT */
     --secondary-color-alternative: #535353;
     --primary-text-color: #161617;
     --primary-text-color-alternative: #464F60;
     --accent-color: #0096FF;
-    /* --secondary-text-color: #777777; */ /* NOT WCAG COMPLIANT */
     --secondary-text-color: #535353;
     --accent-text-color: #0066CC;
     --accent-text-color-alternative: #E03030;
-    --default-font-family: "Helvetica", "Arial", sans-serif;
-    --default-font-size: 14px;
-    --default-page-width: 1200px;
+    --font-family-default: "Helvetica", "Arial", sans-serif;
+    --font-size-default: 14px;
+    --font-size-3xs: 0.285rem;
+    --font-size-2xs: 0.57rem;
+    --font-size-xs: 0.715rem;
+    --font-size-s: 0.855rem;
+    --font-size-m: 1rem;
+    --font-size-l: 1.145rem;
+    --font-size-xl: 1.285rem;
+    --font-size-2xl: 1.43rem;
+    --font-size-3xl: 1.57rem;
+    --font-size-4xl: 1.715rem;
+    --font-size-5xl: 1.855rem;
+    --font-size-6xl: 2rem;
+    --font-size-7xl: 2.145rem;
+    --font-size-8xl: 2.285rem;
+    --font-size-9xl: 2.43rem;
+    --font-size-10xl: 2.57rem;
+    --font-size-11xl: 2.715rem;
+    --font-size-12xl: 2.855rem;
+    --page-width-default: 1200px;
 }
 
 /* Fix autofills */
@@ -79,18 +97,21 @@ input:-webkit-autofill:focus
 html
 {
     min-height: 100vh;
-    /* background-color: #FFFFFF; */
+    width: 100%;
     background-color: var(--secondary-color);
+    font-family: var(--font-family-default);
+    font-size: var(--font-size-default);
+    font-weight: 400;
+    overflow-x: hidden;
 }
 
 body
 {
-    /* min-height: 100vh; */
+    width: 100%;
     background-color: var(--primary-color);
-    font-family: var(--default-font-family);
-    font-size: var(--default-font-size);
-    font-weight: 400;
+    font-size: var(--font-size-m);
     color: var(--primary-text-color);
+    overflow-x: hidden;
     overflow-y: scroll;
 }
 
@@ -184,7 +205,8 @@ header > nav > span:first-of-type
 {
     display: block;
     padding: 0;
-    width: 102px;
+    min-width: 102px;
+    height: 60px;
     background-image: url("./logo.png");
     background-position: center;
     background-size: contain;
@@ -216,11 +238,13 @@ header > nav > span.categories:hover
 
 header > nav > span.categories > div
 {
+    display: flex;
     left: -15px;
     right: auto;
     margin-top: -10px;
     padding: 10px;
-    width: max-content;
+    width: 250px;
+    align-items: center;
 }
 
 header > nav > span.categories > div > nav
@@ -254,9 +278,8 @@ header > nav > span.search
     padding: 0;
     flex-grow: 1;
     height: 40px;
-    border: 0;
-    border-radius: 7px;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 7px;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
     align-items: center;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -279,6 +302,7 @@ header > nav > span.search > input
     padding-left: 15px;
     height: 40px;
     border: none;
+    outline: none;
     background-color: transparent;
     resize: none;
     flex-grow: 1;
@@ -307,6 +331,33 @@ header > nav > span.search > span
     padding: 0 15px 0 5px;
     height: 40px;
     line-height: 40px;
+}
+
+/* Smaller screens search */
+
+header > nav > span.search-sm
+{
+    display: none;
+    margin-left: auto;
+}
+
+header > nav > span.search-sm > div
+{
+    position: fixed;
+    left: 0;
+    padding: 10px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+}
+
+header > nav > span.search-sm > div > input
+{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    resize: none;
+    flex-grow: 1;
+
 }
 
 /* Language and currency panel */
@@ -371,8 +422,9 @@ header > nav > span.language-currency > div > div > label > span
 
 header > nav > span.language-currency > div > div > input
 {
-    opacity: 0;
     position: absolute;
+    outline: none;
+    opacity: 0;
 }
 
 header > nav > span.language-currency > div > div > input:checked + label
@@ -439,7 +491,7 @@ header > nav > span.cart > div > article > div.info
     display: flex;
     min-width: 120px;
     max-width: 180px;
-    font-size: 12px;
+    font-size: var(--font-size-s);
     line-height: 18px;
     flex-direction: column;
     flex-grow: 1;
@@ -472,7 +524,7 @@ main.cart > section > div > div > div > table.order_items > tbody > tr > td > di
     display: flex;
     border: 1px solid rgba(0, 0, 0, 0.25);
     background-color: #FFFFFF;
-    font-size: 12px;
+    font-size: var(--font-size-s);
     flex-direction: row;
     align-items: center;
     justify-content: end;
@@ -629,7 +681,7 @@ header > nav > span.cart > div > a:hover
 
 /* Shopping cart badge */
 
-header > nav > span.cart > a > span
+header > nav > span.cart > a > span.counter
 {
     /* Display is changed in JavaScript */
     display: none;
@@ -783,7 +835,7 @@ header > nav > span.messages > div > a.unread > div > span:last-of-type
 
 /* Red Count Bubble */
 
-header > nav > span:not(.search) > a > span
+header > nav > span:not(.search) > a > span.counter
 {
     position: absolute;
     top: 20%;
@@ -791,7 +843,7 @@ header > nav > span:not(.search) > a > span
     padding: 2px 4px;
     border-radius: 5px;
     background-color: var(--accent-text-color-alternative);
-    font-size: 10px;
+    font-size: var(--font-size-xs);
     line-height: 10px;
     color: var(--primary-color);
 }
@@ -818,7 +870,7 @@ header > nav > span.account-panel > div > form
 
 header > nav > span.account-panel > div > form > label
 {
-    font-size: 16px;
+    font-size: var(--font-size-l);
     font-weight: 700;
 }
 
@@ -868,7 +920,7 @@ header > nav > span.account-panel > div > form > div
     justify-content: space-between;
     align-items: center;
     gap: 40px;
-    font-size: 12px;
+    font-size: var(--font-size-s);
     line-height: 12px;
 }
 
@@ -921,6 +973,7 @@ header > nav > span.account-panel > div > form > input
 {
     padding: 10px;
     border: none;
+    outline: none;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
     background-color: var(--accent-color);
     color: var(--primary-color);
@@ -953,6 +1006,7 @@ header > nav > span.account-panel > div.signed_in > nav
 {
     display: flex;
     padding: 10px;
+    width: max-content;
     border-radius: 7px;
     background-color: var(--primary-color);
     flex-direction: column;
@@ -1006,7 +1060,7 @@ section.global_message > article
     flex-direction: row;
     align-items: center;
     padding: 20px 20px 20px 45px;
-    width: var(--default-page-width);
+    width: var(--page-width-default);
     max-width: 100%;
     border-radius: 7px;
     font-weight: 700;
@@ -1032,7 +1086,7 @@ section.global_message > article::before
     display: inline-block;
     position: relative;
     left: -20px;
-    font-size: 20px !important;
+    font-size: var(--font-size-2xl) !important;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     font: var(--fa-font-solid);
@@ -1074,7 +1128,12 @@ div.modal > input[type = checkbox]
 
 /* Background of the modal */
 
-div.modal > label.modal_background
+div.modal > label.modal_background,
+main.order > div,
+main.cart > div,
+main.listings_edit > form > aside > div.category_selector > span > label.modal_background,
+main.listings > span > label.modal_background,
+main.profile > section.info > aside > span > label.modal_background
 {
     display: none;
     position: fixed;
@@ -1082,7 +1141,7 @@ div.modal > label.modal_background
     left: 0;
     height: 100%;
     width: 100%;
-    background-color: rgba(50, 50, 50, 0.75);
+    background-color: rgba(50, 50, 50, 0.6);
     backdrop-filter: blur(5px);
     z-index: 998;
 }
@@ -1101,7 +1160,10 @@ div.modal> input[type = checkbox]:checked ~ div
 
 /* Error modal itself */
 
-div.modal > div
+div.modal > div,
+main.listings_edit > form > aside > div.category_selector > span > div,
+main.listings > span > div,
+main.profile > section.info > aside > span > div
 {
     display: none;
     flex-direction: column;
@@ -1115,7 +1177,7 @@ div.modal > div
     height: fit-content;
     border-radius: 7px;
     box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.7);
     overflow: hidden;
     z-index: 999;
 }
@@ -1138,7 +1200,7 @@ div.modal > div > div.title-bar > span
 div.modal > div > div.title-bar > label
 {
     color: var(--secondary-text-color);
-    font-size: 24px;
+    font-size: var(--font-size-4xl);
     cursor: pointer;
 }
 
@@ -1175,7 +1237,7 @@ div.modal > div > div.content
 section > div.carousel div.carousel-cell
 {
     margin-right: 10px;
-    width: 1000px;
+    width: min(1000px, 80%);
     height: 350px;
     background: var(--secondary-color-alternative);
     counter-increment: gallery-cell;
@@ -1189,7 +1251,7 @@ section > div.carousel div.carousel-cell > i.fa-rectangle-ad
     position: absolute;
     top: 5px;
     right: 10px;
-    font-size: 32px;
+    font-size: var(--font-size-8xl);
 }
 
 /* TODO: make below automatic when admin panel is ready */
@@ -1211,7 +1273,7 @@ section > div.carousel div.carousel-cell > div.ad
     background: var(--accent-text-color-alternative);
     justify-content: center;
     align-items: center;
-    font-size: 20px;
+    font-size: var(--font-size-2xl);
 }
 
 /* MACBOOK */
@@ -1230,13 +1292,13 @@ section > div.carousel div.carousel-cell > div.macbook
 
 section > div.carousel div.carousel-cell > div.macbook > h1
 {
-    font-size: 32px;
+    font-size: var(--font-size-8xl);
     color: var(--primary-color);
 }
 
 section > div.carousel div.carousel-cell > div.macbook > h2
 {
-    font-size: 16px;
+    font-size: var(--font-size-l);
     flex-grow: 1;
 }
 
@@ -1267,13 +1329,13 @@ section > div.carousel div.carousel-cell > div.iphone
 
 section > div.carousel div.carousel-cell > div.iphone > h1
 {
-    font-size: 32px;
+    font-size: var(--font-size-8xl);
     color: var(--primary-color);
 }
 
 section > div.carousel div.carousel-cell > div.iphone > h2
 {
-    font-size: 16px;
+    font-size: var(--font-size-l);
     flex-grow: 1;
 }
 
@@ -1344,18 +1406,16 @@ main
 
 main > section
 {
-    width: var(--default-page-width);
     max-width: 100%;
+    width: var(--page-width-default);
 }
 
 /* Main page */
 
-main.home > section:first-of-type
+main.home > section.recommended
 {
     display: flex;
-    width: var(--default-page-width);
     border-radius: 7px;
-    /* old box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     justify-content: flex-start;
     align-items: stretch;
@@ -1437,15 +1497,10 @@ main.home > section > div > span > a
 
 main.home ~ main > h1
 {
-    width: var(--default-page-width);
+    width: 100%;
+    max-width: var(--page-width-default);
     padding: 20px 10px;
-    font-size: 1.25rem;
-}
-
-main.home ~ main.search > section.articles > article
-{
-    width: calc((var(--default-page-width) - ((5 - 1) * 40px)) / 5);
-
+    font-size: var(--font-size-xl);
 }
 
 /* Subscribe to the newsletter */
@@ -1454,7 +1509,7 @@ section.newsletter
 {
     display: flex;
     margin-top: 40px;
-    padding: 80px 0;
+    padding: 80px 40px;
     background-color: var(--accent-color);
     color: var(--primary-color);
     flex-direction: column;
@@ -1473,12 +1528,16 @@ section.newsletter ~ script + footer
 
 section.newsletter > h1
 {
-    font-size: 1.25rem;
+    font-size: var(--font-size-xl);
 }
 
 section.newsletter > form
 {
     display: flex;
+    width: 100%;
+    max-width: 600px;
+    flex-wrap: wrap;
+    justify-content: center;;
     gap: 20px;
 }
 
@@ -1497,6 +1556,14 @@ section.newsletter > form > input
     color: var(--primary-text-color);
 }
 
+/* Input fields */
+
+section.newsletter > form > span
+{
+    min-width: 200px;
+    flex-grow: 2;
+}
+
 section.newsletter > form > span:hover,
 section.newsletter > form > input:hover
 {
@@ -1510,11 +1577,12 @@ section.newsletter > form > span > i
     padding: 0 10px 0 12px;
 }
 
-/* Actual input fields */
+/* Actual input field */
 
 section.newsletter > form > span > input
 {
     padding: 0 10px 0 0;
+    width: 100%;
     border: none;
     outline: none;
     height: 40px;
@@ -1522,14 +1590,12 @@ section.newsletter > form > span > input
     color: inherit;
 }
 
-section.newsletter > form > span > input[type="email"]
-{
-    min-width: 200px;
-}
+/* Submit button */
 
 section.newsletter > form > input
 {
     padding: 10px 15px;
+    flex-grow: 1;
     border: none;
     outline: none;
     cursor: pointer;
@@ -1686,6 +1752,7 @@ main.orders > section > div > span > input
     padding-left: 12px;
     padding-right: 5px;
     border: none;
+    outline: none;
     background-color: transparent;
     resize: none;
     flex-grow: 1;
@@ -1738,7 +1805,7 @@ main.orders > section > table.sortable > thead
     border-bottom: 1px solid #EAEAEA;
     color: var(--primary-text-color-alternative);
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: var(--font-size-s);
 }
 
 main.listings > section > table.sortable > thead > tr > th,
@@ -1815,7 +1882,7 @@ main.order > section > div > div > div > table.order_items > tbody > tr > td,
 main.cart > section > div > div > div > table.order_items > tbody > tr > td
 {
     padding: 15px;
-    font-size: 12px;
+    font-size: var(--font-size-s);
     text-align: center;
 }
 
@@ -1876,7 +1943,7 @@ main.orders > section > table.sortable > tbody > tr > td > span.order_shipped
 main.listings > section > table.sortable > tbody > tr > td:last-of-type
 {
     padding: 0;
-    color: #CACACA;
+    color: rgba(0, 0, 0, 0.15);
     cursor: pointer;
 }
 
@@ -1942,21 +2009,6 @@ main.cart
 
 /* Container */
 
-main.order > div,
-main.cart > div
-{
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(50, 50, 50, 0.75);
-    backdrop-filter: blur(5px);
-    z-index: 998;
-    cursor: pointer;
-}
-
 /* Actual image */
 
 main.order > div > div,
@@ -1991,7 +2043,8 @@ main.cart > section
 main.order > nav
 {
     padding-left: 20px;
-    width: var(--default-page-width);
+    width: var(--page-width-default);
+    max-width: 100%;
 }
 
 main.order > nav > a
@@ -2007,6 +2060,7 @@ main.order > section > div,
 main.cart > section > div
 {
     display: flex;
+    width: 100%;
     flex-direction: column;
     gap: 20px;
 }
@@ -2023,14 +2077,6 @@ main.cart > section > aside > div
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
     background-color: #FFFFFF;
     flex-direction: column;
-}
-
-/* Order box */
-
-main.order > section > div > div,
-main.cart > section > div > div
-{
-    width: calc(var(--default-page-width) - 225px - 20px);
 }
 
 /* Box title */
@@ -2056,7 +2102,7 @@ main.order > section > div > div > h1:first-of-type > span > i,
 main.order > section > div > div > h1:first-of-type > span > span
 {
     font-weight: 700;
-    font-size: 20px;
+    font-size: var(--font-size-2xl);
     line-height: 14px;
     vertical-align: middle;
 }
@@ -2148,7 +2194,7 @@ main.order > section > div > div > div > div.timeline > span > i
     align-items: center;
     justify-content: center;
     z-index: 2;
-    font-size: 16px;
+    font-size: var(--font-size-l);
     color: var(--primary-color);
 }
 
@@ -2165,8 +2211,8 @@ main.order > section > div > div > div > div.timeline > span > i:after
     top: 50px;
     width: max-content;
     content: attr(data-text);
-    font-family: var(--default-font-family);
-    font-size: var(--default-font-size);
+    font-family: var(--font-family-default);
+    font-size: var(--font-size-m);
     font-weight: 400;
     color: #4CAF50;
 }
@@ -2239,6 +2285,8 @@ main.cart > section > div > div > div > table.order_items > tbody > tr > td
     text-align: left;
 }
 
+/* Product identification (image, name, category) */
+
 main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span,
 main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span
 {
@@ -2305,10 +2353,12 @@ main.cart > section > div > div > div > table.order_items > tbody > tr > td:firs
     gap: 5px;
 }
 
+/* Product name */
+
 main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type,
 main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type
 {
-    font-size: 14px;
+    font-size: var(--font-size-m);
     font-weight: 700;
     color: var(--accent-text-color);
     cursor: pointer;
@@ -2320,7 +2370,7 @@ main.order > section > div > div > div > table.order_items > tbody > tr > td:fir
 main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:first-of-type > i
 {
     opacity: 0;
-    font-size: 12px;
+    font-size: var(--font-size-s);
     transition: opacity 0.2s;
 }
 
@@ -2329,6 +2379,8 @@ main.cart > section > div > div > div > table.order_items > tbody > tr > td:firs
 {
     opacity: 1;
 }
+
+/* Category name */
 
 main.order > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:last-of-type,
 main.cart > section > div > div > div > table.order_items > tbody > tr > td:first-of-type > span > span:last-of-type > span:last-of-type
@@ -2364,12 +2416,16 @@ main.cart > section > div > div > div > table.order_items > tbody > tr > td.tiny
     padding: 0;
 }
 
+/* Times (x) multiplier symbol */
+
 main.order > section > div > div > div > table.order_items > tbody > tr > td.tiny:not(.left, .right),
 main.cart > section > div > div > div > table.order_items > tbody > tr > td.tiny:not(.left, .right)
 {
     padding: 10px;
     text-align: center;
 }
+
+/* Total price for each item */
 
 main.order > section > div > div > div > table.order_items > tbody > tr > td:last-of-type,
 main.cart > section > div > div > div > table.order_items > tbody > tr > td:last-of-type
@@ -2405,7 +2461,7 @@ main.order > section > aside,
 main.cart > section > aside
 {
     display: flex;
-    width: 225px;
+    width: 220px;
     flex-direction: column;
     gap: 20px;
 }
@@ -2483,6 +2539,13 @@ main.order > section > aside > div > div > span > a
 main.cart > section > div > div > div > table.order_items > tbody > tr > td > div.quantity > span.qty
 {
     flex-grow: 1;
+    /*
+        min() does not support auto.
+        100% and fit-content are not what I want.
+        It's a personal choice what to use.
+        I am going to leave it like this, due to 1 additional pro:display:
+        math in css is not supported in older browsers.
+    */
     width: auto;
     min-width: 25px;
 }
@@ -2531,6 +2594,8 @@ main.cart > section > div > div > div > table.order_items > tbody > tr > td:last
 main.listings_edit > form
 {
     display: flex;
+    width: var(--page-width-default);
+    max-width: 100%;
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
@@ -2550,7 +2615,7 @@ main.listings_edit > form > :is(section, aside)
 
 main.listings_edit > form > section
 {
-    width: calc(var(--default-page-width) - 300px - 20px);
+    width: 100%;
 }
 
 /* Right section */
@@ -2596,6 +2661,7 @@ main.listings_edit > form > aside > div.category_selector > span > div > div.con
     display: flex;
     border-radius: 7px;
     border: 1px solid rgba(0, 0, 0, 0.2);
+    outline: none;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
     background-color: #FFFFFF;
     align-items: center;
@@ -2640,8 +2706,8 @@ main.listings_edit > form > section > div > div
 main.listings_edit > form > section > div > div.images > div
 {
     position: relative; /* instead of z-index on child img and delete icon */
-    width: 158px;
-    height: 158px;
+    width: 139px;
+    height: 139px;
 }
 
 /* Actual image */
@@ -2723,7 +2789,7 @@ main.listings_edit > form > section > div > div.images > div.add_new:hover
 
 main.listings_edit > form > section > div > div.images > div.add_new > i
 {
-    font-size: 25px;
+    font-size: var(--font-size-5xl);
     opacity: 0.3;
 }
 
@@ -2756,7 +2822,7 @@ main.listings_edit > form > :is(section, aside) > div > div.editor > textarea:fo
 
 main.listings_edit > form > :is(section, aside) > div > span.status
 {
-    border: 0;
+    border: none;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -2816,11 +2882,10 @@ main.listings_edit > form > :is(section, aside) > div.nav-buttons
 
 main.listings_edit > form > :is(section, aside) > div.nav-buttons > button
 {
-    border: 0;
+    border: none;
     border-radius: 7px;
     padding: 10px;
     flex-grow: 1;
-    /* flex-basis: 0; */
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
 }
@@ -2832,8 +2897,10 @@ main.listings_edit > form > :is(section, aside) > div.nav-buttons > button
 main.listings_edit > form > aside > div.category_selector > span > div > div.content
 {
     position: relative;
+    padding: 15px;
     width: 100%;
     height: 500px;
+    background-color: var(--primary-color);
 }
 
 main.listings_edit > form > aside > div.category_selector > span > div > div.content > input
@@ -2900,9 +2967,7 @@ main.listings_edit > form > aside > div.category_selector > span > div > div.con
     background-color: var(--primary-color);
 }
 
-/*
-Category Modal [START]
-*/
+/* Category Modal [START] */
 
 /* Invisible checkbox that enables the modal control */
 
@@ -2921,22 +2986,6 @@ main.listings_edit > form > aside > div.category_selector > span > label.open_mo
     cursor: pointer;
 }
 
-/* Background of the modal */
-
-main.listings_edit > form > aside > div.category_selector > span > label.modal_background,
-main.listings > span > label.modal_background
-{
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(50, 50, 50, 0.75);
-    backdrop-filter: blur(5px);
-    z-index: 998;
-}
-
 /* Show the modal by changing the invisible checkbox state */
 
 main.listings_edit > form > aside > div.category_selector > span > input[type = checkbox]:checked ~ label.modal_background,
@@ -2952,26 +3001,6 @@ main.listings > span > input[type = checkbox]:checked ~ div
 }
 
 /* Modal itself */
-
-main.listings_edit > form > aside > div.category_selector > span > div,
-main.listings > span > div
-{
-    display: none;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    width: fit-content;
-    height: fit-content;
-    border-radius: 7px;
-    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.8);
-    overflow: hidden;
-    z-index: 999;
-}
 
 main.listings_edit > form > aside > div.category_selector > span > div > div.title-bar,
 main.listings > span > div > div.title-bar
@@ -2994,7 +3023,7 @@ main.listings_edit > form > aside > div.category_selector > span > div > div.tit
 main.listings > span > div > div.title-bar > label
 {
     color: var(--secondary-text-color);
-    font-size: 24px;
+    font-size: var(--font-size-4xl);
     cursor: pointer;
 }
 
@@ -3006,7 +3035,6 @@ main.listings > span > div > div.title-bar > label:hover
 
 /* Price range slider */
 
-main.listings_edit > form > aside > div.category_selector > span > div > div.content,
 main.listings > span > div > div.content
 {
     padding: 15px;
@@ -3095,7 +3123,7 @@ main.listings_edit > form > :is(section, aside) > div.nav-buttons > button[type=
 {
     display: inline-block;
     position: relative;
-    left: -10px;
+    left: -5px;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     font: var(--fa-font-solid);
@@ -3306,7 +3334,7 @@ main.settings > section > div > form > span > select
     height: 36px;
     background-color: #FFFFFF;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
-    font-size: 14px;
+    font-size: var(--font-size-m);
     transition: box-shadow 0.5s;
 }
 
@@ -3346,6 +3374,7 @@ main.settings > section > div > form > span > input:disabled::placeholder
 main.settings > section > div > input
 {
     border: none;
+    outline: none;
     border-radius: 7px;
     padding: 10px 20px;
     color: var(--secondary-text-color);
@@ -3408,14 +3437,13 @@ main.profile > section.info > article
 {
     display: flex;
     padding: 15px;
-    min-width: fit-content;
     flex-direction: column;
     justify-content: space-evenly;
 }
 
 main.profile > section.info > article > h1
 {
-    font-size: 16px;
+    font-size: var(--font-size-l);
     font-weight: 700;
 }
 
@@ -3500,9 +3528,17 @@ main.profile > section.info > article > div > div.bars > div.one > div
 
 /* Reviews column */
 
+
 main.profile > section.info > article > div > div.reviews
 {
     text-align: right;
+}
+
+/* No reviews */
+
+main.profile > section.reviews:not(:has(*))
+{
+    display: none;
 }
 
 /* Reviews [END] */
@@ -3556,21 +3592,6 @@ main.profile > section.info > aside > span > label.open_modal:hover
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
 }
 
-/* Background of the modal */
-
-main.profile > section.info > aside > span > label.modal_background
-{
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(50, 50, 50, 0.75);
-    backdrop-filter: blur(5px);
-    z-index: 998;
-}
-
 /* Show the modal by changing the invisible checkbox state */
 
 main.profile > section.info > aside > span > input[type = checkbox]:checked ~ label.modal_background
@@ -3584,25 +3605,6 @@ main.profile > section.info > aside > span > input[type = checkbox]:checked ~ di
 }
 
 /* Modal itself */
-
-main.profile > section.info > aside > span > div
-{
-    display: none;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    width: fit-content;
-    height: fit-content;
-    border-radius: 7px;
-    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.8);
-    overflow: hidden;
-    z-index: 999;
-}
 
 main.profile > section.info > aside > span > div > div.title-bar
 {
@@ -3622,7 +3624,7 @@ main.profile > section.info > aside > span > div > div.title-bar > span
 main.profile > section.info > aside > span > div > div.title-bar > label
 {
     color: var(--secondary-text-color);
-    font-size: 24px;
+    font-size: var(--font-size-4xl);
     cursor: pointer;
 }
 
@@ -3802,11 +3804,13 @@ main.profile > section.info > aside > span > div > div.buttons > button#range-ap
 /* Articles container */
 
 main.search > section.articles,
-main.profile > section.articles
+main.profile > section.articles,
+main.category > section
 {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
+    display: grid;
+    width: var(--page-width-default);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
 }
 
 main.profile
@@ -3821,7 +3825,6 @@ main.profile > section.articles > article,
 main.category > section > article
 {
     display: flex;
-    width: calc((var(--default-page-width) - ((4 - 1) * 40px)) / 4);
     border-radius: 7px;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.15);
     background-color: #FFFFFF;
@@ -3835,7 +3838,6 @@ main.profile > section.articles > article:hover,
 main.category > section > article:hover
 {
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
-    width: calc((var(--default-page-width) - ((4 - 1) * 40px)) / 4);
 }
 
 /* Article image and title */
@@ -3855,6 +3857,7 @@ main.search > section.articles > article > a > img,
 main.profile > section.articles > article > a > img,
 main.category > section > article > a > img
 {
+    max-height: 300px;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }
@@ -3882,7 +3885,7 @@ main.category > section > article > a > span#discount
     background-color: #E03030;
     font-weight: 700;
     color: #F5F5F7;
-    font-size: 14px;
+    font-size: var(--font-size-m);
 }
 
 /* Article rating, price and buttons */
@@ -3973,7 +3976,7 @@ main.category > section > article > div > div.buttons
 {
     display: flex;
     align-items: center;
-    font-size: 20px;
+    font-size: var(--font-size-2xl);
     gap: 15px;
 }
 
@@ -4022,10 +4025,12 @@ main.category > section > article > div > div.buttons > span:hover > i.fa-cart-s
 
 main.category
 {
+    margin: 40px auto;
+    max-width: var(--page-width-default);
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
 }
 
 /* Left and right sections */
@@ -4036,7 +4041,7 @@ main.category > aside
 {
     display: flex;
     padding: 20px;
-    width: 250px;
+    min-width: 220px;
     border-radius: 7px;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     background-color: rgba(0, 0, 0, 0.025);
@@ -4075,17 +4080,15 @@ main.category > aside > div.filters
 {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 /* Right section - List of articles */
 
 main.category > section
 {
-    display: flex;
-    flex-wrap: wrap;
-    width: calc(var(--default-page-width) - 250px - 15px);
-    gap: 15px;
+    width: calc(100% - 220px - 20px);
+    gap: 20px;
 }
 
 /* Breadcrumb */
@@ -4093,17 +4096,7 @@ main.category > section
 main.category > section > nav
 {
     padding: 10px 0 0 5px;
-    flex-basis: 100%;
-}
-
-main.category > section > article
-{
-    width: calc((var(--default-page-width) - 250px - 15px - ((4 - 1) * 15px)) / 4);
-}
-
-main.category > section > article:hover
-{
-    width: calc((var(--default-page-width) - 250px - 15px - ((4 - 1) * 15px)) / 4);
+    grid-column: 1 / -1; /* Full width: 1 (from first element) / (to) -1 (last) */
 }
 
 main.category > section > article > a > h1,
@@ -4115,13 +4108,13 @@ main.category > section > article > div:last-of-type
 
 main.category > section > article > div > div.buttons
 {
-    gap: 10px;
+    gap: 15px;
 }
 
 /* This could be used in case the old price currency identifier is displayed */
 /* main.category > section > article > div > div.buttons > span
 {
-    font-size: 18px;
+    font-size: var(--font-size-xl);
 } */
 
 /***************************
@@ -4153,12 +4146,13 @@ footer
 footer > section
 {
     display: flex;
-    width: var(--default-page-width);
-    min-height: 250px;
+    max-width: var(--page-width-default);
+    width: 100%;
     justify-content: space-around;
     align-items: center;
     font-weight: 700;
     color: var(--primary-color);
+    gap: 40px;
 }
 
 footer > section > div
@@ -4178,3 +4172,383 @@ footer > section > div > span > a > i
 **    FOOTER [END]    **
 **                    **
 ***********************/
+
+/**********************
+**                   **
+**      SMALLER      **
+**      SCREENS      **
+**      [START]      **
+**                   **
+**********************/
+
+@media screen and (width <= 1920px)
+{
+    /* Improves accuracy. Makes header navigation buttons easier to click. */
+
+    header > nav > span
+    {
+        margin: 0 -10px;
+        padding: 0 10px;
+    }
+
+    /* Hide header navigation text and leave only icons (Except for language and currency) */
+
+    header > nav > span > a > span:not(.counter),
+    header > nav > span.account-panel > span
+    {
+        display: none;
+    }
+
+    /* Fix red counter bubble's position */
+
+    header > nav > span:not(.search) > a > span.counter
+    {
+        left: 22px;
+    }
+}
+
+@media screen and (width <= 1200px)
+{
+    /*
+        Make sections full screen width.
+
+        Removing border-radius from sections require !important, due to specificity.
+        The elements are styled with a class, which is more specific than the tag.
+    */
+
+    main > section
+    {
+        width: 100%;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+    }
+
+    /* Remove shadow from sections */
+
+    main.home > section.recommended,
+    main.profile > section.info,
+    main.category > aside,
+    main.listings > section,
+    main.orders > section,
+    main.search > section.articles > article,
+    main.profile > section.articles > article,
+    main.category > section > article
+    {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        box-shadow: none;
+    }
+
+    /* Restyle the categories view page */
+
+    main.category,
+    main.orders,
+    main.listings,
+    main.category ~ script + footer,
+    main.orders ~ script + footer,
+    main.listings ~ script + footer
+    {
+        margin: 0;
+    }
+
+    main.category
+    {
+        align-items: stretch;
+    }
+
+    main.category > aside
+    {
+        min-width: fit-content;
+        border-top: none;
+        border-bottom: none;
+        border-left: none;
+    }
+
+    main.category > section
+    {
+        padding: 5px 15px 15px 0;
+        width: inherit;
+        max-width: none;
+    }
+
+    main.category + footer
+    {
+        margin: 0;
+    }
+
+    /* Remove border from sections */
+
+    section.global_message > article,
+    main.category > aside,
+    main.order > section > div > div,
+    main.order > section > aside > div,
+    main.cart > section > div > div,
+    main.cart > section > aside > div,
+    /* TODO: Remove :not() when element selectors are replaced for better readability */
+    main.listings_edit > form > :is(section, aside) > div:not(.nav-buttons)
+    {
+        border-radius: 0;
+    }
+
+    /* Restyle the sections */
+
+    main.search > section.articles,
+    main.profile > section.articles
+    {
+        padding: 0 40px;
+        width: 100%;
+    }
+}
+
+@media screen and (width <= 900px)
+{
+    /* Swap big screens search bar with smaller screen one */
+
+    header > nav > span.search,
+    /* Hide header navigation text for the remaining language and currency button */
+    header > nav > span.language-currency > span
+    {
+        display: none;
+    }
+
+    header > nav > span.search-sm,
+    header > nav > span.search-sm > div
+    {
+        display: flex;
+    }
+
+    /* Remove gap between global messages, so the colors can touch nicely */
+
+    section.global_message
+    {
+        margin: 0;
+        gap: 0;
+    }
+
+    section.global_message > article
+    {
+        padding: 25px 20px 25px 45px;
+    }
+
+    /* Remove distance between elements, so they can tocu nicely */
+
+    main,
+    footer
+    {
+        margin-top: 0;
+    }
+
+    /* Fix the page dots position, when there is no margin space */
+
+    .flickity-page-dots
+    {
+        position: inherit !important;
+        bottom: unset !important;
+        padding: 10px 0 !important;
+    }
+
+    /* Restyle the categories view page */
+
+    main.category,
+    main.listings_edit > form
+    {
+        flex-direction: column;
+    }
+
+    main.category > section
+    {
+        padding: 0 15px 15px 15px;
+    }
+
+    /* Restyle of order details and shopping cart page */
+
+    main.order,
+    main.cart,
+    main.listings_edit > form,
+    main.order > section > div > div > div > table.order_items > tbody > tr > td,
+    main.cart > section > div > div > div > table.order_items > tbody > tr > td
+    {
+        padding: 10px;
+    }
+
+    /* Keep the back to all orders button away from the edge (header logo) */
+
+    main.order
+    {
+        padding-top: 20px;
+    }
+
+    main.order > section > div > div > div > table.order_items > tbody > tr > td:last-of-type,
+    main.cart > section > div > div > div > table.order_items > tbody > tr > td:last-of-type
+    {
+        padding-right: 15px;
+    }
+
+    /* TODO: Maybe it is less *flashy*, but better to address each column with a class name */
+
+    main.order > section > div > div > div > table.order_items > tbody > tr > td.price_pc,
+    main.cart > section > div > div > div > table.order_items > tbody > tr > td.price_pc,
+    main.cart > section > div > div > div > table.order_items > tbody > tr > td.tiny:not(.left, .right),
+    main.order > section > div > div > div > table.order_items > tbody > tr > td.right.tiny,
+    main.listings > section > table.sortable > thead > tr > th.left + th,
+    main.listings > section > table.sortable > tbody > tr > td.left + td,
+    main.listings > section > table.sortable > thead > tr > th:nth-last-of-type(3), /* 3rd element from last to first */
+    main.listings > section > table.sortable > tbody > tr > td:nth-last-of-type(3), /* 3rd element from last to first */
+    /* Status color for items in listings and orders pages */
+    main.listings > section > table.sortable > thead > tr > th:nth-last-of-type(2), /* 3rd element from last to first */
+    main.listings > section > table.sortable > tbody > tr > td:nth-last-of-type(2), /* 3rd element from last to first */
+    main.orders > section > table.sortable > thead > tr > th:last-of-type,
+    main.orders > section > table.sortable > tbody > tr > td:last-of-type
+    {
+        display: none;
+    }
+
+    /* TODO: MAKE BELOW MORE READABLE! THIS IS WIP! */
+
+    main.orders > section > table.sortable > tbody > tr:has(td > span.order_pending)
+    {
+        background-color: #E6E6E6;
+    }
+
+    main.listings > section > table.sortable > tbody > tr:has(td > span.active),
+    main.orders > section > table.sortable > tbody > tr:has(td > span.order_received)
+    {
+        background-color: #D0FBD0;
+    }
+
+    main.listings > section > table.sortable > tbody > tr:has(td > span.inactive),
+    main.orders > section > table.sortable > tbody > tr:has(td > span.order_cancelled)
+    {
+        background-color: #FFD4D4;
+    }
+    main.orders > section > table.sortable > tbody > tr:has(td > span.order_ready_for_shipping)
+    {
+        background-color: #FFFFB3;
+    }
+
+    main.orders > section > table.sortable > tbody > tr:has(td > span.order_shipped)
+    {
+        background-color: #E5F1FF;
+    }
+
+    /* Make the side sections go full width below the main content */
+
+    main.order > section,
+    main.cart > section
+    {
+        flex-direction: column;
+    }
+
+    main.order > section,
+    main.cart > section,
+    main.listings_edit > form,
+    main.order > section > :is(div, aside),
+    main.cart > section > div,
+    main.listings_edit > form > :is(section, aside)
+    {
+        gap: 10px;
+    }
+
+    main.order > section > aside,
+    main.cart > section > aside,
+    main.listings_edit > form > aside
+    {
+        width: 100%;
+    }
+
+    /* Fix up the settings page appearance, as it is different from the rest */
+
+    main.settings,
+    main.settings + footer
+    {
+        margin-top: 0;
+    }
+
+    main.settings > section
+    {
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+    }
+
+    /* Make the footer more compact */
+
+    footer > section
+    {
+        flex-direction: column;
+    }
+
+    footer > section > div:last-of-type
+    {
+        padding: 0 10px;
+    }
+}
+
+@media screen and (width <= 420px)
+{
+    /* Make product cards scale better on smaller screens */
+
+    main.search > section.articles,
+    main.profile > section.articles,
+    main.category > section.articles
+    {
+        grid-template-columns: 1fr;
+    }
+
+    /* Modal for category selection in listings_edit and listings_add pages */
+
+    main.listings_edit > form > aside > div.category_selector > span > div
+    {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+
+    main.listings_edit > form > aside > div.category_selector > span > div > div.content
+    {
+        /* Manually calculated. TODO: fix it. */
+        height: calc(100% - 44px);
+        background-color: transparent;
+    }
+}
+
+/*
+    Fix header categories menu for smaller screens
+
+    60px is the height of the header navigation
+    764px is the height of the menu (measured, not automated yet!)
+    20px is tolerance
+*/
+
+@media screen and (height <= calc(60px + 764px + 20px))
+{
+    header > nav > span.categories > div
+    {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 9; /* Parent (header) z-index is 800 */
+        overflow-y: auto;
+    }
+}
+
+/* Centering the menu vertically doesn't work anymore */
+
+@media screen and (height <= 764px)
+{
+    header > nav > span.categories > div
+    {
+        align-items: flex-start
+    }
+}
+
+/**********************
+**                   **
+**      SMALLER      **
+**      SCREENS      **
+**       [END]       **
+**                   **
+**********************/

@@ -8,53 +8,34 @@
     <meta name="author" content="{{ VAR site.author ~ }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/templates/default/resources/favicon.jpg">
-    {{ -- |
-        Include styles in the following order:
-            1. Font awesome (icons)
-            2. Flags (icons)
-            3. noUiSlider
-            4. Main style
-    | -- }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
-    {{ -- TODO: IF page requires it -- }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.css">
     {{ -- TODO: update style version from server to force the users to update -- }}
     <link rel="stylesheet" type="text/css" href="/templates/default/resources/style.css?v=1.0.0">
-    {{ -- TODO: IF page requires it -- }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
-    {{ -- jquery
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    -- }}
-    {{ -- TODO: IF page requires it -- }}
-    <link rel="stylesheet" type="text/css" href="/templates/default/resources/flickity.css">
-    {{ -- KEEP PAGE SPECIFIC STYLE LAST -- }}
-    <link rel="stylesheet" type="text/css" href="/templates/default/resources/listing_view.css">
-    <script src="/templates/default/resources/flickity2.pkgd.min.js"></script>
-    <script src="/templates/default/resources/flickity1.fullscreen.js"></script>
-    {{ -- |
-        External links instead
-        <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
-        <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
-        <script src="https://unpkg.com/flickity-fullscreen@1.1.1/fullscreen.js"></script>
-
-        Not required currently
-        <script src="/templates/default/resources/flickity-as-nav-for2.js"></script>
-        <script src="/templates/default/resources/flickity-as-nav-for3.js"></script>
-        <script src="https://unpkg.com/flickity-as-nav-for@3/as-nav-for.js"></script>
-        <script src="https://unpkg.com/flickity-fullscreen@2/fullscreen.js"></script>
-    | -- }}
-    {{ -- TODO: IF page requires it -- }}
-    {{ -- TODO: make it load from local server maybe ? -- }}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
-    <script src="/templates/default/resources/sceditor3_min.js"></script>
-    {{ -- |
-        External links instead
-        OLD -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/default.min.css">
-        OLD -> <script src="https://cdn.jsdelivr.net/npm/sceditor@3/minified/sceditor.min.js"></script>
-        LATEST -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
-        LATEST -> <script src="https://cdn.jsdelivr.net/combine/npm/sceditor@latest/minified/sceditor.min.js,npm/sceditor@latest/minified/formats/bbcode.min.js,npm/sceditor@latest/minified/icons/monocons.min.js"></script>
-    | -- }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
+    {{ IF Builder::get_data("page_name") === "profile_shop" ? }}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    {{ END IF }}
+    {{ IF Builder::get_data("page_name") === "home" || Builder::get_data("page_name") === "listing_view" ? }}
+        <link rel="stylesheet" type="text/css" href="/templates/default/resources/flickity.css">
+        <script src="/templates/default/resources/flickity2.pkgd.min.js"></script>
+        <script src="/templates/default/resources/flickity1.fullscreen.js"></script>
+    {{ END IF }}
+    {{ IF Builder::get_data("page_name") === "listing_view" ? }}
+        <link rel="stylesheet" type="text/css" href="/templates/default/resources/listing_view.css">
+    {{ END IF }}
+    {{ IF Builder::get_data("page_name") === "listing_add" || Builder::get_data("page_name") === "listing_edit" ? }}
+        {{ -- TODO: make it load from local server maybe ? -- }}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
+        <script src="/templates/default/resources/sceditor3_min.js"></script>
+        {{ -- |
+            External links instead
+            OLD -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/default.min.css">
+            OLD -> <script src="https://cdn.jsdelivr.net/npm/sceditor@3/minified/sceditor.min.js"></script>
+            LATEST -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
+            LATEST -> <script src="https://cdn.jsdelivr.net/combine/npm/sceditor@latest/minified/sceditor.min.js,npm/sceditor@latest/minified/formats/bbcode.min.js,npm/sceditor@latest/minified/icons/monocons.min.js"></script>
+        | -- }}
+    {{ END IF }}
 </head>
 <body>
     {{ -- Top navigation bar -- }}
@@ -63,7 +44,7 @@
             {{ -- LOGO -- }}
             <span><a href="/home" aria-label="Home page"></a></span>
             <span class="categories">
-                <i class="fa-solid fa-bars fa-xl"></i></i>
+                <i class="fa-solid fa-bars fa-xl"></i>
                 <div>
                     <nav>
                         {{ -- |
@@ -107,25 +88,33 @@
             </span>
 
             {{ -- Search bar -- }}
+            {{ -- Bigger screens -- }}
             <span class="search">
-                {{ -- Instead of textarea, input type="search" can be used -- }}
-                <input type="search" name="search" placeholder="{{ VAR translate.search ~ }}" onkeydown="search_key_down(event)">
-                <span onclick="search_prod()"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="search" name="search" placeholder="{{ VAR translate.search ~ }}">
+                <span><i class="fa-solid fa-magnifying-glass"></i></span>
+            </span>
+            {{ -- Smaller screens -- }}
+            <span class="search-sm">
+                <span><i class="fa-solid fa-magnifying-glass"></i></span>
+                <div>
+                    <input type="search" name="search" placeholder="{{ VAR translate.search ~ }}">
+                    <span><i class="fa-solid fa-magnifying-glass"></i></span>
+                </div>
             </span>
 
             {{ -- Language and currency menu -- }}
             <span class="language-currency">
                 <i class="fa-solid fa-globe fa-xl"></i>
-                {{ VAR site.language ~ }} | {{ VAR site.currency ~ }}
+                <span>{{ VAR site.language ~ }} | {{ VAR site.currency ~ }}</span>
                 <div>
                     <span>{{ VAR translate.language ~ }}</span>
                     <div tabindex="1">
                         <input type="radio" name="language" id="en" {{ IF User::get("language") === "en" ? }}checked{{ END IF }}>
-                        <label for="en" onclick="change_display('en', 'language');">
+                        <label for="en">
                             <span class="fi fi-us"></span>English ({{ VAR translate.english ~ }})
                         </label>
                         <input type="radio" name="language" id="bg" {{ IF User::get("language") === "bg" ? }}checked{{ END IF }}>
-                        <label for="bg" onclick="change_display('bg', 'language');">
+                        <label for="bg">
                             <span class="fi fi-bg"></span>Български ({{ VAR translate.bulgarian ~ }})
                         </label>
                     </div>
@@ -134,11 +123,11 @@
                     <span>{{ VAR translate.currency ~ }}</span>
                     <div tabindex="2">
                         <input type="radio" name="currency" id="usd" {{ IF User::get("currency") === "USD" ? }}checked{{ END IF }}>
-                        <label for="usd" onclick="change_display('USD', 'currency');">USD - {{ VAR translate.us_dollar ~ }}</label>
+                        <label for="usd">USD - {{ VAR translate.us_dollar ~ }}</label>
                         <input type="radio" name="currency" id="eur" {{ IF User::get("currency") === "EUR" ? }}checked{{ END IF }}>
-                        <label for="eur" onclick="change_display('EUR', 'currency');">EUR - {{ VAR translate.euro ~ }}</label>
+                        <label for="eur">EUR - {{ VAR translate.euro ~ }}</label>
                         <input type="radio" name="currency" id="bgn" {{ IF User::get("currency") === "BGN" ? }}checked{{ END IF }}>
-                        <label for="bgn" onclick="change_display('BGN', 'currency');">BGN - {{ VAR translate.bulgarian_lev ~ }}</label>
+                        <label for="bgn">BGN - {{ VAR translate.bulgarian_lev ~ }}</label>
                     </div>
                 </div>
             </span>
@@ -151,8 +140,8 @@
                     <span>
                         <a href="#wishlist">
                             <i class="fa-solid fa-heart fa-xl"></i>
-                            <span>WIP</span>
-                            {{ VAR translate.wishlist ~ }}
+                            <span class="counter">WIP</span>
+                            <span>{{ VAR translate.wishlist ~ }}</span>
                         </a>
                         <div>Wishlist items</div>
                     </span>
@@ -160,8 +149,8 @@
                     <span class="cart">
                         <a href="/cart">
                             <i class="fa-solid fa-cart-shopping fa-xl"></i>
-                            <span>{{ VAR USER.cart_total_qty ~ }}</span>
-                            {{ VAR translate.cart ~ }}
+                            <span class="counter">{{ VAR USER.cart_total_qty ~ }}</span>
+                            <span>{{ VAR translate.cart ~ }}</span>
                         </a>
                         <div>
                             {{ -- Only show below code when viewing product listing page to handle adding new cart items -- }}
@@ -211,27 +200,27 @@
                     {{ -- SHOP MENU -- }}
 
                     {{ -- Orders menu -- }}
-                    <span>
+                    <span class="orders">
                         <a href="/orders">
                             <i class="fa-solid fa-boxes-packing fa-xl"></i>
-                            {{ VAR translate.orders ~ }}
-                            <span>??</span>
+                            <span>{{ VAR translate.orders ~ }}</span>
+                            <span class="counter">??</span>
                         </a>
                     </span>
                     {{ -- Listings menu -- }}
-                    <span>
+                    <span class="listings">
                         <a href="/listings">
                             <i class="fa-solid fa-tags fa-xl"></i>
-                            {{ VAR translate.listings ~ }}
+                            <span>{{ VAR translate.listings ~ }}</span>
                         </a>
                     </span>
                 {{ END IF }}
 
                 {{ -- Messages menu -- }}
                 <span class="messages">
-                    <a href="#messages">
+                    <a href="#WIP_messages_page">
                         <i class="fa-solid fa-message fa-xl"></i>
-                        <span>WIP</span>
+                        <span class="counter">WIP</span>
                     </a>
                     <div>
                         <section>
@@ -286,10 +275,10 @@
                     <img src="/uploads/avatars/{{ VAR USER.profile_picture ~ }}" alt="Profile picture">
 
                     {{ -- USER NAMES -- }}
-                    {{ VAR USER.first_name ~ }} {{ VAR USER.last_name ~ }}
+                    <span>{{ VAR USER.first_name ~ }} {{ VAR USER.last_name ~ }}</span>
                 {{ ELSE }}
                     <i class="fa-solid fa-user fa-xl"></i>
-                    {{ VAR translate.guest ~ }}
+                    <span>{{ VAR translate.guest ~ }}</span>
                 {{ END IF }}
                 {{ IF !User::get("signed_in") ? }}
                     <div>

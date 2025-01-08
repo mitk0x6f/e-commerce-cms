@@ -41,7 +41,7 @@
 
 {{ -- Main product categories -- }}
 <main class="home">
-    <section>
+    <section class="recommended">
         {{ -- List of categories -- }}
         {{ -- |
             id + id2 (+ hidden id3). category1 + category2 [combined_name]
@@ -83,8 +83,8 @@
                 WIP - Laptop and computer products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.laptops ~ }} <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="">{{ VAR translate.computers ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/laptops">{{ VAR translate.laptops ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/computers">{{ VAR translate.computers ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="smartphones_and_tablets">
@@ -92,8 +92,8 @@
                 WIP - Smartphone and tablet products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.smartphones ~ }} <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="">{{ VAR translate.tablets ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/smartphones">{{ VAR translate.smartphones ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/tablets">{{ VAR translate.tablets ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="monitors_and_TVs">
@@ -101,8 +101,8 @@
                 WIP - Monitor and TV products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.monitors ~ }} <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="">{{ VAR translate.TVs ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/monitors">{{ VAR translate.monitors ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/TVs">{{ VAR translate.TVs ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="pc_components">
@@ -110,7 +110,7 @@
                 WIP - PC components will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/pc_components">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="peripherals">
@@ -118,7 +118,7 @@
                 WIP - Peripheral products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/peripherals">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="office">
@@ -126,7 +126,7 @@
                 WIP - Office products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/office">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="cameras">
@@ -134,7 +134,7 @@
                 WIP - Camera products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/cameras">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="watches">
@@ -142,7 +142,7 @@
                 WIP - Watch products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/watches">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="software">
@@ -150,7 +150,7 @@
                 WIP - Software products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/software">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
         <div class="home_appliances">
@@ -158,7 +158,7 @@
                 WIP - Home appliance products will be displayed here.
             </div>
             <span>
-                <a href="">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="/category/home_appliances">{{ VAR translate.view_all ~ }} <i class="fa-solid fa-arrow-right"></i></a>
             </span>
         </div>
     </section>
@@ -313,40 +313,6 @@
                 </div>
             </div>
         </article>
-        <article>
-            <a href="/view/2">
-                <img src="/uploads/product.jpg" alt="Product_name image">
-                <h1>Placeholder</h1>
-                <span id="discount">-Discount%</span>
-            </a>
-            <div>
-                <div class="price">
-                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
-                    <span id="shipping">Free shipping</span>
-                </div>
-                <div class="buttons">
-                    <span><i class="fa-solid fa-heart"></i></span>
-                    <span><i class="fa-solid fa-cart-shopping"></i></span>
-                </div>
-            </div>
-        </article>
-        <article>
-            <a href="/view/2">
-                <img src="/uploads/product.jpg" alt="Product_name image">
-                <h1>Placeholder</h1>
-                <span id="discount">-Discount%</span>
-            </a>
-            <div>
-                <div class="price">
-                    <span id="price">Price {{ VAR translate.bulgarian_lev_short ~ }}</span>
-                    <span id="shipping">Free shipping</span>
-                </div>
-                <div class="buttons">
-                    <span><i class="fa-solid fa-heart"></i></span>
-                    <span><i class="fa-solid fa-cart-shopping"></i></span>
-                </div>
-            </div>
-        </article>
     </section>
 </main>
 
@@ -354,12 +320,12 @@
     <h1>{{ VAR translate.subscribe_to_our_newsletter ~ }}</h1>
     <form action="/newsletter/subscribe" method="POST">
         <span>
-            <i class="fa-regular fa-user"></i>
-            <input type="text" name="name" placeholder="{{ VAR translate.name ~ }} (optional)" autocomplete="name">
-        </span>
-        <span>
             <i class="fa-regular fa-envelope"></i>
             <input type="email" name="email" placeholder="Email" autocomplete="email">
+        </span>
+        <span>
+            <i class="fa-regular fa-user"></i>
+            <input type="text" name="name" placeholder="{{ VAR translate.name ~ }} (optional)" autocomplete="name">
         </span>
         <input type="submit" value="{{ VAR translate.subscribe ~ }}">
     </form>
