@@ -46,11 +46,18 @@ Builder::add_data("site", array(
 
 Builder::add_data("author_email", "dimitrov.career@gmail.com");
 
-// Make sure the user status is set to boolean
+// Make sure the sign in status is set to boolean
 
 if(!User::get("signed_in"))
 {
     User::set("signed_in", false);
+}
+
+// Make sure the seller status is set to boolean
+
+if(!User::get("seller"))
+{
+    User::set("seller", false);
 }
 
 // Check if user has set language in their sessions (even if signed out)
