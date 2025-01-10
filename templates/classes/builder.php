@@ -511,11 +511,11 @@ class Builder
             {
                 // Split the variable to [0] Key and [1] Value.
                 // Examples:
-                // {{ USER.first_name }} -> string: $_SESSION["first_name"] -> "Dimitar"
-                // {{ author }} -> string: $data["author"] -> "Dimitar Dimitrov"
-                // {{ site }} -> array: $data["site"] -> ["title" => "E-commerce-Title", "name" => "E-commerce-Name"]
-                // {{ site.title }} -> string: $data["site"]["title"] -> "E-commerce-Title"
-                // {{ translate.??? }} -> string: $data["translate"]["???"] -> dict.json["??"]["???"]
+                // {{ VAR USER.first_name ~ }} -> string: $_SESSION["first_name"] -> "Dimitar"
+                // {{ VAR author ~ }} -> string: $data["author"] -> "Dimitar Dimitrov"
+                // {{ VAR site ~ }} -> array: $data["site"] -> ["title" => "E-commerce-Title", "name" => "E-commerce-Name"]
+                // {{ VAR site.title ~ }} -> string: $data["site"]["title"] -> "E-commerce-Title"
+                // {{ VAR translate.??? ~ }} -> string: $data["translate"]["???"] -> dict.json["??"]["???"]
 
                 $token["VARIABLE"] = explode(".", $token["VARIABLE"]);
 

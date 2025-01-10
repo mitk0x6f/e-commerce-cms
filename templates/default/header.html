@@ -11,10 +11,10 @@
     {{ -- TODO: update style version from server to force the users to update -- }}
     <link rel="stylesheet" type="text/css" href="/templates/default/resources/style.css?v=1.0.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
     {{ IF Builder::get_data("page_name") === "profile_shop" ? }}
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.8.1/nouislider.min.css" integrity="sha512-qveKnGrvOChbSzAdtSs8p69eoLegyh+1hwOMbmpCViIwj7rn4oJjdmMvWOuyQlTOZgTlZA0N2PXA7iA8/2TUYA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.8.1/nouislider.min.js"></script>
     {{ END IF }}
     {{ IF Builder::get_data("page_name") === "home" || Builder::get_data("page_name") === "listing_view" ? }}
         <link rel="stylesheet" type="text/css" href="/templates/default/resources/flickity.css">
@@ -26,15 +26,8 @@
     {{ END IF }}
     {{ IF Builder::get_data("page_name") === "listing_add" || Builder::get_data("page_name") === "listing_edit" ? }}
         {{ -- TODO: make it load from local server maybe ? -- }}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/default.min.css">
         <script src="/templates/default/resources/sceditor3_min.js"></script>
-        {{ -- |
-            External links instead
-            OLD -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/default.min.css">
-            OLD -> <script src="https://cdn.jsdelivr.net/npm/sceditor@3/minified/sceditor.min.js"></script>
-            LATEST -> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sceditor@latest/minified/themes/default.min.css">
-            LATEST -> <script src="https://cdn.jsdelivr.net/combine/npm/sceditor@latest/minified/sceditor.min.js,npm/sceditor@latest/minified/formats/bbcode.min.js,npm/sceditor@latest/minified/icons/monocons.min.js"></script>
-        | -- }}
     {{ END IF }}
 </head>
 <body>
