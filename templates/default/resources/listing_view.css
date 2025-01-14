@@ -4,12 +4,6 @@
 ** Modification was made to resolve issues with style specificy without having to repeat !important
 */
 
-/**************************
-**                       **
-**    PRODUCT [START]    **
-**                       **
-**************************/
-
 main.product > section
 {
     display: flex;
@@ -389,8 +383,93 @@ main.product > section > aside > form:has(input:disabled) > span:hover
     box-shadow: none;
 }
 
-/************************
-**                     **
-**    PRODUCT [END]    **
-**                     **
-************************/
+@media screen and (width <= 1200px)
+{
+    main.product,
+    main.product ~ script + footer
+    {
+        margin: 0;
+    }
+
+    main.product > section
+    {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    main.product > section > div,
+    main.product > section > div > div.wrapper,
+    main.product > section > div > div.carousel-nav
+    {
+        width: 100%;
+    }
+
+    main.product > section > div > div.wrapper
+    {
+        border-radius: 0;
+    }
+
+    main.product > section > div > div.carousel-nav
+    {
+        padding: 0 10px;
+    }
+}
+
+@media screen and (width <= 900px)
+{
+    main.product > section > div > div.carousel-nav
+    {
+        display: none;
+    }
+
+    main.product > section > aside
+    {
+        width: 100%;
+        padding: 15px;
+    }
+
+    main.product > section > aside > form
+    {
+        justify-content: center;
+    }
+}
+
+@media screen and (width <= 420px)
+{
+    main.product > section > aside > form
+    {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    main.product > section > aside > form > div.quantity,
+    main.product > section > aside > form > span:first-of-type
+    {
+        width: 100%;
+    }
+
+    main.product > section > aside > form > div.quantity > span.qty
+    {
+        flex-grow: 1;
+    }
+
+    main.product > section > aside > form > span:first-of-type
+    {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /*
+        Add to wishlist button.
+        TODO: restyle this button as this is a temporary solution
+    */
+
+    main.product > section > aside > form > span:last-of-type
+    {
+        position: absolute;
+        right: 25px;
+        margin-top: -180px;
+    }
+}

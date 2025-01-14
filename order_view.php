@@ -54,6 +54,7 @@ if(
             WHERE
                 order_items.order_id = :order_id
                 AND articles.shop_slug = :shop_slug
+                AND order_items.status = 1
             ORDER BY
                 articles.title ASC;",
             [

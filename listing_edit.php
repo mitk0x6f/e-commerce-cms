@@ -5,7 +5,7 @@ require_once("./templates/configuration.php");
 
 // Attack protection
 
-$article_id = isset($_GET["id"]) ? htmlspecialchars(trim($_GET["id"])) : "";
+$article_id = isset($_GET["id"]) ? (int) htmlspecialchars(trim($_GET["id"])) : "";
 
 // Check if editing specific article website.com/listings/id, saving or deleting it
 
@@ -13,9 +13,24 @@ if(
     $_SERVER["REQUEST_METHOD"] === "GET" &&
     strlen($article_id) > 0 &&
     strlen($article_id) < 12 &&
-    preg_match("/^[\d]{1,11}$/", $article_id)
+    preg_match("/^[\d]{1,11}$/", $article_id) &&
+    User::get("signed_in") &&
+    User::get("seller")
 )
 {
+    // Make sure the user is signed in and is the owner of the article
+
+    $article_seller = Database::run(
+        "SELECT shop_slug FROM articles WHERE id = :article_id",
+        [':article_id' => $article_id]
+    )->fetchColumn();
+
+    if($article_seller !== User::get("slug"))
+    {
+        header("Location: /home");
+        die();
+    }
+
     try
     {
         $result = Database::run(

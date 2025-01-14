@@ -939,6 +939,42 @@ class Builder
 
         self::add_data("cart", User::get("cart"));
 
+        // Add orders data if the viewing user is a seller
+
+        // TODO: Cache the active orders count in new database table to avoid complex queries
+
+        if(User::get("seller"))
+        {
+            $active_orders_count = Database::run(
+                "SELECT
+                    COUNT(DISTINCT orders.id) AS active_orders_count
+                FROM
+                    orders
+                INNER JOIN
+                    order_items
+                        ON orders.id = order_items.order_id
+                        AND order_items.status = 1
+                INNER JOIN
+                    articles
+                        ON order_items.article_id = articles.id
+                        AND articles.shop_slug = :shop_slug
+                WHERE
+                    orders.status != 0;",
+                [
+                    ':shop_slug' => (string) User::get("slug")
+                ]
+            )->fetch(PDO::FETCH_ASSOC);
+        }
+        else
+        {
+            // TODO: remove this temporary solution when Builder is improved
+            // and templating engine is not parsing IF blocks with false conditions
+
+            $active_orders_count = ["active_orders_count" => 0];
+        }
+
+        self::add_data("active_orders_count", $active_orders_count["active_orders_count"]);
+
         // Rendering sequence (Tokenization and rendering)
 
         self::compile(self::tokenize());

@@ -203,7 +203,8 @@ header > nav > span:first-of-type
 {
     display: block;
     padding: 0;
-    min-width: 102px;
+    min-width: 32px;
+    width: 102px;
     height: 60px;
     background-image: url("./logo.png");
     background-position: center;
@@ -837,7 +838,7 @@ header > nav > span:not(.search) > a > span.counter
 {
     position: absolute;
     top: 20%;
-    left: 12px;
+    right: 4px;
     padding: 2px 4px;
     border-radius: 5px;
     background-color: var(--accent-text-color-alternative);
@@ -4185,7 +4186,6 @@ footer > section > div > span > a > i
 
     header > nav > span
     {
-        margin: 0 -10px;
         padding: 0 10px;
     }
 
@@ -4196,17 +4196,16 @@ footer > section > div > span > a > i
     {
         display: none;
     }
-
-    /* Fix red counter bubble's position */
-
-    header > nav > span:not(.search) > a > span.counter
-    {
-        left: 22px;
-    }
 }
 
 @media screen and (width <= 1200px)
 {
+    header > nav
+    {
+        padding: 10px;
+        gap: 25px;
+    }
+
     /*
         Make sections full screen width.
 
@@ -4269,11 +4268,6 @@ footer > section > div > span > a > i
         max-width: none;
     }
 
-    main.category + footer
-    {
-        margin: 0;
-    }
-
     /* Remove border from sections */
 
     section.global_message > article,
@@ -4300,6 +4294,16 @@ footer > section > div > span > a > i
 
 @media screen and (width <= 900px)
 {
+    header > nav
+    {
+        gap: 15px;
+    }
+
+    header > nav > span
+    {
+        padding: 0 5px;
+    }
+
     /* Swap big screens search bar with smaller screen one */
 
     header > nav > span.search,
@@ -4313,6 +4317,11 @@ footer > section > div > span > a > i
     header > nav > span.search-sm > div
     {
         display: flex;
+    }
+
+    header > nav > span.messages
+    {
+        margin-right: 0;
     }
 
     /* Remove gap between global messages, so the colors can touch nicely */
@@ -4486,6 +4495,11 @@ footer > section > div > span > a > i
 
 @media screen and (width <= 420px)
 {
+    header > nav
+    {
+        gap: 10px;
+    }
+
     /* Make product cards scale better on smaller screens */
 
     main.search > section.articles,

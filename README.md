@@ -1,5 +1,5 @@
 ![WIP](https://img.shields.io/badge/Work_In_Progress-yellow)
-![Version](https://img.shields.io/badge/Version-0.2.2-blue)
+![Static Badge](https://img.shields.io/badge/%7B%7B_%7D%7D-Custom_Template_Engine-teal)<!--![Version](https://img.shields.io/badge/Version-0.2.3-blue))-->
 [![Font Awesome](https://img.shields.io/badge/Font_Awesome-6-blue?logo=fontawesome&logoColor=yellow)](https://fontawesome.com/)
 [![Lipis' flag-icons](https://img.shields.io/badge/Lipis'_flag--icons-7-green)](https://github.com/lipis/flag-icons)
 [![noUiSlider](https://img.shields.io/badge/noUiSlider-15-blue)](https://refreshless.com/nouislider/)
@@ -16,7 +16,7 @@
 
 # E-commerce CMS  
 > Lightweight E-commerce CMS.  
-> Live demo of version 0.1.1 [_here_](http://dimitar.freesite.online/).  
+> Live demo of version 0.2.3 [_here_](http://dimitar.freesite.online/).  
 
 ## Table of Contents  
 * [General Info](#general-information)  
@@ -46,9 +46,48 @@ _Including WIP and future features_
 
 
 ## Screenshots  
-![Example screenshot 1](./README/screenshot1.png)  
-![Example screenshot 2](./README/screenshot2.png)  
-![Example screenshot 3](./README/screenshot3.png)  
+<table>
+    <tr>
+        <td align="center" width="50%">
+            <img alt="Home page" src="https://i.imgur.com/eU2NKYv.png" height="280px" style="width:auto;"><br>
+            <strong>Home Page</strong>
+        </td>
+        <td align="center" width="50%">
+            <img alt="Product page" src="https://i.imgur.com/mAtIT9g.png" style="width:100%;"><br>
+            <strong>Product Page</strong>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" width="50%">
+            <img alt="Products by category" src="https://i.imgur.com/6kZr54y.png" style="width:100%;"><br>
+            <strong>Products by Category</strong>
+        </td>
+        <td align="center" width="50%">
+            <img alt="Products by category - mobile" src="https://i.imgur.com/DMXD3hV.png" height="280px" style="width:auto;"><br>
+            <strong>Products by Category (Mobile)</strong>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" width="50%">
+            <img alt="Edit product" src="https://i.imgur.com/qIHVgsZ.png" style="width:100%;"><br>
+            <strong>Edit Product</strong>
+        </td>
+        <td align="center" width="50%">
+            <img alt="Shop listings" src="https://i.imgur.com/9BVubxZ.png" style="width:100%;"><br>
+            <strong>Shop Listings</strong>
+        </td>
+    </tr>
+    <tr>
+        <td align="center" width="50%">
+            <img alt="Shop orders" src="https://i.imgur.com/xP43KwG.png" style="width:100%;"><br>
+            <strong>Shop Orders</strong>
+        </td>
+        <td align="center" width="50%">
+            <img alt="View order" src="https://i.imgur.com/G8mlLLB.png" style="width:100%;"><br>
+            <strong>View Order</strong>
+        </td>
+    </tr>
+</table>  
 
 
 ## Setup  
