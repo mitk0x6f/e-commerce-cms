@@ -146,8 +146,11 @@
                             <span>{{ VAR translate.cart ~ }}</span>
                         </a>
                         <div>
-                            {{ -- Only show below code when viewing product listing page to handle adding new cart items -- }}
-                            {{ IF Builder::get_data("page_name") === "listing_view" ? }}
+                            {{ -- Only show below code when viewing product listing and search pages to handle adding new cart items -- }}
+                            {{ IF Builder::get_data("page_name") === "listing_view"
+                                || Builder::get_data("page_name") === "search"
+                                || Builder::get_data("page_name") === "category_view"
+                                || Builder::get_data("page_name") === "profile_shop" ? }}
                             <template>
                                 <article data-item-id="">
                                     <img src="" alt="">
@@ -169,7 +172,7 @@
                             {{ FOR article in cart * }}
                                 <article data-item-id="{{* article_id *}}">
                                     {{ -- TODO: fix images -- }}
-                                    <img src="/uploads/articles/{{* article_id *}}/large/img1.jpg" alt="Product_name image">
+                                    <img src="/uploads/articles/{{* article_id *}}/large/img1.jpg" alt="Product image">
                                     <div class="info">
                                         <a href="/view/{{* article_id *}}">{{* title *}}</a>
                                         <span data-price="{{* price *}}" data-discount="{{* discount *}}"></span>

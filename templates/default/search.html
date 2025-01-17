@@ -3,7 +3,7 @@
 <main class="search">
     <section class="articles">
         {{ FOR result in results * }}
-            <article>
+            <article data-item-id="{{* id *}}">
                 <a href="/view/{{* id *}}">
                     {{ -- TODO: fix below link -- }}
                     <img src="/uploads/articles/{{* id *}}/large/img1.jpg">
@@ -25,8 +25,16 @@
                         <span id="shipping">Free shipping</span>
                     </div>
                     <div class="buttons">
-                        <span><i class="fa-regular fa-heart"></i></span>
-                        <span><i class="fa-solid fa-cart-shopping"></i></span>
+                        <span
+                            {{ IF User::get("seller") ? }}
+                                class="disabled"
+                            {{ END IF }}
+                        ><i class="fa-regular fa-heart"></i></span>
+                        <span
+                            {{ IF User::get("seller") ? }}
+                                class="disabled"
+                            {{ END IF }}
+                        ><i class="fa-solid fa-cart-shopping"></i></span>
                     </div>
                 </div>
             </article>
@@ -52,6 +60,7 @@
         if(discount == 0)
         {
             discount_elements[i].style.display = "none";
+
             continue;
         }
 
@@ -80,5 +89,18 @@
         document.querySelector("header > nav > span.search > input[name='search']").setAttribute("value", search_query);
     }
 </script>
+{{ IF !User::get("seller") ? }}
+    <script>
+        const article_path = "main.search > section.articles > article";
+
+        // Pass translation to the javascript file, so we don't have to pre-render it on the server side
+
+        const translate = {
+            "bulgarian_lev_short": "{{ VAR translate.bulgarian_lev_short ~ }}",
+            "view_cart": "{{ VAR translate.view_cart ~ }}"
+        };
+    </script>
+    <script src="/templates/default/resources/add_to_cart.js"></script>
+{{ END IF }}
 
 {{ INCLUDE footer # }}

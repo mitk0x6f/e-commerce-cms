@@ -28,7 +28,7 @@
             {{ END FOR }}
         </nav>
         {{ FOR result in results * }}
-            <article>
+            <article data-item-id="{{* id *}}">
                 <a href="/view/{{* id *}}">
                     <img src="/uploads/articles/{{* id *}}/large/img1.jpg">
                     <h1>{{* title *}}</h1>
@@ -49,8 +49,16 @@
                         <span id="shipping">Free shipping</span>
                     </div>
                     <div class="buttons">
-                        <span><i class="fa-regular fa-heart"></i></span>
-                        <span><i class="fa-solid fa-cart-shopping"></i></span>
+                        <span
+                            {{ IF User::get("seller") ? }}
+                                class="disabled"
+                            {{ END IF }}
+                        ><i class="fa-regular fa-heart"></i></span>
+                        <span
+                            {{ IF User::get("seller") ? }}
+                                class="disabled"
+                            {{ END IF }}
+                        ><i class="fa-solid fa-cart-shopping"></i></span>
                     </div>
                 </div>
             </article>
@@ -86,6 +94,7 @@
         if(discount == 0)
         {
             discount_elements[i].style.display = "none";
+
             continue;
         }
 
@@ -95,5 +104,18 @@
         price_elements[i].innerHTML = "<span>" + new_price.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}</span> <span>" + price.toFixed(2) + "</span>";
     }
 </script>
+{{ IF !User::get("seller") ? }}
+    <script>
+        const article_path = "main.category > section > article";
+
+        // Pass translation to the javascript file, so we don't have to pre-render it on the server side
+
+        const translate = {
+            "bulgarian_lev_short": "{{ VAR translate.bulgarian_lev_short ~ }}",
+            "view_cart": "{{ VAR translate.view_cart ~ }}"
+        };
+    </script>
+    <script src="/templates/default/resources/add_to_cart.js"></script>
+{{ END IF }}
 
 {{ INCLUDE footer # }}

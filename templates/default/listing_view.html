@@ -298,15 +298,7 @@
             }
             else
             {
-                // shopping_cart_container.querySelector("a:last-of-type").parentNode.parentNode.after(cart_clone);
-
-                // shopping_cart_container.appendChild(cart_clone);
-
                 shopping_cart_container.insertBefore(cart_clone, shopping_cart_container.lastElementChild);
-
-                // shopping_cart_container.querySelector("a:last-of-type").insertAdjacent('afterend', cart_clone);
-                // const lastLink = shopping_cart_container.querySelector("a:last-of-type");
-                // lastLink.parentNode.insertAdjacentElement('afterend', cart_clone);
             }
         }
     }
@@ -364,14 +356,6 @@
 
                     old_price_element.innerHTML = old_price.toFixed(2);
                     new_price_element.innerHTML = new_price.toFixed(2) + " {{ VAR translate.bulgarian_lev_short ~ }}";
-
-                    // // Function to hide the modal after 1500ms (1.5s) delay
-
-                    // (async () => {
-                    //     await new Promise(resolve => setTimeout(resolve, 1500));
-
-                    //     modal_state.checked = false;
-                    // })();
                 }
                 else
                 {
