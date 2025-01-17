@@ -437,7 +437,7 @@ class Builder
 
                 // Evaluate the condition and push the current state to the stack
 
-                $parent_cond_met = empty($token_stack) || end($token_stack)["cond_met"];
+                $parent_cond_met = empty($token_stack) || (isset(end($token_stack)["cond_met"]) && end($token_stack)["cond_met"]);
 
                 // Push the current state to the stack
 
@@ -595,11 +595,22 @@ class Builder
                 //     {{* key *}}
                 // {{ END FOR }}
 
-                // WIP NEW
-
-                if(empty($token_stack) || (end($token_stack)["type"] === "IF" && end($token_stack)["cond_met"]))
+                if(empty($token_stack)
+                    || (
+                        isset(end($token_stack)["type"]) && end($token_stack)["type"] === "IF"
+                        && isset(end($token_stack)["cond_met"]) && end($token_stack)["cond_met"]
+                    )
+                )
                 {
                     $final_output .= $output_buffer;
+
+                    // Set the cond_met for nasted blocks
+
+                    $parent_cond_met = true;
+                }
+                else
+                {
+                    $parent_cond_met = false;
                 }
 
                 $output_buffer = "";
@@ -618,7 +629,8 @@ class Builder
                     $token_stack[] = [
                         "type" => "FOR",
                         "item" => $tkn_item,
-                        "array" => $tkn_array
+                        "array" => $tkn_array,
+                        "cond_met" => $parent_cond_met // Propagate for nasted conditions
                     ];
 
                     // Check if the array is actually iterable

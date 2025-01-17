@@ -19,7 +19,8 @@
 </footer>
 {{ IF User::get("signed_in") && !User::get("seller") ? }}
     <script>
-        let shopping_cart_badge = document.querySelector("header > nav > span.cart > a > span.counter");
+        const shopping_cart_container = document.querySelector("header > nav > span.cart > div");
+        const shopping_cart_badge = document.querySelector("header > nav > span.cart > a > span.counter");
 
         if(shopping_cart_badge.textContent > 0)
         {
@@ -76,7 +77,8 @@
             {
                 // Display the empty cart message
 
-                document.querySelector("header > nav > span.cart > div").textContent = "{{ VAR translate.cart_is_empty ~ }}";
+                shopping_cart_container.lastChild.remove();
+                shopping_cart_container.textContent = "{{ VAR translate.cart_is_empty ~ }}";
 
                 // Hide the shopping cart badge
 
@@ -87,10 +89,6 @@
 
             return false;
         }
-
-        // Make sure the empty shopping cartv is displayed properly.
-
-        solve_empty_cart();
 
         // Quantity update function
 
@@ -404,19 +402,21 @@
 
         // Add event listeners
 
-        const shopping_cart_container = document.querySelector("header > nav > span.cart > div");
-
         shopping_cart_container.addEventListener("click", handle_quantity_change);
     </script>
 {{ END IF }}
 <script>
+    // Initialize the global variables
+
+    let modal_state, modal_title, modal_content;
+
     document.addEventListener("DOMContentLoaded", function()
     {
         // Modal
 
-        const modal_state = document.querySelector("div.modal > input[type='checkbox']#modal_state");
-        const modal_title = document.querySelector("div.modal > div > div.title-bar > span");
-        const modal_content = document.querySelector("div.modal > div > div.content");
+        modal_state = document.querySelector("div.modal > input[type='checkbox']#modal_state");
+        modal_title = document.querySelector("div.modal > div > div.title-bar > span");
+        modal_content = document.querySelector("div.modal > div > div.content");
 
         // Handle language and currency changes
 
